@@ -1,0 +1,21 @@
+services:
+  blogging_mysql:
+    container_name: blogging_mysql
+    image: 'mysql:8.2'
+    environment:
+      - 'MYSQL_DATABASE=news_outlet_db'
+      - 'MYSQL_ROOT_PASSWORD=news_outlet'
+      - 'MYSQL_PASSWORD=news_outlet'
+      - 'MYSQL_USER=news_outlet'
+    ports:
+      - '3306:3306'
+    volumes:
+      - "news_outlet_storage:/var/lib/mysql"
+    networks:
+      - "news_outlet_network"
+
+volumes:
+    news_outlet_storage:
+networks:
+    news_outlet_network:
+        driver: bridge

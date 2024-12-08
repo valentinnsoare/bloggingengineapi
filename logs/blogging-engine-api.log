@@ -1,0 +1,486 @@
+2024-12-04 20:16:25 [restartedMain] INFO  o.s.boot.SpringApplication - 
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+[32m :: Spring Boot :: [39m              [2m (v3.3.3)[0;39m
+
+
+2024-12-04 20:16:25 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-04 20:16:25 [restartedMain] INFO  i.v.b.BloggingEngineApi - Starting BloggingEngineApi using Java 22.0.2 with PID 13361 (/home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI/target/classes started by vsoare in /home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI)
+2024-12-04 20:16:25 [restartedMain] INFO  i.v.b.BloggingEngineApi - The following 1 profile is active: "dev"
+2024-12-04 20:16:25 [restartedMain] INFO  o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file '/home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI/compose.yaml'
+2024-12-04 20:16:26 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli - time="2024-12-04T20:16:26+02:00" level=warning msg="Found orphan containers ([news_mysql]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
+2024-12-04 20:16:26 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Creating
+2024-12-04 20:16:26 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Created
+2024-12-04 20:16:26 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Starting
+2024-12-04 20:16:26 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Started
+2024-12-04 20:16:26 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Waiting
+2024-12-04 20:16:27 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Healthy
+2024-12-04 20:16:28 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-12-04 20:16:28 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-12-04 20:16:28 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-04 20:16:28 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 6 JPA repository interfaces.
+2024-12-04 20:16:29 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-04 20:16:29 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-04 20:16:29 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-04 20:16:29 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-12-04 20:16:29 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-04 20:16:29 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 958 ms
+2024-12-04 20:16:29 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-04 20:16:29 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-12-04 20:16:29 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-04 20:16:29 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-04 20:16:29 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-04 20:16:29 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@10f62f7f
+2024-12-04 20:16:29 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-04 20:16:30 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-04 20:16:30 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-04 20:16:30 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-12-04 20:16:30 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-04 20:16:31 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2024-12-04 20:16:31 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-12-04 20:16:31 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-04 20:16:31 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-12-04 20:16:31 [restartedMain] INFO  i.v.b.BloggingEngineApi - Started BloggingEngineApi in 6.061 seconds (process running for 6.455)
+2024-12-04 20:16:32 [RMI TCP Connection(2)-192.168.100.35] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-04 20:16:32 [RMI TCP Connection(2)-192.168.100.35] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-12-04 20:16:32 [RMI TCP Connection(2)-192.168.100.35] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2024-12-04 20:18:04 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-04 20:18:04 [restartedMain] INFO  o.s.boot.SpringApplication - 
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+[32m :: Spring Boot :: [39m              [2m (v3.3.3)[0;39m
+
+
+2024-12-04 20:18:04 [restartedMain] INFO  i.v.b.BloggingEngineApi - Starting BloggingEngineApi using Java 22.0.2 with PID 16170 (/home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI/target/classes started by vsoare in /home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI)
+2024-12-04 20:18:04 [restartedMain] INFO  i.v.b.BloggingEngineApi - The following 1 profile is active: "dev"
+2024-12-04 20:18:04 [restartedMain] INFO  o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file '/home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI/compose.yaml'
+2024-12-04 20:18:04 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  blogging_mysql Pulling 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  599b67b0dd6a Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  50314d46ce2b Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  494babc92263 Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  02548e6f2dbf Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  a9e5e2637e0d Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  215a2b0eabbf Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  4bfe599fe218 Pulling fs layer 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  a9e5e2637e0d Waiting 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Waiting 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  4bfe599fe218 Waiting 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  494babc92263 Waiting 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Waiting 
+2024-12-04 20:18:06 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  215a2b0eabbf Waiting 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  599b67b0dd6a Downloading [========================================>          ]     721B/883B
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  599b67b0dd6a Downloading [==================================================>]     883B/883B
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  599b67b0dd6a Verifying Checksum 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  599b67b0dd6a Download complete 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  50314d46ce2b Downloading [>                                                  ]  10.95kB/982.8kB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Downloading [>                                                  ]  524.3kB/51.32MB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  50314d46ce2b Downloading [==================================================>]  982.8kB/982.8kB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  50314d46ce2b Verifying Checksum 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  50314d46ce2b Download complete 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Downloading [===========>                                       ]     12MB/51.32MB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Downloading [======================>                            ]  23.52MB/51.32MB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Downloading [==================================>                ]  35.03MB/51.32MB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  494babc92263 Downloading [>                                                  ]     47kB/4.591MB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Downloading [============================================>      ]  45.49MB/51.32MB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  494babc92263 Downloading [==================================>                ]  3.177MB/4.591MB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  02548e6f2dbf Downloading [=============>                                     ]     720B/2.604kB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  02548e6f2dbf Downloading [==================================================>]  2.604kB/2.604kB
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  02548e6f2dbf Verifying Checksum 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  02548e6f2dbf Download complete 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  494babc92263 Verifying Checksum 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  494babc92263 Download complete 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Verifying Checksum 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Download complete 
+2024-12-04 20:18:07 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Extracting [>                                                  ]  524.3kB/51.32MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Extracting [=======>                                           ]   7.34MB/51.32MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Extracting [=================>                                 ]  17.83MB/51.32MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Extracting [===========================>                       ]  28.31MB/51.32MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  215a2b0eabbf Downloading [==================================================>]     329B/329B
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  215a2b0eabbf Verifying Checksum 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  215a2b0eabbf Download complete 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Extracting [===================================>               ]   36.7MB/51.32MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  a9e5e2637e0d Downloading [==================================================>]     338B/338B
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  a9e5e2637e0d Verifying Checksum 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  a9e5e2637e0d Download complete 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Downloading [>                                                  ]  540.7kB/62.57MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Downloading [=========>                                         ]  12.37MB/62.57MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Extracting [================================================>  ]  49.81MB/51.32MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Downloading [===================>                               ]  24.17MB/62.57MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Extracting [==================================================>]  51.32MB/51.32MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  558b7d69a2e5 Pull complete 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  599b67b0dd6a Extracting [==================================================>]     883B/883B
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  599b67b0dd6a Extracting [==================================================>]     883B/883B
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  599b67b0dd6a Pull complete 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  50314d46ce2b Extracting [=>                                                 ]  32.77kB/982.8kB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Downloading [============================>                      ]  35.98MB/62.57MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  50314d46ce2b Extracting [==================================================>]  982.8kB/982.8kB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  50314d46ce2b Extracting [==================================================>]  982.8kB/982.8kB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  50314d46ce2b Pull complete 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  494babc92263 Extracting [>                                                  ]  65.54kB/4.591MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  494babc92263 Extracting [==================================================>]  4.591MB/4.591MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Downloading [======================================>            ]   47.8MB/62.57MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  494babc92263 Pull complete 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  02548e6f2dbf Extracting [==================================================>]  2.604kB/2.604kB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  02548e6f2dbf Extracting [==================================================>]  2.604kB/2.604kB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  4bfe599fe218 Downloading [======>                                            ]     720B/5.181kB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  4bfe599fe218 Downloading [==================================================>]  5.181kB/5.181kB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  4bfe599fe218 Verifying Checksum 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  4bfe599fe218 Download complete 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  02548e6f2dbf Pull complete 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  a9e5e2637e0d Extracting [==================================================>]     338B/338B
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  a9e5e2637e0d Extracting [==================================================>]     338B/338B
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  a9e5e2637e0d Pull complete 
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Downloading [>                                                  ]  527.6kB/62.07MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Downloading [============================================>      ]  55.85MB/62.57MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Downloading [====>                                              ]   5.88MB/62.07MB
+2024-12-04 20:18:08 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Downloading [=================================================> ]  62.26MB/62.57MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Verifying Checksum 
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Download complete 
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Extracting [>                                                  ]  557.1kB/62.57MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Downloading [===========>                                       ]  13.97MB/62.07MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Extracting [========>                                          ]  10.03MB/62.57MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Downloading [================>                                  ]  20.97MB/62.07MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Extracting [===============>                                   ]   19.5MB/62.57MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Downloading [=========================>                         ]  31.21MB/62.07MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Extracting [=======================>                           ]  28.97MB/62.57MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Downloading [==================================>                ]   42.5MB/62.07MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Extracting [================================>                  ]  40.67MB/62.57MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Downloading [===========================================>       ]  54.35MB/62.07MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Verifying Checksum 
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Download complete 
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Extracting [=========================================>         ]  51.81MB/62.57MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Extracting [=================================================> ]  61.83MB/62.57MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Extracting [==================================================>]  62.57MB/62.57MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  657b198fe6b7 Pull complete 
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  215a2b0eabbf Extracting [==================================================>]     329B/329B
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  215a2b0eabbf Extracting [==================================================>]     329B/329B
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  215a2b0eabbf Pull complete 
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [>                                                  ]  557.1kB/62.07MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [=========>                                         ]   11.7MB/62.07MB
+2024-12-04 20:18:09 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [==================>                                ]   23.4MB/62.07MB
+2024-12-04 20:18:10 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [========================>                          ]  30.08MB/62.07MB
+2024-12-04 20:18:10 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [=========================>                         ]   31.2MB/62.07MB
+2024-12-04 20:18:10 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [==========================>                        ]  32.31MB/62.07MB
+2024-12-04 20:18:10 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [==========================>                        ]  33.42MB/62.07MB
+2024-12-04 20:18:10 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [===========================>                       ]  34.54MB/62.07MB
+2024-12-04 20:18:10 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [============================>                      ]  35.65MB/62.07MB
+2024-12-04 20:18:10 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [=============================>                     ]  36.77MB/62.07MB
+2024-12-04 20:18:10 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [==============================>                    ]  37.88MB/62.07MB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [===============================>                   ]  38.99MB/62.07MB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [=================================>                 ]  41.22MB/62.07MB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [===================================>               ]  44.01MB/62.07MB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [=======================================>           ]  49.58MB/62.07MB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [===========================================>       ]  53.48MB/62.07MB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [=================================================> ]  61.28MB/62.07MB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Extracting [==================================================>]  62.07MB/62.07MB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  377a4c7a89c5 Pull complete 
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  4bfe599fe218 Extracting [==================================================>]  5.181kB/5.181kB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  4bfe599fe218 Extracting [==================================================>]  5.181kB/5.181kB
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  4bfe599fe218 Pull complete 
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  blogging_mysql Pulled 
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Network bloggingengineapi_news_outlet_network  Creating
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Network bloggingengineapi_news_outlet_network  Created
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Volume "bloggingengineapi_news_outlet_storage"  Creating
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Volume "bloggingengineapi_news_outlet_storage"  Created
+2024-12-04 20:18:11 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Creating
+2024-12-04 20:18:12 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Created
+2024-12-04 20:18:12 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Starting
+2024-12-04 20:18:12 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli - Error response from daemon: Ports are not available: exposing port TCP 0.0.0.0:3306 -> 0.0.0.0:0: listen tcp 0.0.0.0:3306: bind: address already in use
+2024-12-04 20:18:12 [restartedMain] ERROR o.s.boot.SpringApplication - Application run failed
+org.springframework.boot.docker.compose.core.ProcessExitException: 'docker compose --file /home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI/compose.yaml --ansi never up --no-color --detach --wait' failed with exit code 1.
+
+Stdout:
+
+
+Stderr:
+ blogging_mysql Pulling 
+ 558b7d69a2e5 Pulling fs layer 
+ 599b67b0dd6a Pulling fs layer 
+ 50314d46ce2b Pulling fs layer 
+ 494babc92263 Pulling fs layer 
+ 02548e6f2dbf Pulling fs layer 
+ a9e5e2637e0d Pulling fs layer 
+ 657b198fe6b7 Pulling fs layer 
+ 215a2b0eabbf Pulling fs layer 
+ 377a4c7a89c5 Pulling fs layer 
+ 4bfe599fe218 Pulling fs layer 
+ a9e5e2637e0d Waiting 
+ 377a4c7a89c5 Waiting 
+ 4bfe599fe218 Waiting 
+ 494babc92263 Waiting 
+ 657b198fe6b7 Waiting 
+ 215a2b0eabbf Waiting 
+ 599b67b0dd6a Downloading [========================================>          ]     721B/883B
+ 599b67b0dd6a Downloading [==================================================>]     883B/883B
+ 599b67b0dd6a Verifying Checksum 
+ 599b67b0dd6a Download complete 
+ 50314d46ce2b Downloading [>                                                  ]  10.95kB/982.8kB
+ 558b7d69a2e5 Downloading [>                                                  ]  524.3kB/51.32MB
+ 50314d46ce2b Downloading [==================================================>]  982.8kB/982.8kB
+ 50314d46ce2b Verifying Checksum 
+ 50314d46ce2b Download complete 
+ 558b7d69a2e5 Downloading [===========>                                       ]     12MB/51.32MB
+ 558b7d69a2e5 Downloading [======================>                            ]  23.52MB/51.32MB
+ 558b7d69a2e5 Downloading [==================================>                ]  35.03MB/51.32MB
+ 494babc92263 Downloading [>                                                  ]     47kB/4.591MB
+ 558b7d69a2e5 Downloading [============================================>      ]  45.49MB/51.32MB
+ 494babc92263 Downloading [==================================>                ]  3.177MB/4.591MB
+ 02548e6f2dbf Downloading [=============>                                     ]     720B/2.604kB
+ 02548e6f2dbf Downloading [==================================================>]  2.604kB/2.604kB
+ 02548e6f2dbf Verifying Checksum 
+ 02548e6f2dbf Download complete 
+ 494babc92263 Verifying Checksum 
+ 494babc92263 Download complete 
+ 558b7d69a2e5 Verifying Checksum 
+ 558b7d69a2e5 Download complete 
+ 558b7d69a2e5 Extracting [>                                                  ]  524.3kB/51.32MB
+ 558b7d69a2e5 Extracting [=======>                                           ]   7.34MB/51.32MB
+ 558b7d69a2e5 Extracting [=================>                                 ]  17.83MB/51.32MB
+ 558b7d69a2e5 Extracting [===========================>                       ]  28.31MB/51.32MB
+ 215a2b0eabbf Downloading [==================================================>]     329B/329B
+ 215a2b0eabbf Verifying Checksum 
+ 215a2b0eabbf Download complete 
+ 558b7d69a2e5 Extracting [===================================>               ]   36.7MB/51.32MB
+ a9e5e2637e0d Downloading [==================================================>]     338B/338B
+ a9e5e2637e0d Verifying Checksum 
+ a9e5e2637e0d Download complete 
+ 657b198fe6b7 Downloading [>                                                  ]  540.7kB/62.57MB
+ 657b198fe6b7 Downloading [=========>                                         ]  12.37MB/62.57MB
+ 558b7d69a2e5 Extracting [================================================>  ]  49.81MB/51.32MB
+ 657b198fe6b7 Downloading [===================>                               ]  24.17MB/62.57MB
+ 558b7d69a2e5 Extracting [==================================================>]  51.32MB/51.32MB
+ 558b7d69a2e5 Pull complete 
+ 599b67b0dd6a Extracting [==================================================>]     883B/883B
+ 599b67b0dd6a Extracting [==================================================>]     883B/883B
+ 599b67b0dd6a Pull complete 
+ 50314d46ce2b Extracting [=>                                                 ]  32.77kB/982.8kB
+ 657b198fe6b7 Downloading [============================>                      ]  35.98MB/62.57MB
+ 50314d46ce2b Extracting [==================================================>]  982.8kB/982.8kB
+ 50314d46ce2b Extracting [==================================================>]  982.8kB/982.8kB
+ 50314d46ce2b Pull complete 
+ 494babc92263 Extracting [>                                                  ]  65.54kB/4.591MB
+ 494babc92263 Extracting [==================================================>]  4.591MB/4.591MB
+ 657b198fe6b7 Downloading [======================================>            ]   47.8MB/62.57MB
+ 494babc92263 Pull complete 
+ 02548e6f2dbf Extracting [==================================================>]  2.604kB/2.604kB
+ 02548e6f2dbf Extracting [==================================================>]  2.604kB/2.604kB
+ 4bfe599fe218 Downloading [======>                                            ]     720B/5.181kB
+ 4bfe599fe218 Downloading [==================================================>]  5.181kB/5.181kB
+ 4bfe599fe218 Verifying Checksum 
+ 4bfe599fe218 Download complete 
+ 02548e6f2dbf Pull complete 
+ a9e5e2637e0d Extracting [==================================================>]     338B/338B
+ a9e5e2637e0d Extracting [==================================================>]     338B/338B
+ a9e5e2637e0d Pull complete 
+ 377a4c7a89c5 Downloading [>                                                  ]  527.6kB/62.07MB
+ 657b198fe6b7 Downloading [============================================>      ]  55.85MB/62.57MB
+ 377a4c7a89c5 Downloading [====>                                              ]   5.88MB/62.07MB
+ 657b198fe6b7 Downloading [=================================================> ]  62.26MB/62.57MB
+ 657b198fe6b7 Verifying Checksum 
+ 657b198fe6b7 Download complete 
+ 657b198fe6b7 Extracting [>                                                  ]  557.1kB/62.57MB
+ 377a4c7a89c5 Downloading [===========>                                       ]  13.97MB/62.07MB
+ 657b198fe6b7 Extracting [========>                                          ]  10.03MB/62.57MB
+ 377a4c7a89c5 Downloading [================>                                  ]  20.97MB/62.07MB
+ 657b198fe6b7 Extracting [===============>                                   ]   19.5MB/62.57MB
+ 377a4c7a89c5 Downloading [=========================>                         ]  31.21MB/62.07MB
+ 657b198fe6b7 Extracting [=======================>                           ]  28.97MB/62.57MB
+ 377a4c7a89c5 Downloading [==================================>                ]   42.5MB/62.07MB
+ 657b198fe6b7 Extracting [================================>                  ]  40.67MB/62.57MB
+ 377a4c7a89c5 Downloading [===========================================>       ]  54.35MB/62.07MB
+ 377a4c7a89c5 Verifying Checksum 
+ 377a4c7a89c5 Download complete 
+ 657b198fe6b7 Extracting [=========================================>         ]  51.81MB/62.57MB
+ 657b198fe6b7 Extracting [=================================================> ]  61.83MB/62.57MB
+ 657b198fe6b7 Extracting [==================================================>]  62.57MB/62.57MB
+ 657b198fe6b7 Pull complete 
+ 215a2b0eabbf Extracting [==================================================>]     329B/329B
+ 215a2b0eabbf Extracting [==================================================>]     329B/329B
+ 215a2b0eabbf Pull complete 
+ 377a4c7a89c5 Extracting [>                                                  ]  557.1kB/62.07MB
+ 377a4c7a89c5 Extracting [=========>                                         ]   11.7MB/62.07MB
+ 377a4c7a89c5 Extracting [==================>                                ]   23.4MB/62.07MB
+ 377a4c7a89c5 Extracting [========================>                          ]  30.08MB/62.07MB
+ 377a4c7a89c5 Extracting [=========================>                         ]   31.2MB/62.07MB
+ 377a4c7a89c5 Extracting [==========================>                        ]  32.31MB/62.07MB
+ 377a4c7a89c5 Extracting [==========================>                        ]  33.42MB/62.07MB
+ 377a4c7a89c5 Extracting [===========================>                       ]  34.54MB/62.07MB
+ 377a4c7a89c5 Extracting [============================>                      ]  35.65MB/62.07MB
+ 377a4c7a89c5 Extracting [=============================>                     ]  36.77MB/62.07MB
+ 377a4c7a89c5 Extracting [==============================>                    ]  37.88MB/62.07MB
+ 377a4c7a89c5 Extracting [===============================>                   ]  38.99MB/62.07MB
+ 377a4c7a89c5 Extracting [=================================>                 ]  41.22MB/62.07MB
+ 377a4c7a89c5 Extracting [===================================>               ]  44.01MB/62.07MB
+ 377a4c7a89c5 Extracting [=======================================>           ]  49.58MB/62.07MB
+ 377a4c7a89c5 Extracting [===========================================>       ]  53.48MB/62.07MB
+ 377a4c7a89c5 Extracting [=================================================> ]  61.28MB/62.07MB
+ 377a4c7a89c5 Extracting [==================================================>]  62.07MB/62.07MB
+ 377a4c7a89c5 Pull complete 
+ 4bfe599fe218 Extracting [==================================================>]  5.181kB/5.181kB
+ 4bfe599fe218 Extracting [==================================================>]  5.181kB/5.181kB
+ 4bfe599fe218 Pull complete 
+ blogging_mysql Pulled 
+ Network bloggingengineapi_news_outlet_network  Creating
+ Network bloggingengineapi_news_outlet_network  Created
+ Volume "bloggingengineapi_news_outlet_storage"  Creating
+ Volume "bloggingengineapi_news_outlet_storage"  Created
+ Container blogging_mysql  Creating
+ Container blogging_mysql  Created
+ Container blogging_mysql  Starting
+Error response from daemon: Ports are not available: exposing port TCP 0.0.0.0:3306 -> 0.0.0.0:0: listen tcp 0.0.0.0:3306: bind: address already in use
+
+	at org.springframework.boot.docker.compose.core.ProcessRunner.run(ProcessRunner.java:96)
+	at org.springframework.boot.docker.compose.core.DockerCli.run(DockerCli.java:80)
+	at org.springframework.boot.docker.compose.core.DefaultDockerCompose.up(DefaultDockerCompose.java:51)
+	at org.springframework.boot.docker.compose.lifecycle.StartCommand.applyTo(StartCommand.java:51)
+	at org.springframework.boot.docker.compose.lifecycle.DockerComposeLifecycleManager.start(DockerComposeLifecycleManager.java:128)
+	at org.springframework.boot.docker.compose.lifecycle.DockerComposeListener.onApplicationEvent(DockerComposeListener.java:53)
+	at org.springframework.boot.docker.compose.lifecycle.DockerComposeListener.onApplicationEvent(DockerComposeListener.java:35)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:138)
+	at org.springframework.boot.context.event.EventPublishingRunListener.multicastInitialEvent(EventPublishingRunListener.java:136)
+	at org.springframework.boot.context.event.EventPublishingRunListener.contextLoaded(EventPublishingRunListener.java:98)
+	at org.springframework.boot.SpringApplicationRunListeners.lambda$contextLoaded$4(SpringApplicationRunListeners.java:72)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:118)
+	at org.springframework.boot.SpringApplicationRunListeners.doWithListeners(SpringApplicationRunListeners.java:112)
+	at org.springframework.boot.SpringApplicationRunListeners.contextLoaded(SpringApplicationRunListeners.java:72)
+	at org.springframework.boot.SpringApplication.prepareContext(SpringApplication.java:433)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1363)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1352)
+	at io.valentinsoare.bloggingengineapi.BloggingEngineApi.main(BloggingEngineApi.java:9)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+2024-12-04 20:19:35 [restartedMain] INFO  o.s.boot.SpringApplication - 
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+[32m :: Spring Boot :: [39m              [2m (v3.3.3)[0;39m
+
+
+2024-12-04 20:19:35 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-04 20:19:35 [restartedMain] INFO  i.v.b.BloggingEngineApi - Starting BloggingEngineApi using Java 22.0.2 with PID 18627 (/home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI/target/classes started by vsoare in /home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI)
+2024-12-04 20:19:35 [restartedMain] INFO  i.v.b.BloggingEngineApi - The following 1 profile is active: "dev"
+2024-12-04 20:19:35 [restartedMain] INFO  o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file '/home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI/compose.yaml'
+2024-12-04 20:19:35 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Starting
+2024-12-04 20:19:35 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Started
+2024-12-04 20:19:35 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Waiting
+2024-12-04 20:19:36 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Healthy
+2024-12-04 20:19:43 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-12-04 20:19:43 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-12-04 20:19:43 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-04 20:19:43 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 27 ms. Found 6 JPA repository interfaces.
+2024-12-04 20:19:44 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-04 20:19:44 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-04 20:19:44 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-04 20:19:44 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-12-04 20:19:44 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-04 20:19:44 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 913 ms
+2024-12-04 20:19:44 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-04 20:19:44 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-12-04 20:19:44 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-04 20:19:44 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-04 20:19:44 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-04 20:19:44 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6830d067
+2024-12-04 20:19:44 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-04 20:19:45 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-04 20:19:45 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-04 20:19:46 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-12-04 20:19:46 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-04 20:19:46 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2024-12-04 20:19:46 [restartedMain] WARN  o.s.b.d.a.OptionalLiveReloadServer - Unable to start LiveReload server
+2024-12-04 20:19:46 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-04 20:19:46 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-12-04 20:19:46 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-04 20:19:46 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-12-04 20:19:46 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-12-04 20:19:46 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-04 20:19:46 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2024-12-04 20:20:25 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.1.Final
+2024-12-04 20:20:25 [restartedMain] INFO  o.s.boot.SpringApplication - 
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+[32m :: Spring Boot :: [39m              [2m (v3.3.3)[0;39m
+
+
+2024-12-04 20:20:25 [restartedMain] INFO  i.v.b.BloggingEngineApi - Starting BloggingEngineApi using Java 22.0.2 with PID 19327 (/home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI/target/classes started by vsoare in /home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI)
+2024-12-04 20:20:25 [restartedMain] INFO  i.v.b.BloggingEngineApi - The following 1 profile is active: "dev"
+2024-12-04 20:20:25 [restartedMain] INFO  o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file '/home/vsoare/Documents/projectsLongTerm/BloggingEngineAPI/compose.yaml'
+2024-12-04 20:20:25 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Created
+2024-12-04 20:20:25 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Starting
+2024-12-04 20:20:26 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Started
+2024-12-04 20:20:26 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Waiting
+2024-12-04 20:20:26 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container blogging_mysql  Healthy
+2024-12-04 20:20:26 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-12-04 20:20:26 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-12-04 20:20:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-04 20:20:27 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 25 ms. Found 6 JPA repository interfaces.
+2024-12-04 20:20:27 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-12-04 20:20:27 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-12-04 20:20:27 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-12-04 20:20:27 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.28]
+2024-12-04 20:20:27 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-12-04 20:20:27 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 864 ms
+2024-12-04 20:20:27 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-04 20:20:27 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.5.2.Final
+2024-12-04 20:20:27 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-12-04 20:20:27 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-04 20:20:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-12-04 20:20:28 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6d4114c4
+2024-12-04 20:20:28 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-12-04 20:20:28 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-04 20:20:28 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-04 20:20:28 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2024-12-04 20:20:28 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2024-12-04 20:20:29 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2024-12-04 20:20:29 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-12-04 20:20:29 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-12-04 20:20:29 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2024-12-04 20:20:29 [restartedMain] INFO  i.v.b.BloggingEngineApi - Started BloggingEngineApi in 4.366 seconds (process running for 4.671)
+2024-12-04 20:20:30 [RMI TCP Connection(3)-192.168.100.35] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-04 20:20:30 [RMI TCP Connection(3)-192.168.100.35] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-12-04 20:20:30 [RMI TCP Connection(3)-192.168.100.35] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2024-12-04 20:28:49 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-04 20:28:49 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-12-04 20:28:49 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
