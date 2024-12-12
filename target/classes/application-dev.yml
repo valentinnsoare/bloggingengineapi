@@ -29,13 +29,6 @@ spring:
 
 logging:
   config: classpath:logback-spring.xml
-#  level:
-#    org.springframework: INFO
-#    org.hibernate: INFO
-#    org.hibernate.SQL: WARN
-#    org.hibernate.orm.jdbc.bind: WARN
-#    io.valentinsoare.learnspringmodulithmonolithtomicroservicesseamlessly: INFO
-#    com.zaxxer.hikari: WARN
 
 server:
   port: 8080
