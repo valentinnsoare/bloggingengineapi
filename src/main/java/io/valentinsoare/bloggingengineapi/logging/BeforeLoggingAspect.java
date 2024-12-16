@@ -16,6 +16,11 @@ import java.util.Arrays;
 @Component
 public class BeforeLoggingAspect {
 
+    @Before("io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnSecurityLayer()")
+    public void loggingBeforeSecurityLayer(JoinPoint joinPoint) {
+        logBeforeMethodExecution("Security layer", joinPoint);
+    }
+
     @Before("io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnControllerLayer()")
     public void loggingBeforeControllerLayer(JoinPoint joinPoint) {
         logBeforeMethodExecution("Controller layer", joinPoint);
