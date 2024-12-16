@@ -16,12 +16,6 @@ import java.util.Arrays;
 @Order(2)
 @Component
 public class AroundLoggingAspect {
-
-    @Around(value = "io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnSecurityLayer()")
-    public Object loggingAfterReturningMethodExecutionWithAnyArgumentsOnSecurityLayer(ProceedingJoinPoint joinPoint) throws Throwable {
-        return logAroundMethodExecution("Security layer", joinPoint);
-    }
-
     @Around(value = "io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnControllerLayer()")
     public Object loggingAfterReturningMethodExecutionWithAnyArguments(ProceedingJoinPoint joinPoint) throws Throwable {
         return logAroundMethodExecution("Controller layer", joinPoint);
