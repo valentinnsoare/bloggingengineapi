@@ -88,4 +88,14 @@ public class Author implements Comparable<Author> {
     public int compareTo(Author o) {
         return o.compareTo(this);
     }
+
+    @Override
+    public String toString() {
+        return "Author [" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ']';
+    }
 }

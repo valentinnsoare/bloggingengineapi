@@ -60,9 +60,9 @@ public class Role implements Comparable<Role> {
 
     @Override
     public String toString() {
-        return "Role{" +
+        return "Role [" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                '}';
+                ']';
     }
 }

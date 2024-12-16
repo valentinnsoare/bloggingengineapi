@@ -132,4 +132,11 @@ public class Post implements Comparable<Post> {
                 .thenComparing(p -> description)
                 .compare(this, o);
     }
+
+    @Override
+    public String toString() {
+        return "Post [" +
+                "id=" + id +
+                ']';
+    }
 }

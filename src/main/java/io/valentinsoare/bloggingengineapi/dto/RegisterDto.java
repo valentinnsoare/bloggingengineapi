@@ -31,11 +31,11 @@ public class RegisterDto {
 
     @Override
     public String toString() {
-        return "RegisterDto{" +
+        return "RegisterDto [" +
                 "name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                '}';
+                ']';
     }
 }

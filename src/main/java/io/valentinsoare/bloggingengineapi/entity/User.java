@@ -82,13 +82,13 @@ public class User implements Comparable<User> {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "User [" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", roles=" + roles +
-                '}';
+                ']';
     }
 }

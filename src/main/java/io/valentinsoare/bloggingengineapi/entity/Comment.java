@@ -93,4 +93,11 @@ public class Comment implements Comparable<Comment> {
                 .thenComparing(c -> c.post)
                 .compare(this, o);
     }
+
+    @Override
+    public String toString() {
+        return "Comment [" +
+                "id=" + id +
+                ']';
+    }
 }
