@@ -90,10 +90,10 @@ public class Category implements Comparable<Category> {
 
     @Override
     public String toString() {
-        return "Category{" +
+        return "Category [" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                '}';
+                ']';
     }
 }

@@ -27,10 +27,10 @@ public class CategoryDto {
 
     @Override
     public String toString() {
-        return "CategoryDto{" +
+        return "CategoryDto: [" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                '}';
+                ']';
     }
 }

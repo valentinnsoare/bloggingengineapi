@@ -40,13 +40,13 @@ public class PostDto {
 
     @Override
     public String toString() {
-        return "PostDto{" +
+        return "PostDto: [" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", author=" + author +
                 ", description='" + description + '\'' +
                 ", category=" + category +
                 ", content='" + content + '\'' +
-                '}';
+                ']';
     }
 }

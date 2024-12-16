@@ -164,22 +164,17 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional
     public AuthorDto createAuthor(AuthorDto authorDto) {
-        log.info("Creating author {}.", authorDto);
         Author author = modelMapper.map(authorDto, Author.class);
         String emailToBeSearch = author.getEmail();
 
-        log.info("Checking if author with email {} exists.", emailToBeSearch);
         authorRepository.findByEmail(author.getEmail())
                 .ifPresent(a -> {
-                    log.error("Author with email {} already exists.", emailToBeSearch);
                     throw new BloggingEngineException("author", "email already exists", Map.of("email", emailToBeSearch));
                 });
 
         try {
             author = authorRepository.save(author);
-            log.info("Author {} created.", author);
         } catch (Exception e) {
-            log.error("Error creating author {}.", authorDto);
             throw new BloggingEngineException("author", "error creating", Map.of("author", authorDto.toString()));
         }
 
@@ -289,7 +284,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional
-    public AuthorResponse getAllAuthors(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir) {
+    public AuthorResponse  getAllAuthors(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir) {
         log.info("Fetching all authors with page number: {}, page size: {}, sort by: {}, sort direction: {}.",
                 pageNo, pageSize, sortBy, sortDir);
 

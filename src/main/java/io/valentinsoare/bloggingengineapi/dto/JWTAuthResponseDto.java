@@ -19,9 +19,9 @@ public class JWTAuthResponseDto {
 
     @Override
     public String toString() {
-        return "JWTAuthResponseDto{" +
+        return "JWTAuthResponseDto: [" +
                 "accessToken='" + accessToken + '\'' +
                 ", tokenType='" + tokenType + '\'' +
-                '}';
+                ']';
     }
 }

@@ -31,12 +31,12 @@ public class CommentDto {
 
     @Override
     public String toString() {
-        return "CommentDto{" +
+        return "CommentDto: [" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", body='" + body + '\'' +
                 ", postId=" + postId +
-                '}';
+                ']';
     }
 }

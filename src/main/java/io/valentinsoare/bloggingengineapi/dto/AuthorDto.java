@@ -29,11 +29,11 @@ public class AuthorDto {
 
     @Override
     public String toString() {
-        return "AuthorDto{" +
+        return "AuthorDto:[" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                '}';
+                ']';
     }
 }

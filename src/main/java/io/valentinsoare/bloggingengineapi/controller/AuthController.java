@@ -25,7 +25,6 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JWTAuthResponseDto> login(@RequestBody @Valid LoginDto loginDto) {
-        log.info("\033[1;32m Login Request: {} \033[0m", loginDto);
         String token = authService.login(loginDto);
 
         JWTAuthResponseDto authResponse = JWTAuthResponseDto.builder()
@@ -33,10 +32,7 @@ public class AuthController {
                 .tokenType("Bearer")
                 .build();
 
-        ResponseEntity<JWTAuthResponseDto> jwtAuthResponseDtoResponseEntity = new ResponseEntity<>(authResponse, HttpStatus.OK);
-        log.info("\033[1;32m JWT Auth Response: {} \033[0m", jwtAuthResponseDtoResponseEntity);
-
-        return jwtAuthResponseDtoResponseEntity;
+        return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
     @PostMapping("/signup")
