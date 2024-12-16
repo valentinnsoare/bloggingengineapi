@@ -15,29 +15,20 @@ import java.util.Arrays;
 @Order(1)
 @Component
 public class BeforeLoggingAspect {
-    @Before("io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnControllerLayer()")
+
+    @Before("io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnAllLayers()")
     public void loggingBeforeControllerLayer(JoinPoint joinPoint) {
-        logBeforeMethodExecution("Controller layer", joinPoint);
+        logBeforeMethodExecution(joinPoint);
     }
 
-    @Before("io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnServiceLayer()")
-    public void loggingBeforeServiceLayer(JoinPoint joinPoint) {
-        logBeforeMethodExecution("Service layer", joinPoint);
-    }
-
-    @Before("io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnRepositoryLayer()")
-    public void loggingBeforeRepositoryLayer(JoinPoint joinPoint) {
-        logBeforeMethodExecution("Repository layer", joinPoint);
-    }
-
-    private <T> void logBeforeMethodExecution(String layer, JoinPoint joinPoint) {
+    private <T> void logBeforeMethodExecution(JoinPoint joinPoint) {
         SourceLocation sourceLocation = joinPoint.getSourceLocation();
 
         String methodName = joinPoint.getSignature().getName();
         String className = sourceLocation.getWithinType().toString();
         Object[] methodArguments = joinPoint.getArgs();
 
-        log.info("{} -> executing method {} from {} with arguments {}",
-                layer, methodName, className, Arrays.toString(methodArguments));
+        log.info("{} -> executing method {} with arguments {}",
+                joinPoint.getSourceLocation().getWithinType().getName(), methodName, Arrays.toString(methodArguments));
     }
 }

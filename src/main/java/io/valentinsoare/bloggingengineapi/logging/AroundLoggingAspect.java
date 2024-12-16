@@ -16,22 +16,13 @@ import java.util.Arrays;
 @Order(2)
 @Component
 public class AroundLoggingAspect {
-    @Around(value = "io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnControllerLayer()")
+
+    @Around(value = "io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnAllLayers()")
     public Object loggingAfterReturningMethodExecutionWithAnyArguments(ProceedingJoinPoint joinPoint) throws Throwable {
-        return logAroundMethodExecution("Controller layer", joinPoint);
+        return logAroundMethodExecution(joinPoint);
     }
 
-    @Around(value = "io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnServiceLayer()")
-    public Object loggingAfterReturningMethodExecutionWithAnyArgumentsOnServiceLayer(ProceedingJoinPoint joinPoint) throws Throwable {
-        return logAroundMethodExecution("Service layer", joinPoint);
-    }
-
-    @Around(value = "io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnRepositoryLayer()")
-    public Object loggingAfterReturningMethodExecutionWithAnyArgumentsOnRepositoryLayer(ProceedingJoinPoint joinPoint) throws Throwable {
-        return logAroundMethodExecution("Repository layer", joinPoint);
-    }
-
-    private <T> Object logAroundMethodExecution(String layer, ProceedingJoinPoint joinPoint) throws Throwable {
+    private <T> Object logAroundMethodExecution(ProceedingJoinPoint joinPoint) throws Throwable {
         SourceLocation sourceLocation = joinPoint.getSourceLocation();
 
         String methodName = joinPoint.getSignature().getName();
@@ -46,16 +37,16 @@ public class AroundLoggingAspect {
             endTime = System.currentTimeMillis();
             executionTime = endTime - startTime;
 
-            log.info("{} -> returned method {} from {} with arguments {} and result {}. Execution time: {} ms",
-                    layer, methodName, className, Arrays.toString(methodArguments), resultOfExecution, executionTime);
+            log.info("{} -> returned method {}with arguments {} and result {}. Execution time: {} ms",
+                    joinPoint.getSourceLocation().getWithinType().getName(), methodName, Arrays.toString(methodArguments), resultOfExecution, executionTime);
 
             return resultOfExecution;
         } catch (Exception e) {
             endTime = System.currentTimeMillis();
             executionTime = endTime - startTime;
 
-            String exceptionMessage = String.format("%s -> while executing method %s from %s with arguments %s and exception %s. Execution tome: %s ms",
-                    layer, methodName, className, Arrays.toString(methodArguments), e.getMessage(), executionTime);
+            String exceptionMessage = String.format("%s -> while executing method %s with arguments %s and exception %s. Execution tome: %s ms",
+                    joinPoint.getSourceLocation().getWithinType().getName(), methodName, Arrays.toString(methodArguments), e.getMessage(), executionTime);
 
             log.error(
                     new MethodFailedException(exceptionMessage).toString()
