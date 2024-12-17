@@ -48,15 +48,14 @@ public class CategoryController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDto categoryDto) {
-        categoryService.updateCategory(id, categoryDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(categoryService.updateCategory(id, categoryDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<CategoryDto> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Category deleted successfully!", HttpStatus.OK);
     }
 
     @GetMapping("/exists")
@@ -71,8 +70,8 @@ public class CategoryController {
 
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<CategoryDto> deleteAllCategories() {
+    public ResponseEntity<String> deleteAllCategories() {
         categoryService.deleteAllCategories();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("All categories deleted successfully!", HttpStatus.OK);
     }
 }

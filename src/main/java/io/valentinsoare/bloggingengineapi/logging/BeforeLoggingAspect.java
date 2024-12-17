@@ -29,6 +29,6 @@ public class BeforeLoggingAspect {
         Object[] methodArguments = joinPoint.getArgs();
 
         log.info("{} -> executing method {} with arguments {}",
-                joinPoint.getSourceLocation().getWithinType().getName(), methodName, Arrays.toString(methodArguments));
+                className, methodName, Arrays.toString(methodArguments));
     }
 }
