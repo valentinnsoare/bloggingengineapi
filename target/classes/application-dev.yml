@@ -3,7 +3,7 @@ spring:
     ansi:
       enabled: always
   main:
-    banner-mode: "log"
+    banner-mode: log
 
   application:
     name: BloggingEngineAPI
@@ -29,6 +29,13 @@ spring:
 
 logging:
   config: classpath:logback-spring.xml
+
+  level:
+    root: INFO
+    net:
+      ttddyy:
+        dsproxy:
+          listener: OFF
 
 server:
   port: 8080

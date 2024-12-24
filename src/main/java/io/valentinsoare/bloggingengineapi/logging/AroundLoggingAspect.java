@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class AroundLoggingAspect {
 
     @Around(value = "io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnAllLayers()")
-    public Object loggingAfterReturningMethodExecutionWithAnyArguments(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object loggingAfterMethodExecutionWithAnyArguments(ProceedingJoinPoint joinPoint) throws Throwable {
         return logAroundMethodExecution(joinPoint);
     }
 
