@@ -150,10 +150,29 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostDto> getPostsByAuthorEmail(@NotNull String email) {
-        return postRepository.getAllByAuthorEmail(email).stream()
+    public PostResponse getPostsByAuthorEmail(@NotNull String email, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getAllByAuthorEmail(email, pageCharacteristics);
+
+        List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
                 .map(this::mapToDTO)
                 .toList();
+
+        if (contentExtracted.isEmpty()) {
+            throw new NoElementsException(
+                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
+            );
+        }
+
+        return PostResponse.builder()
+                .pageContent(contentExtracted)
+                .pageNo(pageCharacteristics.getPageNumber())
+                .pageSize(pageCharacteristics.getPageSize())
+                .totalPostsOnPage(contentExtracted.size())
+                .totalPages(pageWithPosts.getTotalPages())
+                .isLast(pageWithPosts.isLast())
+                .build();
     }
 
     @Override
@@ -275,19 +294,5 @@ public class PostServiceImpl implements PostService {
         }
 
         return fetchedPosts;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<PostDto> getPostsByAuthorsEmail(@NotNull List<String> authorsEmail) {
-        List<PostDto> postsFromDb = postRepository.getAllByAuthorsEmail(authorsEmail).stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        if (postsFromDb.isEmpty()) {
-            throw new NoElementsException("posts by authors with emails: %s".formatted(authorsEmail));
-        }
-
-        return postsFromDb;
     }
 }

@@ -1,11 +1,13 @@
 package io.valentinsoare.bloggingengineapi.utilities;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 
+@Getter
 public class AuxiliaryMethods {
     private final ObjectMapper jsonStyle;
     private static AuxiliaryMethods instance;
@@ -41,9 +43,5 @@ public class AuxiliaryMethods {
         }
 
         return newValue != null ? newValue : currentValue;
-    }
-
-    public ObjectMapper getJsonStyle() {
-        return jsonStyle;
     }
 }
