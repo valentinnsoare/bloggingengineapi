@@ -50,7 +50,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName)")
     Page<Post> getAllPostsByAuthorLastName(String firstName, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName AND last_name = :lastName)")
+    @Query(nativeQuery = true,
+            value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName AND last_name = :lastName)"
+    )
     Page<Post> getAllPostsByAuthorFirstNameAndLastName(String firstName, String lastName, Pageable pageable);
 
     Page<Post> findAll(Pageable pageable);
@@ -76,6 +78,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     void deletePostByCategoryIdAndPostId(Long categoryId, Long postId);
 
     @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM post WHERE category_id IN (SELECT id FROM category WHERE name = :categoryName)")
+    @Query(nativeQuery = true,
+            value = "DELETE FROM post WHERE category_id IN (SELECT id FROM category WHERE name = :categoryName)"
+    )
     void deleteAllPostsByCategoryName(String categoryName);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE last_name = :lastName) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)")
+    Page<Post> getAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName, Pageable pageable);
 }

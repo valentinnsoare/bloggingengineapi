@@ -371,8 +371,18 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PostResponse getPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
-        return null;
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts =
+                postRepository.getAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException("posts by author with last name: %s and category name: %s".formatted(lastName, categoryName));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override

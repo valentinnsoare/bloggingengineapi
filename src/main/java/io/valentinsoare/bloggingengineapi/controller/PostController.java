@@ -133,7 +133,7 @@ public class PostController {
         return new ResponseEntity<>(String.format("All Posts with author id: %s deleted successfully!", authorId), HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/author/{authorId}/{postId}")
+    @DeleteMapping("/{postId}/author/{authorId}")
     public ResponseEntity<String> deletePostByAuthorIdAndPostId(@PathVariable Long authorId, @PathVariable Long postId) {
         postService.deletePostByAuthorIdAndPostId(authorId, postId);
         return new ResponseEntity<>(String.format("Post with id: %s and author id: %s deleted successfully!", postId, authorId), HttpStatus.NO_CONTENT);
@@ -210,5 +210,17 @@ public class PostController {
     public ResponseEntity<String> deleteAllPostsByCategoryName(@PathVariable @NotNull String categoryName) {
         postService.deleteAllPostsByCategoryName(categoryName);
         return new ResponseEntity<>(String.format("All Posts with category name: %s deleted successfully!", categoryName), HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/author/{lastName}/category/{categoryName}")
+    public ResponseEntity<PostResponse> getPostsByAuthorLastNameAndCategoryName(
+            @PathVariable @NotNull String lastName,
+            @PathVariable @NotNull String categoryName,
+            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
+    ) {
+        return new ResponseEntity<>(postService.getPostsByAuthorLastNameAndCategoryName(lastName, categoryName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 }
