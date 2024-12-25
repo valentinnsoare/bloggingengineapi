@@ -98,7 +98,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -107,5 +107,17 @@ public class PostController {
     @GetMapping("/count")
     public ResponseEntity<Long> countAllPosts() {
         return new ResponseEntity<>(postService.countAllPosts(), HttpStatus.OK);
+    }
+
+    @GetMapping("/count/author/{email}")
+    public ResponseEntity<Long> countPostByAuthorEmail(@PathVariable @NotNull String email) {
+        return new ResponseEntity<>(postService.countPostByAuthorEmail(email), HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<Void> deleteAllPosts() {
+        postService.deleteAllPosts();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
