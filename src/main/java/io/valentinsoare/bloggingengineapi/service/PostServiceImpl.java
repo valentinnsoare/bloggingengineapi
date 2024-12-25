@@ -220,12 +220,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public PostDto updatePostByTitle(String title, PostDto postDto) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public void deletePost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id)))));
 
         postRepository.delete(post);
+    }
+
+    @Override
+    public void deleteAllPostsByTitle(String title) {
+
     }
 
     @Override
@@ -238,6 +248,11 @@ public class PostServiceImpl implements PostService {
         }
 
         return count;
+    }
+
+    @Override
+    public Long findPostIdByTitle(String title) {
+        return 0L;
     }
 
     @Override
@@ -386,11 +401,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PostResponse getPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
         return null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PostResponse getPostsByAuthorEmailAndCategoryName(String email, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
         return null;
     }
