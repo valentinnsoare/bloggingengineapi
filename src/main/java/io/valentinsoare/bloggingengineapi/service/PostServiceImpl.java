@@ -160,9 +160,7 @@ public class PostServiceImpl implements PostService {
                 .toList();
 
         if (contentExtracted.isEmpty()) {
-            throw new NoElementsException(
-                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
-            );
+            throw new NoElementsException(String.format("posts by author email: %s", email));
         }
 
         return PostResponse.builder()
@@ -276,9 +274,7 @@ public class PostServiceImpl implements PostService {
         Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorId(authorId, pageCharacteristics);
 
         if (pageWithPosts.getContent().isEmpty()) {
-            throw new NoElementsException(
-                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
-            );
+            throw new NoElementsException("posts by author with id: %s".formatted(authorId));
         }
 
         List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
@@ -317,6 +313,31 @@ public class PostServiceImpl implements PostService {
                 .totalPostsOnPage(contentExtracted.size())
                 .totalPages(allPostsByAuthorLastName.getTotalPages())
                 .isLast(allPostsByAuthorLastName.isLast())
+                .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByAuthorFirstNameAndLastName(String firstName, String lastName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> allPostsByAuthorFirstNameAndLastName = postRepository.getAllPostsByAuthorFirstNameAndLastName(firstName, lastName, pageCharacteristics);
+
+        if (allPostsByAuthorFirstNameAndLastName.isEmpty()) {
+            throw new NoElementsException("posts by author with firstname: %s last name: %s".formatted(firstName, lastName));
+        }
+
+        List<PostDto> contentExtracted = allPostsByAuthorFirstNameAndLastName.getContent().stream()
+                .map(this::mapToDTO)
+                .toList();
+
+        return PostResponse.builder()
+                .pageContent(contentExtracted)
+                .pageNo(pageCharacteristics.getPageNumber())
+                .pageSize(pageCharacteristics.getPageSize())
+                .totalPostsOnPage(contentExtracted.size())
+                .totalPages(allPostsByAuthorFirstNameAndLastName.getTotalPages())
+                .isLast(allPostsByAuthorFirstNameAndLastName.isLast())
                 .build();
     }
 }
