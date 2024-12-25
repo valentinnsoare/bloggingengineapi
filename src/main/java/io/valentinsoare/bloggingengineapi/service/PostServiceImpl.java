@@ -131,7 +131,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public PostDto getPostById(long id) {
+    public PostDto getPostById(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))
@@ -168,7 +168,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostDto updatePost(long id, PostDto postDto) {
+    public PostDto updatePost(Long id, PostDto postDto) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))
@@ -221,7 +221,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deletePost(long id) {
+    public void deletePost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id)))));
 
@@ -230,8 +230,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public long countAllPosts() {
-        long count = postRepository.count();
+    public Long countAllPosts() {
+        Long count = postRepository.count();
 
         if (count < 1) {
             throw new NoElementsException("posts");
@@ -248,8 +248,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public long countPostByAuthorEmail(@NotNull String email) {
-        long count = postRepository.countPostByAuthorEmail(email);
+    public Long countPostByAuthorEmail(@NotNull String email) {
+        Long count = postRepository.countPostByAuthorEmail(email);
 
         if (count < 1) {
             throw new NoElementsException(String.format("posts by author email: %s", email));
@@ -260,8 +260,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public long countPostsByAuthorId(long authorId) {
-        long c = postRepository.countPostByAuthorId(authorId);
+    public Long countPostsByAuthorId(Long authorId) {
+        Long c = postRepository.countPostByAuthorId(authorId);
 
         if (c < 1) {
             throw new NoElementsException("posts by author with id: %s".formatted(authorId));
@@ -271,57 +271,80 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deleteAllPostsByAuthorId(long authorId) {
+    @Transactional
+    public void deleteAllPostsByAuthorId(Long authorId) {
         postRepository.deleteAllByAuthorId(authorId);
     }
 
     @Override
-    public void deletePostByAuthorIdAndPostId(long authorId, long postId) {
-
+    @Transactional
+    public void deletePostByAuthorIdAndPostId(Long authorId, Long postId) {
+        postRepository.deletePostByAuthorIdAndPostId(authorId, postId);
     }
 
     @Override
+    @Transactional
     public void deleteAllPostsByAuthorEmail(String email) {
-
+        postRepository.deleteAllByAuthorEmail(email);
     }
 
     @Override
+    @Transactional
     public void deleteAllPostsByAuthorFirstNameAndLastName(String firstName, String lastName) {
-
+        postRepository.deleteAllPostsByAuthorFirstNameAndLastName(firstName, lastName);
     }
 
     @Override
+    @Transactional
     public void deleteAllPostsByAuthorLastName(String lastName) {
-
+        postRepository.deleteAllPostsByAuthorLastName(lastName);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PostResponse getPostsByCategoryName(String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
-        return null;
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getAllPostsByCategoryName(categoryName, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException(String.format("posts by category name: %s", categoryName));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
-    public PostResponse getPostsByCategoryId(long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
-        return null;
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByCategoryId(Long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getAllPostsByCategoryId(categoryId, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException(String.format("posts by category id: %s", categoryId));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
-    public long countPostByCategoryName(String categoryName) {
-        return 0;
+    public Long countPostByCategoryName(String categoryName) {
+        return 0L;
     }
 
     @Override
-    public long countPostByCategoryId(long categoryId) {
-        return 0;
+    public Long countPostByCategoryId(Long categoryId) {
+        return 0L;
     }
 
     @Override
-    public void deleteAllPostsByCategoryId(long categoryId) {
+    public void deleteAllPostsByCategoryId(Long categoryId) {
 
     }
 
     @Override
-    public void deletePostByCategoryIdAndPostId(long categoryId, long postId) {
+    public void deletePostByCategoryIdAndPostId(Long categoryId, Long postId) {
 
     }
 
@@ -346,28 +369,28 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getPostsByAuthorIdAndCategoryId(long authorId, long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
+    public PostResponse getPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
         return null;
     }
 
     @Override
-    public long countPostByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
-        return 0;
+    public Long countPostByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
+        return 0L;
     }
 
     @Override
-    public long countPostByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
-        return 0;
+    public Long countPostByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
+        return 0L;
     }
 
     @Override
-    public long countPostByAuthorEmailAndCategoryName(String email, String categoryName) {
-        return 0;
+    public Long countPostByAuthorEmailAndCategoryName(String email, String categoryName) {
+        return 0L;
     }
 
     @Override
-    public long countPostByAuthorIdAndCategoryId(long authorId, long categoryId) {
-        return 0;
+    public Long countPostByAuthorIdAndCategoryId(Long authorId, Long categoryId) {
+        return 0L;
     }
 
     @Override
@@ -382,7 +405,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public PostResponse getPostsByAuthorId(long authorId, int pageNo, int pageSize, String sortBy, String sortDir) {
+    public PostResponse getPostsByAuthorId(Long authorId, int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
         Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorId(authorId, pageCharacteristics);

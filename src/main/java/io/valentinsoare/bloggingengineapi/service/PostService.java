@@ -5,42 +5,42 @@ import io.valentinsoare.bloggingengineapi.response.PostResponse;
 
 public interface PostService {
     PostDto createPost(PostDto postDto);
-    PostDto getPostById(long id);
+    PostDto getPostById(Long id);
     PostDto getPostByTitle(String title);
-    PostDto updatePost(long id, PostDto postDto);
+    PostDto updatePost(Long id, PostDto postDto);
     PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir);
-    void deletePost(long id);
+    void deletePost(Long id);
     void deleteAllPosts();
-    long countAllPosts();
+    Long countAllPosts();
 
-    PostResponse getPostsByAuthorId(long authorId, int pageNo, int pageSize, String sortBy, String sortDir);
+    PostResponse getPostsByAuthorId(Long authorId, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByAuthorLastName(String lastName, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByAuthorFirstNameAndLastName(String firstName, String lastName, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByAuthorEmail(String email, int pageNo, int pageSize, String sortBy, String sortDir);
-    long countPostByAuthorEmail(String email);
-    long countPostsByAuthorId(long authorId);
-    void deleteAllPostsByAuthorId(long authorId);
-    void deletePostByAuthorIdAndPostId(long authorId, long postId);
+    Long countPostByAuthorEmail(String email);
+    Long countPostsByAuthorId(Long authorId);
+    void deleteAllPostsByAuthorId(Long authorId);
+    void deletePostByAuthorIdAndPostId(Long authorId, Long postId);
     void deleteAllPostsByAuthorEmail(String email);
     void deleteAllPostsByAuthorFirstNameAndLastName(String firstName, String lastName);
     void deleteAllPostsByAuthorLastName(String lastName);
 
     PostResponse getPostsByCategoryName(String categoryName, int pageNo, int pageSize, String sortBy, String sortDir);
-    PostResponse getPostsByCategoryId(long categoryId, int pageNo, int pageSize, String sortBy, String sortDir);
-    long countPostByCategoryName(String categoryName);
-    long countPostByCategoryId(long categoryId);
-    void deleteAllPostsByCategoryId(long categoryId);
-    void deletePostByCategoryIdAndPostId(long categoryId, long postId);
+    PostResponse getPostsByCategoryId(Long categoryId, int pageNo, int pageSize, String sortBy, String sortDir);
+    Long countPostByCategoryName(String categoryName);
+    Long countPostByCategoryId(Long categoryId);
+    void deleteAllPostsByCategoryId(Long categoryId);
+    void deletePostByCategoryIdAndPostId(Long categoryId, Long postId);
     void deleteAllPostsByCategoryName(String categoryName);
 
     PostResponse getPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByAuthorEmailAndCategoryName(String email, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir);
-    PostResponse getPostsByAuthorIdAndCategoryId(long authorId, long categoryId, int pageNo, int pageSize, String sortBy, String sortDir);
-    long countPostByAuthorLastNameAndCategoryName(String lastName, String categoryName);
-    long countPostByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName);
-    long countPostByAuthorEmailAndCategoryName(String email, String categoryName);
-    long countPostByAuthorIdAndCategoryId(long authorId, long categoryId);
+    PostResponse getPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId, int pageNo, int pageSize, String sortBy, String sortDir);
+    Long countPostByAuthorLastNameAndCategoryName(String lastName, String categoryName);
+    Long countPostByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName);
+    Long countPostByAuthorEmailAndCategoryName(String email, String categoryName);
+    Long countPostByAuthorIdAndCategoryId(Long authorId, Long categoryId);
     void deleteAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName);
     void deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName);
 }
