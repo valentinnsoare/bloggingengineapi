@@ -353,13 +353,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void deleteAllPostsByCategoryId(Long categoryId) {
-
+        postRepository.deleteAllPostsByCategoryId(categoryId);
     }
 
     @Override
+    @Transactional
     public void deletePostByCategoryIdAndPostId(Long categoryId, Long postId) {
-
+        postRepository.deletePostByCategoryIdAndPostId(categoryId, postId);
     }
 
     @Override

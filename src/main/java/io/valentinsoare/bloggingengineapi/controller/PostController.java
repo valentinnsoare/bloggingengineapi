@@ -191,4 +191,17 @@ public class PostController {
     public ResponseEntity<Long> countPostByCategoryId(@PathVariable Long categoryId) {
         return new ResponseEntity<>(postService.countPostByCategoryId(categoryId), HttpStatus.OK);
     }
+
+    @DeleteMapping("/category/{categoryId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<String> deleteAllPostsByCategoryId(@PathVariable Long categoryId) {
+        postService.deleteAllPostsByCategoryId(categoryId);
+        return new ResponseEntity<>(String.format("All Posts with category id: %s deleted successfully!", categoryId), HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/category/{categoryId}/{postId}")
+    public ResponseEntity<String> deletePostByCategoryIdAndPostId(@PathVariable Long categoryId, @PathVariable Long postId) {
+        postService.deletePostByCategoryIdAndPostId(categoryId, postId);
+        return new ResponseEntity<>(String.format("Post with id: %s and category id: %s deleted successfully!", postId, categoryId), HttpStatus.NO_CONTENT);
+    }
 }
