@@ -5,13 +5,10 @@ import io.valentinsoare.bloggingengineapi.response.PostResponse;
 import io.valentinsoare.bloggingengineapi.service.PostService;
 import io.valentinsoare.bloggingengineapi.utilities.ApplicationConstants;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -39,8 +36,25 @@ public class PostController {
     }
 
     @GetMapping("/author")
-    public ResponseEntity<List<PostDto>> getAllPostsByAuthor(@RequestParam @NotNull String email) {
-        return new ResponseEntity<>(postService.getPostsByAuthorEmail(email), HttpStatus.OK);
+    public ResponseEntity<PostResponse> getAllPostsByAuthorEmail(
+            @RequestParam (value = "email") String email,
+            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
+    ) {
+        return new ResponseEntity<>(postService.getPostsByAuthorEmail(email, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
+
+    @GetMapping("/author")
+    public ResponseEntity<PostResponse> getAllPostsByAuthorId(
+            @RequestParam (value = "id") Long id,
+            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
+    ) {
+        return new ResponseEntity<>(postService.getPostsByAuthorId(id, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -36,19 +36,19 @@ public class Post implements Comparable<Post> {
     @Column(name = "description", nullable = false)
     private String description;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(
             name = "post_category",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
+            joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id")
     )
     private Set<Category> categories = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "post_author",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id")
+            joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id")
     )
     private Set<Author> authors = new HashSet<>();
 
@@ -57,12 +57,21 @@ public class Post implements Comparable<Post> {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @NotNull
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Comment> comments = new HashSet<>();
 
     public Post setId(@NotNull  Long id) {
         this.id = id;
+        return this;
+    }
+
+    public Post setCategories(Set<Category> categories) {
+        this.categories = categories;
+        return this;
+    }
+
+    public Post setComments(Set<Comment> comments) {
+        this.comments = comments;
         return this;
     }
 
@@ -106,6 +115,16 @@ public class Post implements Comparable<Post> {
         category.getPosts().remove(this);
     }
 
+    public void addAuthor(Author author) {
+        this.authors.add(author);
+        author.getAllPosts().add(this);
+    }
+
+    public void removeAuthor(Author author) {
+        this.authors.remove(author);
+        author.getAllPosts().remove(this);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -137,6 +156,10 @@ public class Post implements Comparable<Post> {
     public String toString() {
         return "Post [" +
                 "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", categories=" + categories +
+                ", authors=" + authors +
                 ']';
     }
 }

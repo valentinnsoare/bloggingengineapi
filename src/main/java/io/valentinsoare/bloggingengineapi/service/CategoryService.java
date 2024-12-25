@@ -12,7 +12,7 @@ public interface CategoryService {
     CategoryDto getCategoryByName(String name);
     CategoryDto addCategory(CategoryDto category);
     void deleteCategory(Long id);
-    void updateCategory(Long id, CategoryDto category);
+    CategoryDto updateCategory(Long id, CategoryDto category);
     CategoryResponse getAllCategories(int pageNo, int pageSize, String sortBy, String sortDir);
     long countAllCategories();
     void deleteAllCategories();

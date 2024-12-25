@@ -1,11 +1,18 @@
 package io.valentinsoare.bloggingengineapi.service;
 
+import io.valentinsoare.bloggingengineapi.dto.AuthorDto;
+import io.valentinsoare.bloggingengineapi.dto.CategoryDto;
+import io.valentinsoare.bloggingengineapi.dto.CommentDto;
 import io.valentinsoare.bloggingengineapi.entity.Author;
+import io.valentinsoare.bloggingengineapi.entity.Category;
+import io.valentinsoare.bloggingengineapi.entity.Comment;
 import io.valentinsoare.bloggingengineapi.entity.Post;
 import io.valentinsoare.bloggingengineapi.exception.NoElementsException;
 import io.valentinsoare.bloggingengineapi.exception.ResourceNotFoundException;
 import io.valentinsoare.bloggingengineapi.exception.ResourceViolationException;
 import io.valentinsoare.bloggingengineapi.dto.PostDto;
+import io.valentinsoare.bloggingengineapi.repository.AuthorRepository;
+import io.valentinsoare.bloggingengineapi.repository.CategoryRepository;
 import io.valentinsoare.bloggingengineapi.response.PostResponse;
 import io.valentinsoare.bloggingengineapi.repository.PostRepository;
 import io.valentinsoare.bloggingengineapi.utilities.AuxiliaryMethods;
@@ -25,12 +32,18 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final AuxiliaryMethods auxiliaryMethods;
     private final ModelMapper modelmapper;
+    private final CategoryRepository categoryRepository;
+    private final AuthorRepository authorRepository;
 
     public PostServiceImpl(PostRepository postRepository,
-                           ModelMapper modelMapper) {
+                           ModelMapper modelMapper,
+                           CategoryRepository categoryRepository,
+                           AuthorRepository authorRepository) {
         this.modelmapper = modelMapper;
         this.postRepository = postRepository;
         this.auxiliaryMethods = AuxiliaryMethods.getInstance();
+        this.categoryRepository = categoryRepository;
+        this.authorRepository = authorRepository;
     }
 
     private PostDto mapToDTO(Post post) {
@@ -44,26 +57,50 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostDto createPost(@NotNull PostDto postDto) {
-        Post newPost = mapToEntity(postDto);
+        Set<CategoryDto> categoriesDto = postDto.getCategories();
+        Set<AuthorDto> authorsDto = postDto.getAuthors();
 
-        Post savedPost;
-        log.info("Creating post with title: {}.", postDto.getTitle());
+        Post newPost = mapToEntity(postDto)
+                .setCategories(new HashSet<>())
+                .setAuthors(new HashSet<>());
+
+        for (CategoryDto category : categoriesDto) {
+            Optional<Category> categoryByName = categoryRepository.findCategoryByName(category.getName());
+
+            if (categoryByName.isPresent()) {
+                Category foundCategory = categoryByName.get();
+                newPost.addCategory(foundCategory);
+            }
+        }
+
+        if (newPost.getCategories().isEmpty()) {
+            throw new ResourceViolationException("No categories found for post.");
+        }
+
+        for (AuthorDto author : authorsDto) {
+            Optional<Author> authorByEmail = authorRepository.findByEmail(author.getEmail());
+
+            if (authorByEmail.isPresent()) {
+                Author foundAuthor = authorByEmail.get();
+                newPost.addAuthor(foundAuthor);
+            }
+        }
+
+        if (newPost.getAuthors().isEmpty()) {
+            throw new ResourceViolationException("No authors found for post.");
+        }
 
         try {
-            savedPost = postRepository.save(newPost);
+            Post savedPost = postRepository.save(newPost);
+            return mapToDTO(savedPost);
         } catch (Exception e) {
             throw new ResourceViolationException(e.getLocalizedMessage());
         }
-
-        log.info("Post with title {} created.", postDto.getTitle());
-        return mapToDTO(savedPost);
     }
 
     @Override
     @Transactional(readOnly = true)
     public PostResponse getAllPosts(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir) {
-        log.info("Getting all posts from page number: {} and page size: {} in sorted order.", pageNo, pageSize);
-
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
         Page<Post> pageWithPosts = postRepository.findAll(pageCharacteristics);
@@ -73,7 +110,9 @@ public class PostServiceImpl implements PostService {
                 .toList();
 
         if (content.isEmpty()) {
-            throw new NoElementsException("posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize));
+            throw new NoElementsException(
+                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
+            );
         }
 
         return PostResponse.builder()
@@ -89,10 +128,10 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public PostDto getPostById(long id) {
-        log.info("Getting post with id: {}.", id);
-
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id)))));
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))
+                );
 
         return mapToDTO(post);
     }
@@ -100,8 +139,6 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public PostDto getPostByTitle(@NotNull String title) {
-        log.info("Getting post with title: {}", title);
-
         Post post = postRepository.getPostByTitle(title);
 
         if (post == null || post.getId() < 1) {
@@ -113,57 +150,96 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostDto> getPostsByAuthorEmail(@NotNull String email) {
-        log.info("Getting all posts by author: {}", email);
+    public PostResponse getPostsByAuthorEmail(@NotNull String email, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
-        return postRepository.getAllByAuthorEmail(email).stream()
+        Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorEmail(email, pageCharacteristics);
+
+        List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
                 .map(this::mapToDTO)
                 .toList();
+
+        if (contentExtracted.isEmpty()) {
+            throw new NoElementsException(
+                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
+            );
+        }
+
+        return PostResponse.builder()
+                .pageContent(contentExtracted)
+                .pageNo(pageCharacteristics.getPageNumber())
+                .pageSize(pageCharacteristics.getPageSize())
+                .totalPostsOnPage(contentExtracted.size())
+                .totalPages(pageWithPosts.getTotalPages())
+                .isLast(pageWithPosts.isLast())
+                .build();
     }
 
     @Override
     @Transactional
     public PostDto updatePost(long id, @NotNull  @NotNull PostDto postDto) {
-        log.info("Updating post with id: {}.", id);
-
         Post post = postRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))
                 );
 
-        post.setTitle(auxiliaryMethods.updateIfPresent(postDto.getTitle(), post.getTitle()))
-                .setAuthors((Set<Author>) auxiliaryMethods.updateIfPresent(postDto.getAuthor(), post.getAuthors()))
-                .setDescription(auxiliaryMethods.updateIfPresent(postDto.getDescription(), post.getDescription()))
-                .setContent(auxiliaryMethods.updateIfPresent(postDto.getContent(), post.getContent()));
+        post.setTitle(postDto.getTitle())
+                .setDescription(postDto.getDescription())
+                .setContent(postDto.getContent())
+                .setCategories(new HashSet<>())
+                .setAuthors(new HashSet<>())
+                .setComments(new HashSet<>());
+
+        postDto.getCategories().forEach(categoryDto -> {
+            Optional<Category> categoryByName = categoryRepository.findCategoryByName(categoryDto.getName());
+
+            if (categoryByName.isPresent()) {
+                Category foundCategory = categoryByName.get();
+                post.addCategory(foundCategory);
+            }
+        });
+
+        postDto.getAuthors().forEach(authorDto -> {
+            Optional<Author> authorByEmail = authorRepository.findByEmail(authorDto.getEmail());
+
+            if (authorByEmail.isPresent()) {
+                Author foundAuthor = authorByEmail.get();
+                post.addAuthor(foundAuthor);
+            }
+        });
+
+        Set<CommentDto> commentsDto = postDto.getComments();
+
+        if (!commentsDto.isEmpty()) {
+            commentsDto.forEach(commentDto -> {
+                Comment comment = modelmapper.map(commentDto, Comment.class);
+                post.addComment(comment);
+            });
+        }
 
         Post updatedPost;
+
         try {
             updatedPost = postRepository.save(post);
         } catch (Exception e) {
             throw new ResourceViolationException(e.getLocalizedMessage());
         }
 
-        log.info("Post with id: {} updated.", id);
         return mapToDTO(updatedPost);
     }
 
     @Override
     @Transactional
     public void deletePost(long id) {
-        log.info("Deleting post with id: {}.", id);
-
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id)))));
 
         postRepository.delete(post);
-        log.info("Post with id: {} deleted.", id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public long countAllPosts() {
-        log.info("Counting all posts.");
-
         long count = postRepository.count();
 
         if (count < 1) {
@@ -176,16 +252,12 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void deleteAllPosts() {
-        log.info("Deleting all posts.");
-
         postRepository.deleteAll();
-        log.info("All posts deleted.");
     }
 
     @Override
     @Transactional(readOnly = true)
     public long countPostByAuthorEmail(@NotNull String email) {
-        log.info("Counting posts by author email: {}.", email);
 
         long count = postRepository.countPostByAuthorEmail(email);
 
@@ -198,26 +270,34 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostDto> getPostsByAuthorId(long id) {
-        log.info("Fetching all posts by author with id: {}.", id);
+    public PostResponse getPostsByAuthorId(long authorId, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
-        List<PostDto> postsFromDb = postRepository.getAllByAuthorId(id).stream()
+        Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorId(authorId, pageCharacteristics);
+
+        if (pageWithPosts.getContent().isEmpty()) {
+            throw new NoElementsException(
+                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
+            );
+        }
+
+        List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
                 .map(this::mapToDTO)
                 .toList();
 
-        if (postsFromDb.isEmpty()) {
-            throw new NoElementsException("posts by author with id: %s".formatted(id));
-        }
-
-        log.info("Found {} posts by author with id: {}.", postsFromDb.size(), id);
-        return postsFromDb;
+        return PostResponse.builder()
+                .pageContent(contentExtracted)
+                .pageNo(pageCharacteristics.getPageNumber())
+                .pageSize(pageCharacteristics.getPageSize())
+                .totalPostsOnPage(contentExtracted.size())
+                .totalPages(pageWithPosts.getTotalPages())
+                .isLast(pageWithPosts.isLast())
+                .build();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<PostDto> getPostsByAuthorLastName(@NotNull String lastName) {
-        log.info("Fetching all posts by author with last name: {}.", lastName);
-
         List<PostDto> fetchedPosts = postRepository.getAllByAuthorLastName(lastName).stream()
                 .map(this::mapToDTO)
                 .toList();
@@ -226,24 +306,6 @@ public class PostServiceImpl implements PostService {
             throw new NoElementsException("posts by author with last name: %s".formatted(lastName));
         }
 
-        log.info("Found {} posts by author with last name: {}.", fetchedPosts.size(), lastName);
         return fetchedPosts;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<PostDto> getPostsByAuthorsEmail(@NotNull List<String> authorsEmail) {
-        log.info("Fetching all posts by authors with emails: {}.", authorsEmail);
-
-        List<PostDto> postsFromDb = postRepository.getAllByAuthorsEmail(authorsEmail).stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        if (postsFromDb.isEmpty()) {
-            throw new NoElementsException("posts by authors with emails: %s".formatted(authorsEmail));
-        }
-
-        log.info("Found {} posts by authors with emails: {}.", postsFromDb.size(), authorsEmail);
-        return postsFromDb;
     }
 }

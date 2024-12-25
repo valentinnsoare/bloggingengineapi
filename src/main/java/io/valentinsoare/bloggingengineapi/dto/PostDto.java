@@ -19,23 +19,20 @@ public class PostDto {
     @Size(min = 1, max = 100, message = "Title must be between 1 and 100 characters!")
     private String title;
 
-    @NotEmpty(message = "Author is mandatory!")
-    @Size(min = 1, max = 50, message = "Author must be between 1 and 50 characters!")
-    private AuthorDto author;
-
     @NotEmpty(message = "Description is mandatory!")
     @Size(min = 1, max = 355, message = "Description must be between 1 and 355 characters!")
     private String description;
-
-    @NotEmpty(message = "Category is mandatory!")
-    private CategoryDto category;
 
     @NotEmpty(message = "Content is mandatory!")
     @Size(min = 1, max = 15000, message = "Content must be between 1 and 15000 characters!")
     private String content;
 
+    @Size(min = 1, max = 5, message = "We need at least one author and maximum is five!")
+    private Set<AuthorDto> authors = Collections.emptySet();
+
     private Set<CommentDto> comments = Collections.emptySet();
 
+    @Size(min = 1, max = 5, message = "We need at least one category and maximum is five!")
     private Set<CategoryDto> categories = Collections.emptySet();
 
     @Override
@@ -43,9 +40,9 @@ public class PostDto {
         return "PostDto: [" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", author=" + author +
+                ", authors=" + authors +
                 ", description='" + description + '\'' +
-                ", category=" + category +
+                ", categories=" + categories +
                 ", content='" + content + '\'' +
                 ']';
     }

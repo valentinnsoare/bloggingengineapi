@@ -18,7 +18,7 @@ import java.util.Arrays;
 public class AroundLoggingAspect {
 
     @Around(value = "io.valentinsoare.bloggingengineapi.logging.aop.AopMapping.methodsExecutionOnAllLayers()")
-    public Object loggingAfterReturningMethodExecutionWithAnyArguments(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object loggingAfterMethodExecutionWithAnyArguments(ProceedingJoinPoint joinPoint) throws Throwable {
         return logAroundMethodExecution(joinPoint);
     }
 
@@ -37,8 +37,8 @@ public class AroundLoggingAspect {
             endTime = System.currentTimeMillis();
             executionTime = endTime - startTime;
 
-            log.info("{} -> returned method {}with arguments {} and result {}. Execution time: {} ms",
-                    joinPoint.getSourceLocation().getWithinType().getName(), methodName, Arrays.toString(methodArguments), resultOfExecution, executionTime);
+            log.info("{} -> returned method {} with arguments {} and result {}. Execution time: {} ms",
+                    className, methodName, Arrays.toString(methodArguments), resultOfExecution, executionTime);
 
             return resultOfExecution;
         } catch (Exception e) {

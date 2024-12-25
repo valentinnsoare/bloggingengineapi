@@ -4,6 +4,7 @@ import io.valentinsoare.bloggingengineapi.dto.CategoryDto;
 import io.valentinsoare.bloggingengineapi.entity.Category;
 import io.valentinsoare.bloggingengineapi.entity.Post;
 import io.valentinsoare.bloggingengineapi.exception.NoElementsException;
+import io.valentinsoare.bloggingengineapi.exception.ResourceAlreadyExists;
 import io.valentinsoare.bloggingengineapi.exception.ResourceNotFoundException;
 import io.valentinsoare.bloggingengineapi.repository.CategoryRepository;
 import io.valentinsoare.bloggingengineapi.response.CategoryResponse;
@@ -44,140 +45,82 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(readOnly = true)
     public boolean existsByName(String name) {
-        log.info("Checking if category with name {} exists.", name);
-
-        if (categoryRepository.existsByName(name)) {
-            log.info("Category with name {} exists.", name);
-            return true;
-        }
-
-        return false;
+        return categoryRepository.existsByName(name);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CategoryDto> getCategoriesByIds(List<Long> categoryIds) {
-        log.info("Searching for categories with ids: {}.", categoryIds);
         List<Category> byIdIn = categoryRepository.findByIdIn(categoryIds);
 
         if (!byIdIn.isEmpty()) {
-            log.info("Found categories with ids: {}.", categoryIds);
-
             return byIdIn.stream()
                     .map(category -> modelMapper.map(category, CategoryDto.class))
                     .toList();
         }
 
-        log.info("Categories with ids {} not found.", categoryIds);
         throw new ResourceNotFoundException("categories", Map.of("ids", categoryIds.toString()));
     }
 
     @Override
     @Transactional(readOnly = true)
     public CategoryDto getCategoryById(Long id) {
-        log.info("Searching for category with id: {}.", id);
-
         Category foundCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Category with id {} not found.", id);
-                    return new ResourceNotFoundException("category", Map.of("id", id.toString()));
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("category", Map.of("id", id.toString())));
 
-        log.info("Fetched category with id {}.", id);
-
-        CategoryDto categoryDto = modelMapper.map(foundCategory, CategoryDto.class);
-        log.info("Mapped category with id {} to categoryDto.", id);
-
-        return categoryDto;
+        return modelMapper.map(foundCategory, CategoryDto.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public CategoryDto getCategoryByName(String name) {
-        log.info("Searching for category with name: {}.", name);
-
         Category foundCategory = categoryRepository.findCategoryByName(name)
-                .orElseThrow(() -> {
-                    log.error("Category with name {} not found.", name);
-                    return new ResourceNotFoundException("category", Map.of("name", name));
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("category", Map.of("name", name)));
 
-        log.info("Fetched category with name {}.", name);
-
-        CategoryDto categoryDto = modelMapper.map(foundCategory, CategoryDto.class);
-        log.info("Mapped category with name {} to categoryDto.", name);
-
-        return categoryDto;
+        return modelMapper.map(foundCategory, CategoryDto.class);
     }
 
     @Override
     @Transactional
-    public CategoryDto addCategory(CategoryDto category) {
-        Category newCategory = modelMapper.map(category, Category.class);
-        log.info("Mapped categoryDto to category with name: {}.", category.getName());
-
-        System.out.println(newCategory);
+    public CategoryDto addCategory(CategoryDto categoryDto) {
+        Category newCategory = modelMapper.map(categoryDto, Category.class);
 
         categoryRepository.findCategoryByName(newCategory.getName())
-                .ifPresentOrElse(
-                        foundCategory -> log.error("Category with name {} already exists.", foundCategory.getName()),
-                        () -> {
-                            log.info("Saving category with name {}.", newCategory.getName());
-                            categoryRepository.save(newCategory);
-                        }
-                );
+                .ifPresent(category -> {
+                    throw new ResourceAlreadyExists("category", Map.of("name", category.getName()));
+                });
 
         Category savedCategory = categoryRepository.save(newCategory);
-
-        System.out.println(savedCategory);
-        log.info("Category with name {} saved.", newCategory.getName());
-
         return modelMapper.map(savedCategory, CategoryDto.class);
     }
 
     @Override
     @Transactional
     public void deleteCategory(Long id) {
-        log.info("Deleting category with id: {}.", id);
-
         Category foundCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Category with id {} not found.", id);
-                    return new ResourceNotFoundException("category", Map.of("id", id.toString()));
-                });
-        log.info("Fetched category with id {}.", id);
+                .orElseThrow(() -> new ResourceNotFoundException("category", Map.of("id", id.toString())));
 
-        log.info("Deleting category with id {}.", id);
         categoryRepository.delete(foundCategory);
-        log.info("Category with id {} deleted.", id);
     }
 
     @Override
     @Transactional
-    public void updateCategory(Long id, CategoryDto category) {
-        log.info("Updating category with id: {}.", id);
-
+    public CategoryDto updateCategory(Long id, CategoryDto category) {
         Category foundCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Category with id {} not found.", id);
-                    return new ResourceNotFoundException("category", Map.of("id", id.toString()));
-                });
-        log.info("Fetched category with id {}.", id);
+                .orElseThrow(() -> new ResourceNotFoundException("category", Map.of("id", id.toString())));
 
         foundCategory.setName(auxiliaryMethods.updateIfPresent(category.getName(), foundCategory.getName()))
                 .setDescription(auxiliaryMethods.updateIfPresent(category.getDescription(), foundCategory.getDescription()))
                 .setPosts((Set<Post>) auxiliaryMethods.updateIfPresent(category.getAllPostsWithCategory(), foundCategory.getPosts()));
 
-        log.info("Updated category with id {}.", id);
-        categoryRepository.save(foundCategory);
-        log.info("Category with id {} saved.", id);
+        Category savedCategory = categoryRepository.save(foundCategory);
+
+        return modelMapper.map(savedCategory, CategoryDto.class);
     }
 
     @Override
     @Transactional(readOnly = true)
     public CategoryResponse getAllCategories(int pageNo, int pageSize, String sortBy, String sortDir) {
-        log.info("Getting all posts from page number: {} and page size: {} in sorted order.", pageNo, pageSize);
-
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
         Page<Category> pageWithCategories = categoryRepository.findAll(pageCharacteristics);
@@ -203,24 +146,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(readOnly = true)
     public long countAllCategories() {
-        log.info("Counting all categories.");
         long c = categoryRepository.count();
 
         if (c == 0) {
             throw new NoElementsException("categories");
         }
 
-        log.info("Counted all categories.");
         return c;
     }
 
     @Override
     @Transactional
     public void deleteAllCategories() {
-        log.info("Deleting all categories.");
-
         categoryRepository.deleteAll();
-
-        log.info("Deleted all categories.");
     }
 }
