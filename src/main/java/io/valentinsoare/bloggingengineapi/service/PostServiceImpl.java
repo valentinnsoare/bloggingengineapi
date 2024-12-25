@@ -329,13 +329,27 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Long countPostByCategoryName(String categoryName) {
-        return 0L;
+    @Transactional(readOnly = true)
+    public Long countPostsByCategoryName(String categoryName) {
+        Long l = postRepository.countPostsByCategoryName(categoryName);
+
+        if (l < 1) {
+            throw new NoElementsException("posts by category name: %s".formatted(categoryName));
+        }
+
+        return l;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long countPostByCategoryId(Long categoryId) {
-        return 0L;
+        Long l = postRepository.countPostByCategoryId(categoryId);
+
+        if (l < 1) {
+            throw new NoElementsException("posts by category id: %s".formatted(categoryId));
+        }
+
+        return l;
     }
 
     @Override

@@ -181,4 +181,14 @@ public class PostController {
     ) {
         return new ResponseEntity<>(postService.getPostsByCategoryId(categoryId, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
+
+    @GetMapping("/count/category/{categoryName}")
+    public ResponseEntity<Long> countPostsByCategoryName(@PathVariable @NotNull String categoryName) {
+        return new ResponseEntity<>(postService.countPostsByCategoryName(categoryName), HttpStatus.OK);
+    }
+
+    @GetMapping("/count/category/{categoryId}")
+    public ResponseEntity<Long> countPostByCategoryId(@PathVariable Long categoryId) {
+        return new ResponseEntity<>(postService.countPostByCategoryId(categoryId), HttpStatus.OK);
+    }
 }

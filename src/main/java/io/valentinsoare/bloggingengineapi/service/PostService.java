@@ -27,7 +27,7 @@ public interface PostService {
 
     PostResponse getPostsByCategoryName(String categoryName, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByCategoryId(Long categoryId, int pageNo, int pageSize, String sortBy, String sortDir);
-    Long countPostByCategoryName(String categoryName);
+    Long countPostsByCategoryName(String categoryName);
     Long countPostByCategoryId(Long categoryId);
     void deleteAllPostsByCategoryId(Long categoryId);
     void deletePostByCategoryIdAndPostId(Long categoryId, Long postId);

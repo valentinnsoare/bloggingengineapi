@@ -60,4 +60,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE category_id = :categoryId")
     Page<Post> getAllPostsByCategoryId(Long categoryId, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM post WHERE category_id IN (SELECT id FROM category WHERE name = :categoryName)")
+    Long countPostsByCategoryName(String categoryName);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM post WHERE category_id = :categoryId")
+    Long countPostByCategoryId(Long categoryId);
 }
