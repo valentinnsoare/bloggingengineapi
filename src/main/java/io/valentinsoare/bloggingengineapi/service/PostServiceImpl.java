@@ -365,8 +365,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void deleteAllPostsByCategoryName(String categoryName) {
-
+        postRepository.deleteAllPostsByCategoryName(categoryName);
     }
 
     @Override

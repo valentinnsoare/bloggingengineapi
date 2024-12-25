@@ -74,4 +74,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM post WHERE category_id = :categoryId AND id = :postId")
     void deletePostByCategoryIdAndPostId(Long categoryId, Long postId);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM post WHERE category_id IN (SELECT id FROM category WHERE name = :categoryName)")
+    void deleteAllPostsByCategoryName(String categoryName);
 }

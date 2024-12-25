@@ -204,4 +204,11 @@ public class PostController {
         postService.deletePostByCategoryIdAndPostId(categoryId, postId);
         return new ResponseEntity<>(String.format("Post with id: %s and category id: %s deleted successfully!", postId, categoryId), HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/category/{categoryName}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<String> deleteAllPostsByCategoryName(@PathVariable @NotNull String categoryName) {
+        postService.deleteAllPostsByCategoryName(categoryName);
+        return new ResponseEntity<>(String.format("All Posts with category name: %s deleted successfully!", categoryName), HttpStatus.NO_CONTENT);
+    }
 }
