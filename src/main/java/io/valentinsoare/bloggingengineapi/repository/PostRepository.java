@@ -26,7 +26,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> getAllPostsByAuthorId(Long id, Pageable pageable);
 
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName)")
-    List<Post> getAllByAuthorLastName(String firstName);
+    Page<Post> getAllPostsByAuthorLastName(String firstName, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName AND last_name = :lastName)")
+    List<Post> getAllPostsByAuthorFirstNameAndLastName(String firstName, String lastName);
 
     Page<Post> findAll(Pageable pageable);
 }

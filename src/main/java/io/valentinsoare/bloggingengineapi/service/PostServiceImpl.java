@@ -297,15 +297,26 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostDto> getPostsByAuthorLastName(@NotNull String lastName) {
-        List<PostDto> fetchedPosts = postRepository.getAllByAuthorLastName(lastName).stream()
-                .map(this::mapToDTO)
-                .toList();
+    public PostResponse getPostsByAuthorLastName(String lastName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
-        if (fetchedPosts.isEmpty()) {
+        Page<Post> allPostsByAuthorLastName = postRepository.getAllPostsByAuthorLastName(lastName, pageCharacteristics);
+
+        if (allPostsByAuthorLastName.isEmpty()) {
             throw new NoElementsException("posts by author with last name: %s".formatted(lastName));
         }
 
-        return fetchedPosts;
+        List<PostDto> contentExtracted = allPostsByAuthorLastName.getContent().stream()
+                .map(this::mapToDTO)
+                .toList();
+
+        return PostResponse.builder()
+                .pageContent(contentExtracted)
+                .pageNo(pageCharacteristics.getPageNumber())
+                .pageSize(pageCharacteristics.getPageSize())
+                .totalPostsOnPage(contentExtracted.size())
+                .totalPages(allPostsByAuthorLastName.getTotalPages())
+                .isLast(allPostsByAuthorLastName.isLast())
+                .build();
     }
 }
