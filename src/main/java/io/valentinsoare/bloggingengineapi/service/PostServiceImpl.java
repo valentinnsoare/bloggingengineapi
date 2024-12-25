@@ -54,6 +54,21 @@ public class PostServiceImpl implements PostService {
         return modelmapper.map(postDto, Post.class);
     }
 
+    private PostResponse preparePostResponseToBeReturned(Page<Post> pageWithPosts) {
+        List<PostDto> content = pageWithPosts.getContent().stream()
+                .map(this::mapToDTO)
+                .toList();
+
+        return PostResponse.builder()
+                .pageContent(content)
+                .pageNo(pageWithPosts.getNumber())
+                .pageSize(pageWithPosts.getSize())
+                .totalPostsOnPage(content.size())
+                .totalPages(pageWithPosts.getTotalPages())
+                .isLast(pageWithPosts.isLast())
+                .build();
+    }
+
     @Override
     @Transactional
     public PostDto createPost(@NotNull PostDto postDto) {
@@ -100,29 +115,18 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public PostResponse getAllPosts(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir) {
+    public PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
         Page<Post> pageWithPosts = postRepository.findAll(pageCharacteristics);
 
-        List<PostDto> content = pageWithPosts.getContent().stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        if (content.isEmpty()) {
+        if (pageWithPosts.isEmpty()) {
             throw new NoElementsException(
                     "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
             );
         }
 
-        return PostResponse.builder()
-                .pageContent(content)
-                .pageNo(pageCharacteristics.getPageNumber())
-                .pageSize(pageCharacteristics.getPageSize())
-                .totalPostsOnPage(content.size())
-                .totalPages(pageWithPosts.getTotalPages())
-                .isLast(pageWithPosts.isLast())
-                .build();
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
@@ -155,22 +159,11 @@ public class PostServiceImpl implements PostService {
 
         Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorEmail(email, pageCharacteristics);
 
-        List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        if (contentExtracted.isEmpty()) {
+        if (pageWithPosts.isEmpty()) {
             throw new NoElementsException(String.format("posts by author email: %s", email));
         }
 
-        return PostResponse.builder()
-                .pageContent(contentExtracted)
-                .pageNo(pageCharacteristics.getPageNumber())
-                .pageSize(pageCharacteristics.getPageSize())
-                .totalPostsOnPage(contentExtracted.size())
-                .totalPages(pageWithPosts.getTotalPages())
-                .isLast(pageWithPosts.isLast())
-                .build();
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
@@ -256,7 +249,6 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public long countPostByAuthorEmail(@NotNull String email) {
-
         long count = postRepository.countPostByAuthorEmail(email);
 
         if (count < 1) {
@@ -277,18 +269,7 @@ public class PostServiceImpl implements PostService {
             throw new NoElementsException("posts by author with id: %s".formatted(authorId));
         }
 
-        List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        return PostResponse.builder()
-                .pageContent(contentExtracted)
-                .pageNo(pageCharacteristics.getPageNumber())
-                .pageSize(pageCharacteristics.getPageSize())
-                .totalPostsOnPage(contentExtracted.size())
-                .totalPages(pageWithPosts.getTotalPages())
-                .isLast(pageWithPosts.isLast())
-                .build();
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
@@ -302,18 +283,7 @@ public class PostServiceImpl implements PostService {
             throw new NoElementsException("posts by author with last name: %s".formatted(lastName));
         }
 
-        List<PostDto> contentExtracted = allPostsByAuthorLastName.getContent().stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        return PostResponse.builder()
-                .pageContent(contentExtracted)
-                .pageNo(pageCharacteristics.getPageNumber())
-                .pageSize(pageCharacteristics.getPageSize())
-                .totalPostsOnPage(contentExtracted.size())
-                .totalPages(allPostsByAuthorLastName.getTotalPages())
-                .isLast(allPostsByAuthorLastName.isLast())
-                .build();
+        return preparePostResponseToBeReturned(allPostsByAuthorLastName);
     }
 
     @Override
@@ -327,17 +297,6 @@ public class PostServiceImpl implements PostService {
             throw new NoElementsException("posts by author with firstname: %s last name: %s".formatted(firstName, lastName));
         }
 
-        List<PostDto> contentExtracted = allPostsByAuthorFirstNameAndLastName.getContent().stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        return PostResponse.builder()
-                .pageContent(contentExtracted)
-                .pageNo(pageCharacteristics.getPageNumber())
-                .pageSize(pageCharacteristics.getPageSize())
-                .totalPostsOnPage(contentExtracted.size())
-                .totalPages(allPostsByAuthorFirstNameAndLastName.getTotalPages())
-                .isLast(allPostsByAuthorFirstNameAndLastName.isLast())
-                .build();
+        return preparePostResponseToBeReturned(allPostsByAuthorFirstNameAndLastName);
     }
 }
