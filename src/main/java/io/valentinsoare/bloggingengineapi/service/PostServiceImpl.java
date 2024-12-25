@@ -71,7 +71,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostDto createPost(@NotNull PostDto postDto) {
+    public PostDto createPost(PostDto postDto) {
         Set<CategoryDto> categoriesDto = postDto.getCategories();
         Set<AuthorDto> authorsDto = postDto.getAuthors();
 
@@ -142,7 +142,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public PostDto getPostByTitle(@NotNull String title) {
+    public PostDto getPostByTitle(String title) {
         Post post = postRepository.getPostByTitle(title);
 
         if (post == null || post.getId() < 1) {
@@ -154,7 +154,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public PostResponse getPostsByAuthorEmail(@NotNull String email, int pageNo, int pageSize, String sortBy, String sortDir) {
+    public PostResponse getPostsByAuthorEmail(String email, int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
         Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorEmail(email, pageCharacteristics);
@@ -168,7 +168,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostDto updatePost(long id, @NotNull  @NotNull PostDto postDto) {
+    public PostDto updatePost(long id, PostDto postDto) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))

@@ -5,6 +5,7 @@ import io.valentinsoare.bloggingengineapi.response.PostResponse;
 import io.valentinsoare.bloggingengineapi.service.PostService;
 import io.valentinsoare.bloggingengineapi.utilities.ApplicationConstants;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +38,7 @@ public class PostController {
 
     @GetMapping("/author/{email}")
     public ResponseEntity<PostResponse> getAllPostsByAuthorEmail(
-            @PathVariable String email,
+            @PathVariable @NotNull String email,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
@@ -59,7 +60,7 @@ public class PostController {
 
     @GetMapping("/author/{lastName}")
     public ResponseEntity<PostResponse> getAllPostsByAuthorLastName(
-            @PathVariable String lastName,
+            @PathVariable @NotNull String lastName,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
@@ -70,8 +71,8 @@ public class PostController {
 
     @GetMapping("/author/{firstName}/{lastName}")
     public ResponseEntity<PostResponse> getAllPostsByAuthorFirstNameAndLastName(
-            @PathVariable String firstName,
-            @PathVariable String lastName,
+            @PathVariable @NotNull String firstName,
+            @PathVariable @NotNull String lastName,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
@@ -86,7 +87,7 @@ public class PostController {
     }
 
     @GetMapping("/title")
-    public ResponseEntity<PostDto> getPostByTitle(@RequestParam String name) {
+    public ResponseEntity<PostDto> getPostByTitle(@RequestParam @NotNull String name) {
         return new ResponseEntity<>(postService.getPostByTitle(name), HttpStatus.OK);
     }
 
