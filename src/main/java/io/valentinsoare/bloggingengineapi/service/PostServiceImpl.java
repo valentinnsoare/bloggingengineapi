@@ -260,6 +260,128 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
+    public long countPostsByAuthorId(long authorId) {
+        long c = postRepository.countPostByAuthorId(authorId);
+
+        if (c < 1) {
+            throw new NoElementsException("posts by author with id: %s".formatted(authorId));
+        }
+
+        return c;
+    }
+
+    @Override
+    public void deleteAllPostsByAuthorId(long authorId) {
+        postRepository.deleteAllByAuthorId(authorId);
+    }
+
+    @Override
+    public void deletePostByAuthorIdAndPostId(long authorId, long postId) {
+
+    }
+
+    @Override
+    public void deleteAllPostsByAuthorEmail(String email) {
+
+    }
+
+    @Override
+    public void deleteAllPostsByAuthorFirstNameAndLastName(String firstName, String lastName) {
+
+    }
+
+    @Override
+    public void deleteAllPostsByAuthorLastName(String lastName) {
+
+    }
+
+    @Override
+    public PostResponse getPostsByCategoryName(String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public PostResponse getPostsByCategoryId(long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public long countPostByCategoryName(String categoryName) {
+        return 0;
+    }
+
+    @Override
+    public long countPostByCategoryId(long categoryId) {
+        return 0;
+    }
+
+    @Override
+    public void deleteAllPostsByCategoryId(long categoryId) {
+
+    }
+
+    @Override
+    public void deletePostByCategoryIdAndPostId(long categoryId, long postId) {
+
+    }
+
+    @Override
+    public void deleteAllPostsByCategoryName(String categoryName) {
+
+    }
+
+    @Override
+    public PostResponse getPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public PostResponse getPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public PostResponse getPostsByAuthorEmailAndCategoryName(String email, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public PostResponse getPostsByAuthorIdAndCategoryId(long authorId, long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public long countPostByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
+        return 0;
+    }
+
+    @Override
+    public long countPostByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
+        return 0;
+    }
+
+    @Override
+    public long countPostByAuthorEmailAndCategoryName(String email, String categoryName) {
+        return 0;
+    }
+
+    @Override
+    public long countPostByAuthorIdAndCategoryId(long authorId, long categoryId) {
+        return 0;
+    }
+
+    @Override
+    public void deleteAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
+
+    }
+
+    @Override
+    public void deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public PostResponse getPostsByAuthorId(long authorId, int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 

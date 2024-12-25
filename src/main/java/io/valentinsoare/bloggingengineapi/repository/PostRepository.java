@@ -20,7 +20,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Post getPostByTitle(String title);
 
     @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM post WHERE author_id IN (SELECT id FROM author WHERE email = :email)")
-    Long countPostByAuthorEmail(String email);
+    long countPostByAuthorEmail(String email);
+
+    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM post WHERE author_id = :id")
+    long countPostByAuthorId(Long id);
+
+    @Query(nativeQuery = true, value = "DELETE FROM post WHERE author_id = :id")
+    void deleteAllByAuthorId(Long id);
 
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id = :id")
     Page<Post> getAllPostsByAuthorId(Long id, Pageable pageable);

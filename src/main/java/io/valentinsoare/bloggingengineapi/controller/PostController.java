@@ -114,10 +114,22 @@ public class PostController {
         return new ResponseEntity<>(postService.countPostByAuthorEmail(email), HttpStatus.OK);
     }
 
+    @GetMapping("/count/author/{id}")
+    public ResponseEntity<Long> countPostByAuthorId(@PathVariable Long id) {
+        return new ResponseEntity<>(postService.countPostsByAuthorId(id), HttpStatus.OK);
+    }
+
     @DeleteMapping
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Void> deleteAllPosts() {
         postService.deleteAllPosts();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/author/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<Void> deleteAllPostsByAuthorId(@PathVariable Long id) {
+        postService.deleteAllPostsByAuthorId(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

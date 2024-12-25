@@ -18,7 +18,7 @@ public interface PostService {
     PostResponse getPostsByAuthorFirstNameAndLastName(String firstName, String lastName, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByAuthorEmail(String email, int pageNo, int pageSize, String sortBy, String sortDir);
     long countPostByAuthorEmail(String email);
-    long countPostByAuthorId(long authorId);
+    long countPostsByAuthorId(long authorId);
     void deleteAllPostsByAuthorId(long authorId);
     void deletePostByAuthorIdAndPostId(long authorId, long postId);
     void deleteAllPostsByAuthorEmail(String email);
