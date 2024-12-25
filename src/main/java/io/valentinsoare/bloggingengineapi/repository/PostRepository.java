@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE email = :email)")
-    Page<Post> getAllByAuthorEmail(String email, Pageable pageable);
+    Page<Post> getAllPostsByAuthorEmail(String email, Pageable pageable);
 
     @EntityGraph(value = "post-with-authors-categories-comments", type = EntityGraph.EntityGraphType.LOAD)
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE title = :title")
@@ -23,7 +23,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Long countPostByAuthorEmail(String email);
 
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id = :id")
-    List<Post> getAllByAuthorId(Long id);
+    Page<Post> getAllPostsByAuthorId(Long id, Pageable pageable);
 
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName)")
     List<Post> getAllByAuthorLastName(String firstName);

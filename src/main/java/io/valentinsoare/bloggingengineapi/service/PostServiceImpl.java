@@ -153,7 +153,7 @@ public class PostServiceImpl implements PostService {
     public PostResponse getPostsByAuthorEmail(@NotNull String email, int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
-        Page<Post> pageWithPosts = postRepository.getAllByAuthorEmail(email, pageCharacteristics);
+        Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorEmail(email, pageCharacteristics);
 
         List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
                 .map(this::mapToDTO)
@@ -270,16 +270,29 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostDto> getPostsByAuthorId(long id) {
-        List<PostDto> postsFromDb = postRepository.getAllByAuthorId(id).stream()
+    public PostResponse getPostsByAuthorId(long authorId, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorId(authorId, pageCharacteristics);
+
+        if (pageWithPosts.getContent().isEmpty()) {
+            throw new NoElementsException(
+                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
+            );
+        }
+
+        List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
                 .map(this::mapToDTO)
                 .toList();
 
-        if (postsFromDb.isEmpty()) {
-            throw new NoElementsException("posts by author with id: %s".formatted(id));
-        }
-
-        return postsFromDb;
+        return PostResponse.builder()
+                .pageContent(contentExtracted)
+                .pageNo(pageCharacteristics.getPageNumber())
+                .pageSize(pageCharacteristics.getPageSize())
+                .totalPostsOnPage(contentExtracted.size())
+                .totalPages(pageWithPosts.getTotalPages())
+                .isLast(pageWithPosts.isLast())
+                .build();
     }
 
     @Override
