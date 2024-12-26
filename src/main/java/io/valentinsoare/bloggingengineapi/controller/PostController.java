@@ -223,4 +223,41 @@ public class PostController {
     ) {
         return new ResponseEntity<>(postService.getPostsByAuthorLastNameAndCategoryName(lastName, categoryName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
+
+    @GetMapping("/author/{firstName}/{lastName}/category/{categoryName}")
+    public ResponseEntity<PostResponse> getPostsByAuthorFirstNameAndLastNameAndCategoryName(
+            @PathVariable @NotNull String firstName,
+            @PathVariable @NotNull String lastName,
+            @PathVariable @NotNull String categoryName,
+            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
+    ) {
+        return new ResponseEntity<>(postService.getPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
+
+    @GetMapping("/author/{email}/category/{categoryName}")
+    public ResponseEntity<PostResponse> getPostsByAuthorEmailAndCategoryName(
+            @PathVariable @NotNull String email,
+            @PathVariable @NotNull String categoryName,
+            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
+    ) {
+        return new ResponseEntity<>(postService.getPostsByAuthorEmailAndCategoryName(email, categoryName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
+
+    @GetMapping("/author/{authorId}/category/{categoryId}")
+    public ResponseEntity<PostResponse> getPostsByAuthorIdAndCategoryId(
+            @PathVariable Long authorId,
+            @PathVariable Long categoryId,
+            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
+    ) {
+        return new ResponseEntity<>(postService.getPostsByAuthorIdAndCategoryId(authorId, categoryId, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
+    }
 }

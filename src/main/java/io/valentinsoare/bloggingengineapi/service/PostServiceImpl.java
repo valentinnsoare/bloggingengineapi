@@ -403,18 +403,46 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public PostResponse getPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
-        return null;
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts =
+                postRepository.getPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException(
+                    "posts by author with first name: %s last name: %s and category name: %s".formatted(firstName, lastName, categoryName)
+            );
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
     @Transactional(readOnly = true)
     public PostResponse getPostsByAuthorEmailAndCategoryName(String email, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
-        return null;
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getPostsByAuthorEmailAndCategoryName(email, categoryName, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException("posts by author with email: %s and category name: %s".formatted(email, categoryName));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PostResponse getPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
-        return null;
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getPostsByAuthorIdAndCategoryId(authorId, categoryId, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException("posts by author with id: %s and category id: %s".formatted(authorId, categoryId));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
