@@ -13,7 +13,6 @@ public interface AuthorService {
     AuthorResponse getAuthorsByFirstName(String firstName, int pageNo, int pageSize, String sortBy, String sortDir);
     AuthorResponse getAuthorsByLastName(String lastName, int pageNo, int pageSize, String sortBy, String sortDir);
     boolean existsByEmail(String email);
-    List<AuthorDto> getAuthorsByIds(List<Long> userIds);
     AuthorDto createAuthor(AuthorDto authorDto);
     AuthorDto updateAuthor(AuthorDto authorDto);
     List<PostDto> updateAuthorPostList(Long id, List<Long> postIds);

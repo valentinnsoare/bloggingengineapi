@@ -25,9 +25,6 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM author WHERE last_name = :lastName")
     Page<Author> getAuthorsByLastName(String lastName, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM author WHERE id IN :ids")
-    List<Author> getAuthorsByIdIn(List<Long> userIds);
-
     @Query(nativeQuery = true, value = "SELECT EXISTS(SELECT 1 FROM author WHERE email = :email)")
     Boolean existsByEmail(String email);
 

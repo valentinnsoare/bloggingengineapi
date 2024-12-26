@@ -69,12 +69,6 @@ public class AuthorController {
         return new ResponseEntity<>(exists, HttpStatus.OK);
     }
 
-    @GetMapping("/{ids}")
-    public ResponseEntity<List<AuthorDto>> getAuthorsByIds(@PathVariable List<Long> ids) {
-        List<AuthorDto> authorsByIds = authorService.getAuthorsByIds(ids);
-        return new ResponseEntity<>(authorsByIds, HttpStatus.OK);
-    }
-
     @PutMapping
     public ResponseEntity<AuthorDto> updateAuthor(@RequestBody @Valid AuthorDto authorDto) {
         AuthorDto author = authorService.updateAuthor(authorDto);

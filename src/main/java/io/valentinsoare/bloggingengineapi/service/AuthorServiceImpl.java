@@ -11,7 +11,6 @@ import io.valentinsoare.bloggingengineapi.repository.AuthorRepository;
 import io.valentinsoare.bloggingengineapi.repository.PostRepository;
 import io.valentinsoare.bloggingengineapi.response.AuthorResponse;
 import io.valentinsoare.bloggingengineapi.utilities.AuxiliaryMethods;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -64,23 +63,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional(readOnly = true)
     public AuthorDto getAuthorById(Long id) {
-        log.info("Searching author with id: {}.", id);
-
         Author foundAuthor = authorRepository.getAuthorById(id)
-                .orElseThrow(() -> {
-                    log.error("Author with id {} not found.", id);
-                    return new ResourceNotFoundException("author", Map.of("id", id.toString()));
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("author", Map.of("id", id.toString())));
 
-        AuthorDto newAuthorFound = modelMapper.map(foundAuthor, AuthorDto.class);
-
-        foundAuthor.getAllPosts().forEach(post -> {
-            PostDto newPost = modelMapper.map(post, PostDto.class);
-            newAuthorFound.getPostsFromAuthor().add(newPost);
-        });
-
-        log.info("Fetched author with id {} found.", id);
-        return newAuthorFound;
+        return mapToDTO(foundAuthor);
     }
 
     @Override
@@ -149,25 +135,6 @@ public class AuthorServiceImpl implements AuthorService {
 
         log.info("Author with email {} does not exist.", email);
         return false;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<AuthorDto> getAuthorsByIds(List<Long> userIds) {
-        log.info("Searching for authors with ids: {}.", userIds);
-
-        List<Author> byIdIn = authorRepository.getAuthorsByIdIn(userIds);
-
-        if (!byIdIn.isEmpty()) {
-            log.info("Found authors with ids: {}.", userIds);
-
-            return byIdIn.stream()
-                    .map(author -> modelMapper.map(author, AuthorDto.class))
-                    .toList();
-        }
-
-        log.info("Authors with ids {} not found.", userIds);
-        return List.of();
     }
 
     @Override
