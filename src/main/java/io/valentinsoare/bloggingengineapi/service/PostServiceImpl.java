@@ -132,10 +132,11 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional(readOnly = true)
     public PostDto getPostById(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))
-                );
+        Post post = postRepository.getPostById(id);
+
+        if (post == null || post.getId() < 1) {
+            throw new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))));
+        }
 
         return mapToDTO(post);
     }
@@ -446,22 +447,29 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Long countPostByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
+    @Transactional(readOnly = true)
+    public Long countPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
+        Long l = postRepository.countPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
+
+        if (l < 1) {
+            throw new NoElementsException("posts by author with last name: %s and category name: %s".formatted(lastName, categoryName));
+        }
+
+        return l;
+    }
+
+    @Override
+    public Long countPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
         return 0L;
     }
 
     @Override
-    public Long countPostByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
+    public Long countPostsByAuthorEmailAndCategoryName(String email, String categoryName) {
         return 0L;
     }
 
     @Override
-    public Long countPostByAuthorEmailAndCategoryName(String email, String categoryName) {
-        return 0L;
-    }
-
-    @Override
-    public Long countPostByAuthorIdAndCategoryId(Long authorId, Long categoryId) {
+    public Long countPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId) {
         return 0L;
     }
 

@@ -41,10 +41,10 @@ public interface PostService {
     PostResponse getPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByAuthorEmailAndCategoryName(String email, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId, int pageNo, int pageSize, String sortBy, String sortDir);
-    Long countPostByAuthorLastNameAndCategoryName(String lastName, String categoryName);
-    Long countPostByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName);
-    Long countPostByAuthorEmailAndCategoryName(String email, String categoryName);
-    Long countPostByAuthorIdAndCategoryId(Long authorId, Long categoryId);
+    Long countPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName);
+    Long countPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName);
+    Long countPostsByAuthorEmailAndCategoryName(String email, String categoryName);
+    Long countPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId);
     void deleteAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName);
     void deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName);
 }
