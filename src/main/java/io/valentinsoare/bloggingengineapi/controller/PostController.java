@@ -286,4 +286,30 @@ public class PostController {
     public ResponseEntity<Long> countPostsByAuthorIdAndCategoryId(@PathVariable Long authorId, @PathVariable Long categoryId) {
         return new ResponseEntity<>(postService.countPostsByAuthorIdAndCategoryId(authorId, categoryId), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{title}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<String> deletePostByTitle(@PathVariable @NotNull String title) {
+        postService.deletePostByTitle(title);
+        return new ResponseEntity<>(String.format("Post with title: %s deleted successfully!", title), HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/id/title")
+    public ResponseEntity<Long> findPostIdByTitle(@RequestParam @NotNull String title) {
+        return new ResponseEntity<>(postService.findPostIdByTitle(title), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/author/{lastName}/category/{categoryName}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<String> deleteAllPostsByAuthorLastNameAndCategoryName(@PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
+        postService.deleteAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
+        return new ResponseEntity<>(String.format("All Posts with author last name: %s and category name: %s deleted successfully!", lastName, categoryName), HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/author/{firstName}/{lastName}/category/{categoryName}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<String> deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
+        postService.deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
+        return new ResponseEntity<>(String.format("All Posts with author first name: %s, last name: %s and category name: %s deleted successfully!", firstName, lastName, categoryName), HttpStatus.NO_CONTENT);
+    }
 }

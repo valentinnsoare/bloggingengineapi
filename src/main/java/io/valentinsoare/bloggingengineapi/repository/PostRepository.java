@@ -137,4 +137,21 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             value = "SELECT COUNT(*) FROM post WHERE author_id = :authorId AND category_id = :categoryId"
     )
     Long countPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId);
+
+    @Query(nativeQuery = true,
+            value = "SELECT id FROM post WHERE title = :title"
+    )
+    Long findPostIdByTitle(String title);
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "DELETE FROM post WHERE author_id IN (SELECT id FROM author WHERE last_name = :lastName) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
+    )
+    void deleteAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName);
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "DELETE FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName AND last_name = :lastName) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
+    )
+    void deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName);
 }

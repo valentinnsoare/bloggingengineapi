@@ -266,8 +266,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long findPostIdByTitle(String title) {
-        return 0L;
+        Long postId = postRepository.findPostIdByTitle(title);
+
+        if (postId == null || postId < 1) {
+            throw new NoElementsException("post by title: %s".formatted(title));
+        }
+
+        return postId;
     }
 
     @Override
@@ -519,13 +526,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public void deleteAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
-
+        postRepository.deleteAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
     }
 
     @Override
+    @Transactional
     public void deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
-
+        postRepository.deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
     }
 
     @Override
