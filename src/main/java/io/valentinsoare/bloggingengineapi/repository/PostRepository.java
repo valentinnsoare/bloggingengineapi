@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE email = :email)")
@@ -17,6 +19,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @EntityGraph(value = "post-with-authors-categories-comments", type = EntityGraph.EntityGraphType.LOAD)
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE title = :title")
     Post getPostByTitle(String title);
+
+    @Query(nativeQuery = true, value = "SELECT id FROM post WHERE title = :title")
+    Optional<Post> findPostByTitle(String title);
 
     @EntityGraph(value = "post-with-authors-categories-comments", type = EntityGraph.EntityGraphType.LOAD)
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE title = :title")

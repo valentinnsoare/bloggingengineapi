@@ -69,6 +69,52 @@ public class PostServiceImpl implements PostService {
                 .build();
     }
 
+    private PostDto prepareAnswerForUpdateMethods(Post post, PostDto postDto) {
+        post.setTitle(postDto.getTitle())
+                .setDescription(postDto.getDescription())
+                .setContent(postDto.getContent())
+                .setCategories(new HashSet<>())
+                .setAuthors(new HashSet<>())
+                .setComments(new HashSet<>());
+
+        postDto.getCategories().forEach(categoryDto -> {
+            Optional<Category> categoryByName = categoryRepository.findCategoryByName(categoryDto.getName());
+
+            if (categoryByName.isPresent()) {
+                Category foundCategory = categoryByName.get();
+                post.addCategory(foundCategory);
+            }
+        });
+
+        postDto.getAuthors().forEach(authorDto -> {
+            Optional<Author> authorByEmail = authorRepository.findByEmail(authorDto.getEmail());
+
+            if (authorByEmail.isPresent()) {
+                Author foundAuthor = authorByEmail.get();
+                post.addAuthor(foundAuthor);
+            }
+        });
+
+        Set<CommentDto> commentsDto = postDto.getComments();
+
+        if (!commentsDto.isEmpty()) {
+            commentsDto.forEach(commentDto -> {
+                Comment comment = modelmapper.map(commentDto, Comment.class);
+                post.addComment(comment);
+            });
+        }
+
+        Post updatedPost;
+
+        try {
+            updatedPost = postRepository.save(post);
+        } catch (Exception e) {
+            throw new ResourceViolationException(e.getLocalizedMessage());
+        }
+
+        return mapToDTO(updatedPost);
+    }
+
     @Override
     @Transactional
     public PostDto createPost(PostDto postDto) {
@@ -175,54 +221,18 @@ public class PostServiceImpl implements PostService {
                         new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))
                 );
 
-        post.setTitle(postDto.getTitle())
-                .setDescription(postDto.getDescription())
-                .setContent(postDto.getContent())
-                .setCategories(new HashSet<>())
-                .setAuthors(new HashSet<>())
-                .setComments(new HashSet<>());
-
-        postDto.getCategories().forEach(categoryDto -> {
-            Optional<Category> categoryByName = categoryRepository.findCategoryByName(categoryDto.getName());
-
-            if (categoryByName.isPresent()) {
-                Category foundCategory = categoryByName.get();
-                post.addCategory(foundCategory);
-            }
-        });
-
-        postDto.getAuthors().forEach(authorDto -> {
-            Optional<Author> authorByEmail = authorRepository.findByEmail(authorDto.getEmail());
-
-            if (authorByEmail.isPresent()) {
-                Author foundAuthor = authorByEmail.get();
-                post.addAuthor(foundAuthor);
-            }
-        });
-
-        Set<CommentDto> commentsDto = postDto.getComments();
-
-        if (!commentsDto.isEmpty()) {
-            commentsDto.forEach(commentDto -> {
-                Comment comment = modelmapper.map(commentDto, Comment.class);
-                post.addComment(comment);
-            });
-        }
-
-        Post updatedPost;
-
-        try {
-            updatedPost = postRepository.save(post);
-        } catch (Exception e) {
-            throw new ResourceViolationException(e.getLocalizedMessage());
-        }
-
-        return mapToDTO(updatedPost);
+        return prepareAnswerForUpdateMethods(post, postDto);
     }
 
     @Override
+    @Transactional
     public PostDto updatePostByTitle(String title, PostDto postDto) {
-        return null;
+        Post post = postRepository.findPostByTitle(title)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("post", new HashMap<>(Map.of("title", title)))
+                );
+
+        return prepareAnswerForUpdateMethods(post, postDto);
     }
 
     @Override
