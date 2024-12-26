@@ -54,135 +54,22 @@ public class PostServiceImpl implements PostService {
         return modelmapper.map(postDto, Post.class);
     }
 
-    @Override
-    @Transactional
-    public PostDto createPost(@NotNull PostDto postDto) {
-        Set<CategoryDto> categoriesDto = postDto.getCategories();
-        Set<AuthorDto> authorsDto = postDto.getAuthors();
-
-        Post newPost = mapToEntity(postDto)
-                .setCategories(new HashSet<>())
-                .setAuthors(new HashSet<>());
-
-        for (CategoryDto category : categoriesDto) {
-            Optional<Category> categoryByName = categoryRepository.findCategoryByName(category.getName());
-
-            if (categoryByName.isPresent()) {
-                Category foundCategory = categoryByName.get();
-                newPost.addCategory(foundCategory);
-            }
-        }
-
-        if (newPost.getCategories().isEmpty()) {
-            throw new ResourceViolationException("No categories found for post.");
-        }
-
-        for (AuthorDto author : authorsDto) {
-            Optional<Author> authorByEmail = authorRepository.findByEmail(author.getEmail());
-
-            if (authorByEmail.isPresent()) {
-                Author foundAuthor = authorByEmail.get();
-                newPost.addAuthor(foundAuthor);
-            }
-        }
-
-        if (newPost.getAuthors().isEmpty()) {
-            throw new ResourceViolationException("No authors found for post.");
-        }
-
-        try {
-            Post savedPost = postRepository.save(newPost);
-            return mapToDTO(savedPost);
-        } catch (Exception e) {
-            throw new ResourceViolationException(e.getLocalizedMessage());
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PostResponse getAllPosts(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir) {
-        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
-
-        Page<Post> pageWithPosts = postRepository.findAll(pageCharacteristics);
-
+    private PostResponse preparePostResponseToBeReturned(Page<Post> pageWithPosts) {
         List<PostDto> content = pageWithPosts.getContent().stream()
                 .map(this::mapToDTO)
                 .toList();
 
-        if (content.isEmpty()) {
-            throw new NoElementsException(
-                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
-            );
-        }
-
         return PostResponse.builder()
                 .pageContent(content)
-                .pageNo(pageCharacteristics.getPageNumber())
-                .pageSize(pageCharacteristics.getPageSize())
+                .pageNo(pageWithPosts.getNumber())
+                .pageSize(pageWithPosts.getSize())
                 .totalPostsOnPage(content.size())
                 .totalPages(pageWithPosts.getTotalPages())
                 .isLast(pageWithPosts.isLast())
                 .build();
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public PostDto getPostById(long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))
-                );
-
-        return mapToDTO(post);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PostDto getPostByTitle(@NotNull String title) {
-        Post post = postRepository.getPostByTitle(title);
-
-        if (post == null || post.getId() < 1) {
-            throw new ResourceNotFoundException("post", new HashMap<>(Map.of("title", title)));
-        }
-
-        return mapToDTO(post);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PostResponse getPostsByAuthorEmail(@NotNull String email, int pageNo, int pageSize, String sortBy, String sortDir) {
-        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
-
-        Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorEmail(email, pageCharacteristics);
-
-        List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        if (contentExtracted.isEmpty()) {
-            throw new NoElementsException(
-                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
-            );
-        }
-
-        return PostResponse.builder()
-                .pageContent(contentExtracted)
-                .pageNo(pageCharacteristics.getPageNumber())
-                .pageSize(pageCharacteristics.getPageSize())
-                .totalPostsOnPage(contentExtracted.size())
-                .totalPages(pageWithPosts.getTotalPages())
-                .isLast(pageWithPosts.isLast())
-                .build();
-    }
-
-    @Override
-    @Transactional
-    public PostDto updatePost(long id, @NotNull  @NotNull PostDto postDto) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))
-                );
-
+    private PostDto prepareAnswerForUpdateMethods(Post post, PostDto postDto) {
         post.setTitle(postDto.getTitle())
                 .setDescription(postDto.getDescription())
                 .setContent(postDto.getContent())
@@ -230,7 +117,127 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deletePost(long id) {
+    public PostDto createPost(PostDto postDto) {
+        Set<CategoryDto> categoriesDto = postDto.getCategories();
+        Set<AuthorDto> authorsDto = postDto.getAuthors();
+
+        Post newPost = mapToEntity(postDto)
+                .setCategories(new HashSet<>())
+                .setAuthors(new HashSet<>());
+
+        for (CategoryDto category : categoriesDto) {
+            Optional<Category> categoryByName = categoryRepository.findCategoryByName(category.getName());
+
+            if (categoryByName.isPresent()) {
+                Category foundCategory = categoryByName.get();
+                newPost.addCategory(foundCategory);
+            }
+        }
+
+        if (newPost.getCategories().isEmpty()) {
+            throw new ResourceViolationException("No categories found for post.");
+        }
+
+        for (AuthorDto author : authorsDto) {
+            Optional<Author> authorByEmail = authorRepository.findByEmail(author.getEmail());
+
+            if (authorByEmail.isPresent()) {
+                Author foundAuthor = authorByEmail.get();
+                newPost.addAuthor(foundAuthor);
+            }
+        }
+
+        if (newPost.getAuthors().isEmpty()) {
+            throw new ResourceViolationException("No authors found for post.");
+        }
+
+        try {
+            Post savedPost = postRepository.save(newPost);
+            return mapToDTO(savedPost);
+        } catch (Exception e) {
+            throw new ResourceViolationException(e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.findAll(pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException(
+                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
+            );
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostDto getPostById(Long id) {
+        Post post = postRepository.getPostById(id);
+
+        if (post == null || post.getId() < 1) {
+            throw new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))));
+        }
+
+        return mapToDTO(post);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostDto getPostByTitle(String title) {
+        Post post = postRepository.getPostByTitle(title);
+
+        if (post == null || post.getId() < 1) {
+            throw new ResourceNotFoundException("post", new HashMap<>(Map.of("title", title)));
+        }
+
+        return mapToDTO(post);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByAuthorEmail(String email, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorEmail(email, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException(String.format("posts by author email: %s", email));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
+    }
+
+    @Override
+    @Transactional
+    public PostDto updatePost(Long id, PostDto postDto) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id))))
+                );
+
+        return prepareAnswerForUpdateMethods(post, postDto);
+    }
+
+    @Override
+    @Transactional
+    public PostDto updatePostByTitle(String title, PostDto postDto) {
+        Post post = postRepository.findPostByTitle(title)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("post", new HashMap<>(Map.of("title", title)))
+                );
+
+        return prepareAnswerForUpdateMethods(post, postDto);
+    }
+
+    @Override
+    @Transactional
+    public void deletePost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id)))));
 
@@ -238,8 +245,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
+    public void deletePostByTitle(String title) {
+        Post post = postRepository.findPostByTitle(title)
+                .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("title", title))));
+
+        postRepository.delete(post);
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public long countAllPosts() {
+    public Long countAllPosts() {
         long count = postRepository.count();
 
         if (count < 1) {
@@ -250,6 +266,18 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Long findPostIdByTitle(String title) {
+        Long postId = postRepository.findPostIdByTitle(title);
+
+        if (postId == null || postId < 1) {
+            throw new NoElementsException("post by title: %s".formatted(title));
+        }
+
+        return postId;
+    }
+
+    @Override
     @Transactional
     public void deleteAllPosts() {
         postRepository.deleteAll();
@@ -257,9 +285,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public long countPostByAuthorEmail(@NotNull String email) {
-
-        long count = postRepository.countPostByAuthorEmail(email);
+    public Long countPostByAuthorEmail(@NotNull String email) {
+        Long count = postRepository.countPostByAuthorEmail(email);
 
         if (count < 1) {
             throw new NoElementsException(String.format("posts by author email: %s", email));
@@ -270,42 +297,285 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public PostResponse getPostsByAuthorId(long authorId, int pageNo, int pageSize, String sortBy, String sortDir) {
+    public Long countPostsByAuthorId(Long authorId) {
+        Long c = postRepository.countPostByAuthorId(authorId);
+
+        if (c < 1) {
+            throw new NoElementsException("posts by author with id: %s".formatted(authorId));
+        }
+
+        return c;
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllPostsByAuthorId(Long authorId) {
+        postRepository.deleteAllByAuthorId(authorId);
+    }
+
+    @Override
+    @Transactional
+    public void deletePostByAuthorIdAndPostId(Long authorId, Long postId) {
+        postRepository.deletePostByAuthorIdAndPostId(authorId, postId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllPostsByAuthorEmail(String email) {
+        postRepository.deleteAllByAuthorEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllPostsByAuthorFirstNameAndLastName(String firstName, String lastName) {
+        postRepository.deleteAllPostsByAuthorFirstNameAndLastName(firstName, lastName);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllPostsByAuthorLastName(String lastName) {
+        postRepository.deleteAllPostsByAuthorLastName(lastName);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByCategoryName(String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getAllPostsByCategoryName(categoryName, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException(String.format("posts by category name: %s", categoryName));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByCategoryId(Long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getAllPostsByCategoryId(categoryId, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException(String.format("posts by category id: %s", categoryId));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countPostsByCategoryName(String categoryName) {
+        Long l = postRepository.countPostsByCategoryName(categoryName);
+
+        if (l < 1) {
+            throw new NoElementsException("posts by category name: %s".formatted(categoryName));
+        }
+
+        return l;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countPostByCategoryId(Long categoryId) {
+        Long l = postRepository.countPostByCategoryId(categoryId);
+
+        if (l < 1) {
+            throw new NoElementsException("posts by category id: %s".formatted(categoryId));
+        }
+
+        return l;
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllPostsByCategoryId(Long categoryId) {
+        postRepository.deleteAllPostsByCategoryId(categoryId);
+    }
+
+    @Override
+    @Transactional
+    public void deletePostByCategoryIdAndPostId(Long categoryId, Long postId) {
+        postRepository.deletePostByCategoryIdAndPostId(categoryId, postId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllPostsByCategoryName(String categoryName) {
+        postRepository.deleteAllPostsByCategoryName(categoryName);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts =
+                postRepository.getAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException("posts by author with last name: %s and category name: %s".formatted(lastName, categoryName));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts =
+                postRepository.getPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException(
+                    "posts by author with first name: %s last name: %s and category name: %s".formatted(firstName, lastName, categoryName)
+            );
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByAuthorEmailAndCategoryName(String email, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getPostsByAuthorEmailAndCategoryName(email, categoryName, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException("posts by author with email: %s and category name: %s".formatted(email, categoryName));
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> pageWithPosts = postRepository.getPostsByAuthorIdAndCategoryId(authorId, categoryId, pageCharacteristics);
+
+        if (pageWithPosts.isEmpty()) {
+            throw new NoElementsException(
+                    "posts by author with id: %s and category id: %s".formatted(authorId, categoryId)
+            );
+        }
+
+        return preparePostResponseToBeReturned(pageWithPosts);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
+        Long l = postRepository.countPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
+
+        if (l < 1) {
+            throw new NoElementsException(
+                    "posts by author with last name: %s and category name: %s".formatted(lastName, categoryName)
+            );
+        }
+
+        return l;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
+        Long l = postRepository.countPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
+
+        if (l < 1) {
+            throw new NoElementsException(
+                    "posts by author with first name: %s last name: %s and category name: %s".formatted(firstName, lastName, categoryName)
+            );
+        }
+
+        return l;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countPostsByAuthorEmailAndCategoryName(String email, String categoryName) {
+        Long l = postRepository.countPostsByAuthorEmailAndCategoryName(email, categoryName);
+
+        if (l < 1) {
+            throw new NoElementsException(
+                    "posts by author with email: %s and category name: %s".formatted(email, categoryName)
+            );
+        }
+
+        return l;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId) {
+        Long l = postRepository.countPostsByAuthorIdAndCategoryId(authorId, categoryId);
+
+        if (l < 1) {
+            throw new NoElementsException(
+                    "posts by author with id: %s and category id: %s".formatted(authorId, categoryId)
+            );
+        }
+
+        return l;
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
+        postRepository.deleteAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
+        postRepository.deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByAuthorId(Long authorId, int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
         Page<Post> pageWithPosts = postRepository.getAllPostsByAuthorId(authorId, pageCharacteristics);
 
         if (pageWithPosts.getContent().isEmpty()) {
-            throw new NoElementsException(
-                    "posts for page number: %s with max %s posts per page".formatted(pageNo, pageSize)
-            );
+            throw new NoElementsException("posts by author with id: %s".formatted(authorId));
         }
 
-        List<PostDto> contentExtracted = pageWithPosts.getContent().stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        return PostResponse.builder()
-                .pageContent(contentExtracted)
-                .pageNo(pageCharacteristics.getPageNumber())
-                .pageSize(pageCharacteristics.getPageSize())
-                .totalPostsOnPage(contentExtracted.size())
-                .totalPages(pageWithPosts.getTotalPages())
-                .isLast(pageWithPosts.isLast())
-                .build();
+        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostDto> getPostsByAuthorLastName(@NotNull String lastName) {
-        List<PostDto> fetchedPosts = postRepository.getAllByAuthorLastName(lastName).stream()
-                .map(this::mapToDTO)
-                .toList();
+    public PostResponse getPostsByAuthorLastName(String lastName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
-        if (fetchedPosts.isEmpty()) {
+        Page<Post> allPostsByAuthorLastName = postRepository.getAllPostsByAuthorLastName(lastName, pageCharacteristics);
+
+        if (allPostsByAuthorLastName.isEmpty()) {
             throw new NoElementsException("posts by author with last name: %s".formatted(lastName));
         }
 
-        return fetchedPosts;
+        return preparePostResponseToBeReturned(allPostsByAuthorLastName);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PostResponse getPostsByAuthorFirstNameAndLastName(String firstName, String lastName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
+
+        Page<Post> allPostsByAuthorFirstNameAndLastName = postRepository.getAllPostsByAuthorFirstNameAndLastName(firstName, lastName, pageCharacteristics);
+
+        if (allPostsByAuthorFirstNameAndLastName.isEmpty()) {
+            throw new NoElementsException("posts by author with firstname: %s last name: %s".formatted(firstName, lastName));
+        }
+
+        return preparePostResponseToBeReturned(allPostsByAuthorFirstNameAndLastName);
     }
 }

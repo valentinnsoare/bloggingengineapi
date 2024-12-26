@@ -35,7 +35,7 @@ logging:
     net:
       ttddyy:
         dsproxy:
-          listener: OFF
+          listener: DEBUG
 
 server:
   port: 8080
@@ -43,7 +43,7 @@ server:
 app:
   jwt:
     secret: "f6e9567a0b93eb68a5d331d163494adb14adfa067d148c3c165efa59928dfc95"
-    expiration: 604800000 # 7 days in milliseconds
+    expiration: 900 000 # 15 minutes in milliseconds
 
 
 #springdoc:
