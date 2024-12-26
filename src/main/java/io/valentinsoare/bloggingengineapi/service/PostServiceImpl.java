@@ -87,7 +87,7 @@ public class PostServiceImpl implements PostService {
         });
 
         postDto.getAuthors().forEach(authorDto -> {
-            Optional<Author> authorByEmail = authorRepository.findByEmail(authorDto.getEmail());
+            Optional<Author> authorByEmail = authorRepository.getAuthorByEmail(authorDto.getEmail());
 
             if (authorByEmail.isPresent()) {
                 Author foundAuthor = authorByEmail.get();
@@ -139,7 +139,7 @@ public class PostServiceImpl implements PostService {
         }
 
         for (AuthorDto author : authorsDto) {
-            Optional<Author> authorByEmail = authorRepository.findByEmail(author.getEmail());
+            Optional<Author> authorByEmail = authorRepository.getAuthorByEmail(author.getEmail());
 
             if (authorByEmail.isPresent()) {
                 Author foundAuthor = authorByEmail.get();

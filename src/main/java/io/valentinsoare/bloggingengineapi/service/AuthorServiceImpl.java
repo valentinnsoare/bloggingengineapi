@@ -46,12 +46,27 @@ public class AuthorServiceImpl implements AuthorService {
         return modelMapper.map(authorDto, Author.class);
     }
 
+    private AuthorResponse createAndReturnAuthorResponse(Page<Author> pageWithAuthors) {
+        List<AuthorDto> content = pageWithAuthors.getContent().stream()
+                .map(this::mapToDTO)
+                .toList();
+
+        return AuthorResponse.builder()
+                .pageContent(content)
+                .pageNo(pageWithAuthors.getNumber())
+                .pageSize(pageWithAuthors.getSize())
+                .totalAuthorsOnPage(content.size())
+                .totalPages(pageWithAuthors.getTotalPages())
+                .isLast(pageWithAuthors.isLast())
+                .build();
+    }
+
     @Override
     @Transactional(readOnly = true)
     public AuthorDto getAuthorById(Long id) {
         log.info("Searching author with id: {}.", id);
 
-        Author foundAuthor = authorRepository.findById(id)
+        Author foundAuthor = authorRepository.getAuthorById(id)
                 .orElseThrow(() -> {
                     log.error("Author with id {} not found.", id);
                     return new ResourceNotFoundException("author", Map.of("id", id.toString()));
@@ -73,7 +88,7 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorDto getAuthorByEmail(String email) {
         log.info("Searching author with email: {}.", email);
 
-        Author foundAuthor = authorRepository.findByEmail(email)
+        Author foundAuthor = authorRepository.getAuthorByEmail(email)
                 .orElseThrow(() -> {
                     log.error("Author with email {} not found.", email);
                     return new ResourceNotFoundException("author", Map.of("email", email));
@@ -92,40 +107,34 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Transactional(readOnly = true)
-    public AuthorDto getAuthorByFirstName(String firstName) {
-        log.info("Searching author with first name: {}.", firstName);
+    public AuthorResponse getAuthorsByFirstName(String firstName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
-        Author foundAuthor = authorRepository.findByFirstName(firstName)
-                .orElseThrow(() -> {
-                    log.error("Author with first name {} not found.", firstName);
-                    return new ResourceNotFoundException("author", Map.of("first name", firstName));
-                });
-        log.info("Fetched author with first name {} and id {} found.", firstName, foundAuthor.getId());
+        Page<Author> pageWithAuthors = authorRepository.getAuthorsByFirstName(firstName, pageCharacteristics);
 
-        AuthorDto newAuthorFound = modelMapper.map(foundAuthor, AuthorDto.class);
-        log.info("Mapped author with first name {} to authorDto.", firstName);
+        if (pageWithAuthors.isEmpty()) {
+            throw new NoElementsException(
+                    String.format("authors with first name: %s for page number: %s with max %s authors per page", firstName, pageNo, pageSize)
+            );
+        }
 
-        log.info("Returning author {}.", newAuthorFound);
-        return newAuthorFound;
+        return createAndReturnAuthorResponse(pageWithAuthors);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public AuthorDto getAuthorByLastName(String lastName) {
-        log.info("Searching author with last name: {}.", lastName);
+    public AuthorResponse getAuthorsByLastName(String lastName, int pageNo, int pageSize, String sortBy, String sortDir) {
+        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
-        Author foundAuthor = authorRepository.findByLastName(lastName)
-                .orElseThrow(() -> {
-                    log.error("Author with last name {} not found.", lastName);
-                    return new ResourceNotFoundException("author", Map.of("last name", lastName));
-                });
-        log.info("Fetched author with last name {} and id {} found.", lastName, foundAuthor.getId());
+        Page<Author> pageWithAuthors = authorRepository.getAuthorsByLastName(lastName, pageCharacteristics);
 
-        AuthorDto newAuthorFound = modelMapper.map(foundAuthor, AuthorDto.class);
-        log.info("Mapped author with last name {} to authorDto.", lastName);
+        if (pageWithAuthors.isEmpty()) {
+            throw new NoElementsException(
+                    String.format("authors with last name: %s for page number: %s with max %s authors per page", lastName, pageNo, pageSize)
+            );
+        }
 
-        log.info("Returning author {}.", newAuthorFound);
-        return newAuthorFound;
+        return createAndReturnAuthorResponse(pageWithAuthors);
     }
 
     @Override
@@ -147,7 +156,7 @@ public class AuthorServiceImpl implements AuthorService {
     public List<AuthorDto> getAuthorsByIds(List<Long> userIds) {
         log.info("Searching for authors with ids: {}.", userIds);
 
-        List<Author> byIdIn = authorRepository.findByIdIn(userIds);
+        List<Author> byIdIn = authorRepository.getAuthorsByIdIn(userIds);
 
         if (!byIdIn.isEmpty()) {
             log.info("Found authors with ids: {}.", userIds);
@@ -167,7 +176,7 @@ public class AuthorServiceImpl implements AuthorService {
         Author author = modelMapper.map(authorDto, Author.class);
         String emailToBeSearch = author.getEmail();
 
-        authorRepository.findByEmail(author.getEmail())
+        authorRepository.getAuthorByEmail(author.getEmail())
                 .ifPresent(a -> {
                     throw new BloggingEngineException("author", "email already exists", Map.of("email", emailToBeSearch));
                 });
@@ -189,7 +198,7 @@ public class AuthorServiceImpl implements AuthorService {
         Author author = modelMapper.map(authorDto, Author.class);
         String emailToBeChecked = author.getEmail();
 
-        Author existentAuthorInDb = authorRepository.findByEmail(emailToBeChecked)
+        Author existentAuthorInDb = authorRepository.getAuthorByEmail(emailToBeChecked)
                 .orElseThrow(() -> {
                     log.error("Author with email {} not found.", emailToBeChecked);
                     throw new ResourceNotFoundException("author", Map.of("email", emailToBeChecked));
@@ -223,7 +232,7 @@ public class AuthorServiceImpl implements AuthorService {
                 });
 
         String searchedEmail = searchedAuthor.getEmail();
-        Author searchedAuthorByEmail = authorRepository.findByEmail(searchedEmail)
+        Author searchedAuthorByEmail = authorRepository.getAuthorByEmail(searchedEmail)
                 .orElseThrow(() -> {
                     log.error("Author with email {} not found.", searchedEmail);
                     throw new ResourceNotFoundException("author", Map.of("email", searchedEmail));
@@ -283,32 +292,19 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    @Transactional
-    public AuthorResponse  getAllAuthors(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir) {
-        log.info("Fetching all authors with page number: {}, page size: {}, sort by: {}, sort direction: {}.",
-                pageNo, pageSize, sortBy, sortDir);
-
+    @Transactional(readOnly = true)
+    public AuthorResponse getAllAuthors(int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
-        log.info("Fetching all authors for one page with page characteristics: {}.", pageCharacteristics);
         Page<Author> pageWithAuthors =authorRepository.findAll(pageCharacteristics);
 
-        List<AuthorDto> content = pageWithAuthors.getContent().stream()
-                .map(this::mapToDTO)
-                .toList();
-
-        if (content.isEmpty()) {
-            throw new NoElementsException("authors for page number: %s with max %s authors per page".formatted(pageNo, pageSize));
+        if (pageWithAuthors.isEmpty()) {
+            throw new NoElementsException(
+                    "authors for page number: %s with max %s authors per page".formatted(pageNo, pageSize)
+            );
         }
 
-        return AuthorResponse.builder()
-                .pageContent(content)
-                .pageNo(pageCharacteristics.getPageNumber())
-                .pageSize(pageCharacteristics.getPageSize())
-                .totalAuthorsOnPage(content.size())
-                .totalPages(pageWithAuthors.getTotalPages())
-                .isLast(pageWithAuthors.isLast())
-                .build();
+        return createAndReturnAuthorResponse(pageWithAuthors);
     }
 
     @Override

@@ -5,6 +5,7 @@ import io.valentinsoare.bloggingengineapi.dto.PostDto;
 import io.valentinsoare.bloggingengineapi.response.AuthorResponse;
 import io.valentinsoare.bloggingengineapi.service.AuthorService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,15 +40,27 @@ public class AuthorController {
     }
 
     @GetMapping("/{firstName}")
-    public ResponseEntity<AuthorDto> getAuthorByFirstName(@PathVariable String firstName) {
-        AuthorDto author = authorService.getAuthorByFirstName(firstName);
-        return new ResponseEntity<>(author, HttpStatus.OK);
+    public ResponseEntity<AuthorResponse> getAuthorsByFirstName(
+            @PathVariable @NotNull String firstName,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {;
+        AuthorResponse authorsByFirstName = authorService.getAuthorsByFirstName(firstName, pageNo, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(authorsByFirstName, HttpStatus.OK);
     }
 
     @GetMapping("/{lastName}")
-    public ResponseEntity<AuthorDto> getAuthorByLastName(@PathVariable String lastName) {
-        AuthorDto author = authorService.getAuthorByLastName(lastName);
-        return new ResponseEntity<>(author, HttpStatus.OK);
+    public ResponseEntity<AuthorResponse> getAuthorsByLastName(
+            @PathVariable @NotNull String lastName,
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+    ) {
+        AuthorResponse authorsByLastName = authorService.getAuthorsByLastName(lastName, pageNo, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(authorsByLastName, HttpStatus.OK);
     }
 
     @GetMapping("/exists/{email}")
