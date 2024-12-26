@@ -245,14 +245,18 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deleteAllPostsByTitle(String title) {
+    @Transactional
+    public void deletePostByTitle(String title) {
+        Post post = postRepository.findPostByTitle(title)
+                .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("title", title))));
 
+        postRepository.delete(post);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Long countAllPosts() {
-        Long count = postRepository.count();
+        long count = postRepository.count();
 
         if (count < 1) {
             throw new NoElementsException("posts");
@@ -450,7 +454,9 @@ public class PostServiceImpl implements PostService {
         Page<Post> pageWithPosts = postRepository.getPostsByAuthorIdAndCategoryId(authorId, categoryId, pageCharacteristics);
 
         if (pageWithPosts.isEmpty()) {
-            throw new NoElementsException("posts by author with id: %s and category id: %s".formatted(authorId, categoryId));
+            throw new NoElementsException(
+                    "posts by author with id: %s and category id: %s".formatted(authorId, categoryId)
+            );
         }
 
         return preparePostResponseToBeReturned(pageWithPosts);
@@ -462,25 +468,54 @@ public class PostServiceImpl implements PostService {
         Long l = postRepository.countPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
 
         if (l < 1) {
-            throw new NoElementsException("posts by author with last name: %s and category name: %s".formatted(lastName, categoryName));
+            throw new NoElementsException(
+                    "posts by author with last name: %s and category name: %s".formatted(lastName, categoryName)
+            );
         }
 
         return l;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long countPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
-        return 0L;
+        Long l = postRepository.countPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
+
+        if (l < 1) {
+            throw new NoElementsException(
+                    "posts by author with first name: %s last name: %s and category name: %s".formatted(firstName, lastName, categoryName)
+            );
+        }
+
+        return l;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long countPostsByAuthorEmailAndCategoryName(String email, String categoryName) {
-        return 0L;
+        Long l = postRepository.countPostsByAuthorEmailAndCategoryName(email, categoryName);
+
+        if (l < 1) {
+            throw new NoElementsException(
+                    "posts by author with email: %s and category name: %s".formatted(email, categoryName)
+            );
+        }
+
+        return l;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long countPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId) {
-        return 0L;
+        Long l = postRepository.countPostsByAuthorIdAndCategoryId(authorId, categoryId);
+
+        if (l < 1) {
+            throw new NoElementsException(
+                    "posts by author with id: %s and category id: %s".formatted(authorId, categoryId)
+            );
+        }
+
+        return l;
     }
 
     @Override

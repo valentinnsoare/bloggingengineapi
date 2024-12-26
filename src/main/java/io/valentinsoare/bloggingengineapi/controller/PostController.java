@@ -266,4 +266,24 @@ public class PostController {
     ) {
         return new ResponseEntity<>(postService.getPostsByAuthorIdAndCategoryId(authorId, categoryId, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
+
+    @GetMapping("/count/author/{lastName}/category/{categoryName}")
+    public ResponseEntity<Long> countPostsByAuthorLastNameAndCategoryName(@PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
+        return new ResponseEntity<>(postService.countPostsByAuthorLastNameAndCategoryName(lastName, categoryName), HttpStatus.OK);
+    }
+
+    @GetMapping("/count/author/{firstName}/{lastName}/category/{categoryName}")
+    public ResponseEntity<Long> countPostsByAuthorFirstNameAndLastNameAndCategoryName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
+        return new ResponseEntity<>(postService.countPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName), HttpStatus.OK);
+    }
+
+    @GetMapping("/count/author/{email}/category/{categoryName}")
+    public ResponseEntity<Long> countPostsByAuthorEmailAndCategoryName(@PathVariable @NotNull String email, @PathVariable @NotNull String categoryName) {
+        return new ResponseEntity<>(postService.countPostsByAuthorEmailAndCategoryName(email, categoryName), HttpStatus.OK);
+    }
+
+    @GetMapping("/count/author/{authorId}/category/{categoryId}")
+    public ResponseEntity<Long> countPostsByAuthorIdAndCategoryId(@PathVariable Long authorId, @PathVariable Long categoryId) {
+        return new ResponseEntity<>(postService.countPostsByAuthorIdAndCategoryId(authorId, categoryId), HttpStatus.OK);
+    }
 }

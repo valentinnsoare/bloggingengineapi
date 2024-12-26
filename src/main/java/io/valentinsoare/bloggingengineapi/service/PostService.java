@@ -11,7 +11,7 @@ public interface PostService {
     PostDto updatePostByTitle(String title, PostDto postDto);
     PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir);
     void deletePost(Long id);
-    void deleteAllPostsByTitle(String title);
+    void deletePostByTitle(String title);
     void deleteAllPosts();
     Long countAllPosts();
     Long findPostIdByTitle(String title);
