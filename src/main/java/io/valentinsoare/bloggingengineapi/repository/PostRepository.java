@@ -24,7 +24,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findPostByTitle(String title);
 
     @EntityGraph(value = "post-with-authors-categories-comments", type = EntityGraph.EntityGraphType.LOAD)
-    @Query(nativeQuery = true, value = "SELECT * FROM post WHERE title = :title")
+    @Query(nativeQuery = true, value = "SELECT * FROM post WHERE id = :id")
     Post getPostById(Long id);
 
     @Query(nativeQuery = true,
