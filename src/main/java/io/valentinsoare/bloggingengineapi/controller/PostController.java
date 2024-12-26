@@ -97,6 +97,12 @@ public class PostController {
         return new ResponseEntity<>(postService.updatePost(id, postDto), HttpStatus.OK);
     }
 
+    @PutMapping("/title")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    public ResponseEntity<PostDto> updatePostByTitle(@RequestParam @NotNull String title, @Valid @RequestBody PostDto postDto) {
+        return new ResponseEntity<>(postService.updatePostByTitle(title, postDto), HttpStatus.OK);
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<String> deletePost(@PathVariable Long id) {
