@@ -10,14 +10,13 @@ import java.util.List;
 public interface AuthorService {
     AuthorDto getAuthorById(Long id);
     AuthorDto getAuthorByEmail(String email);
-    AuthorDto getAuthorByFirstName(String firstName);
-    AuthorDto getAuthorByLastName(String lastName);
+    AuthorResponse getAuthorsByFirstName(String firstName, int pageNo, int pageSize, String sortBy, String sortDir);
+    AuthorResponse getAuthorsByLastName(String lastName, int pageNo, int pageSize, String sortBy, String sortDir);
     boolean existsByEmail(String email);
-    List<AuthorDto> getAuthorsByIds(List<Long> userIds);
     AuthorDto createAuthor(AuthorDto authorDto);
     AuthorDto updateAuthor(AuthorDto authorDto);
     List<PostDto> updateAuthorPostList(Long id, List<Long> postIds);
     void deleteAuthor(Long id);
-    AuthorResponse getAllAuthors(int pageNo, int pageSize, @NotNull String sortBy, @NotNull String sortDir);
+    AuthorResponse getAllAuthors(int pageNo, int pageSize, String sortBy, String sortDir);
     Long countAuthors();
 }
