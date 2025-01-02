@@ -10,6 +10,7 @@ import io.valentinsoare.bloggingengineapi.exception.ResourceNotFoundException;
 import io.valentinsoare.bloggingengineapi.repository.AuthorRepository;
 import io.valentinsoare.bloggingengineapi.repository.PostRepository;
 import io.valentinsoare.bloggingengineapi.response.AuthorResponse;
+import io.valentinsoare.bloggingengineapi.response.PostResponse;
 import io.valentinsoare.bloggingengineapi.utilities.AuxiliaryMethods;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -92,6 +93,37 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    public PostResponse getAuthorPostsList(Long id) {
+        return null;
+    }
+
+    @Override
+    public PostResponse getAuthorPostsListByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public PostResponse updateAuthorsPostsList(Long id, List<PostDto> posts) {
+        return null;
+    }
+
+
+    @Override
+    public PostResponse createAuthorPostsList(Long id, List<PostDto> posts) {
+        return null;
+    }
+
+    @Override
+    public void deleteAuthorByEmail(String email) {
+
+    }
+
+    @Override
+    public void deleteAuthorsPostsList(Long id) {
+
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public AuthorResponse getAuthorsByFirstName(String firstName, int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
@@ -138,6 +170,21 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    public boolean existsById(Long id) {
+        return false;
+    }
+
+    @Override
+    public boolean existsByFirstName(String firstName) {
+        return false;
+    }
+
+    @Override
+    public boolean existsByLastName(String lastName) {
+        return false;
+    }
+
+    @Override
     @Transactional
     public AuthorDto createAuthor(AuthorDto authorDto) {
         Author author = modelMapper.map(authorDto, Author.class);
@@ -158,89 +205,18 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    @Transactional
-    public AuthorDto updateAuthor(AuthorDto authorDto) {
-        log.info("Updating author {}.", authorDto);
+    public AuthorDto updateAuthorById(Long id, AuthorDto authorDto) {
+        return null;
+    }
 
-        Author author = modelMapper.map(authorDto, Author.class);
-        String emailToBeChecked = author.getEmail();
-
-        Author existentAuthorInDb = authorRepository.getAuthorByEmail(emailToBeChecked)
-                .orElseThrow(() -> {
-                    log.error("Author with email {} not found.", emailToBeChecked);
-                    throw new ResourceNotFoundException("author", Map.of("email", emailToBeChecked));
-                });
-
-        existentAuthorInDb.setEmail(auxiliaryMethods.updateIfPresent(authorDto.getEmail(), existentAuthorInDb.getEmail()))
-                .setFirstName(auxiliaryMethods.updateIfPresent(authorDto.getFirstName(), existentAuthorInDb.getFirstName()))
-                .setLastName(auxiliaryMethods.updateIfPresent(authorDto.getLastName(), existentAuthorInDb.getLastName()));
-
-        Author savedAuthor;
-
-        try {
-            savedAuthor = authorRepository.save(existentAuthorInDb);
-        } catch (Exception e) {
-            log.error("Error updating author {}.", authorDto);
-            throw new BloggingEngineException("author", "error updating", Map.of("author", authorDto.toString()));
-        }
-
-        return modelMapper.map(savedAuthor, AuthorDto.class);
+    @Override
+    public AuthorDto updateAuthorByEmail(String email, AuthorDto authorDto) {
+        return null;
     }
 
     @Override
     @Transactional
-    public List<PostDto> updateAuthorPostList(Long id, List<Long> postIds) {
-        log.info("Updating author with id {} post list with post ids: {}.", id, postIds);
-
-        Author searchedAuthor = authorRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Author with id {} not found.", id);
-                    throw new ResourceNotFoundException("author", Map.of("id", id.toString()));
-                });
-
-        String searchedEmail = searchedAuthor.getEmail();
-        Author searchedAuthorByEmail = authorRepository.getAuthorByEmail(searchedEmail)
-                .orElseThrow(() -> {
-                    log.error("Author with email {} not found.", searchedEmail);
-                    throw new ResourceNotFoundException("author", Map.of("email", searchedEmail));
-                });
-
-        Set<Post> listWithPosts = new HashSet<>();
-        for (Long i : postIds) {
-            Post existentPost = postRepository.findById(id)
-                    .orElseThrow(() -> {
-                        log.error("Post with id {} not found.", i);
-                        throw new ResourceNotFoundException("post", Map.of("id", i.toString()));
-                    });
-
-            log.info("Post with id {} found.", i);
-            listWithPosts.add(existentPost);
-        }
-
-        searchedAuthorByEmail.setAllPosts(listWithPosts);
-        log.info("Author {} post list updated with post ids: {}.", searchedAuthor, postIds);
-
-        try {
-            authorRepository.save(searchedAuthorByEmail);
-            log.info("Author {} post list updated with post ids: {}.", searchedAuthor, postIds);
-        } catch (Exception e) {
-            log.error("Error updating author {} post list with post ids: {}.", searchedAuthor, postIds);
-            throw new BloggingEngineException("author", "error updating post list", Map.of("author", searchedAuthor.toString()));
-        }
-
-        List<PostDto> authorAllPostsUpdates = new ArrayList<>();
-
-        listWithPosts.forEach(post -> {
-            PostDto newPost = modelMapper.map(post, PostDto.class);
-            authorAllPostsUpdates.add(newPost);
-        });
-
-        return authorAllPostsUpdates;
-    }
-
-    @Override
-    @Transactional
-    public void deleteAuthor(Long id) {
+    public void deleteAuthorById(Long id) {
         log.info("Deleting author with id: {}.", id);
 
         Author author = authorRepository.findById(id)
@@ -285,5 +261,20 @@ public class AuthorServiceImpl implements AuthorService {
         }
 
         return countingAuthors;
+    }
+
+    @Override
+    public Long countAuthorsByFirstName(String firstName) {
+        return 0L;
+    }
+
+    @Override
+    public Long countAuthorsByLastName(String lastName) {
+        return 0L;
+    }
+
+    @Override
+    public Long countHowManyPostsAuthorHas(Long id) {
+        return 0L;
     }
 }

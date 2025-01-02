@@ -1,7 +1,6 @@
 package io.valentinsoare.bloggingengineapi.controller;
 
 import io.valentinsoare.bloggingengineapi.dto.AuthorDto;
-import io.valentinsoare.bloggingengineapi.dto.PostDto;
 import io.valentinsoare.bloggingengineapi.response.AuthorResponse;
 import io.valentinsoare.bloggingengineapi.service.AuthorService;
 import jakarta.validation.Valid;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/authors")
@@ -67,24 +65,6 @@ public class AuthorController {
     public ResponseEntity<Boolean> existsByEmail(@PathVariable String email) {
         boolean exists = authorService.existsByEmail(email);
         return new ResponseEntity<>(exists, HttpStatus.OK);
-    }
-
-    @PutMapping
-    public ResponseEntity<AuthorDto> updateAuthor(@RequestBody @Valid AuthorDto authorDto) {
-        AuthorDto author = authorService.updateAuthor(authorDto);
-        return new ResponseEntity<>(author, HttpStatus.OK);
-    }
-
-    @PutMapping("/{id}/posts")
-    public ResponseEntity<List<PostDto>> updateAuthorPostsList(@PathVariable Long id, @RequestBody List<Long> postIds) {
-        List<PostDto> updatedAuthorPosts = authorService.updateAuthorPostList(id, postIds);
-        return new ResponseEntity<>(updatedAuthorPosts, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAuthor(@PathVariable Long id) {
-        authorService.deleteAuthor(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping
