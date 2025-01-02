@@ -1,5 +1,7 @@
 package io.valentinsoare.bloggingengineapi.security;
 
+import io.valentinsoare.bloggingengineapi.exception.ApiAuthException;
+import io.valentinsoare.bloggingengineapi.exception.BloggingEngineException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String token = getTokenFromRequest(request);
 
-        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token, request)) {
             String usernameFromToken = jwtTokenProvider.getUsernameFromToken(token);
             UserDetails userDetails = userDetailsService.loadUserByUsername(usernameFromToken);
 

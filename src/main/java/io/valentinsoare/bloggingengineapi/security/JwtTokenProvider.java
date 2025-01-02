@@ -6,7 +6,10 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.valentinsoare.bloggingengineapi.exception.ApiAuthException;
 import io.valentinsoare.bloggingengineapi.exception.BloggingEngineException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -59,7 +62,7 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token, HttpServletRequest request) {
         try {
             Jwts.parser()
                     .verifyWith(getSecretKey())
@@ -70,13 +73,17 @@ public class JwtTokenProvider {
 
             return true;
         } catch (MalformedJwtException e) {
-            throw new BloggingEngineException("validateToken", "Invalid JWT Token", Map.of("token", token));
+            request.setAttribute("exception", e.getMessage());
+            throw new ApiAuthException("validateToken", "Invalid JWT Token", Map.of("token", token));
         } catch (UnsupportedJwtException e) {
-            throw new BloggingEngineException("validateToken", "Unsupported JWT Token", Map.of("token", token));
+            request.setAttribute("exception", e.getMessage());
+            throw new ApiAuthException("validateToken", "Unsupported JWT Token", Map.of("token", token));
         } catch (ExpiredJwtException e) {
-            throw new BloggingEngineException("validateToken", "Expired JWT Token", Map.of("token", token));
+            request.setAttribute("exception", e.getMessage());
+            throw new ApiAuthException("validateToken", "Expired JWT Token", Map.of("token", token));
         } catch (IllegalArgumentException e) {
-            throw new BloggingEngineException("validateToken", "JWT claims string is null or empty", Map.of("token", "nullOrEmpty"));
+            request.setAttribute("exception", e.getMessage());
+            throw new ApiAuthException("validateToken", "JWT claims string is empty", Map.of("token", token));
         }
     }
 }

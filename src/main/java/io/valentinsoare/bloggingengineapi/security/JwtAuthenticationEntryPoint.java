@@ -9,6 +9,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.Instant;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
@@ -24,12 +25,25 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
 
+        String exception = (String) request.getAttribute("exception");
+
         ErrorResponse newError = ErrorResponse.builder()
                 .statusCode(HttpServletResponse.SC_UNAUTHORIZED)
-                .message(authException.getMessage())
+                .timestamp(Instant.now())
+                .message(exception)
                 .details(request.getRequestURI())
                 .build();
 
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, objectMapper.writeValueAsString(newError));
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write(
+                String.format(
+                        "{\"statusCode\": %d, \"message\": \"%s\", \"details\": \"%s\", \"timestamp\": \"%s\"}",
+                        newError.getStatusCode(),
+                        newError.getMessage(),
+                        newError.getDetails(),
+                        newError.getTimestamp()
+                )
+        );
     }
 }

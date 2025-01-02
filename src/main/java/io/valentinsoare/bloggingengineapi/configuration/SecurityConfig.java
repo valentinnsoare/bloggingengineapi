@@ -1,5 +1,7 @@
 package io.valentinsoare.bloggingengineapi.configuration;
 
+//import io.valentinsoare.bloggingengineapi.security.JwtAuthenticationEntryPoint;
+//import io.valentinsoare.bloggingengineapi.security.JwtAuthenticationEntryPoint;
 import io.valentinsoare.bloggingengineapi.security.JwtAuthenticationEntryPoint;
 import io.valentinsoare.bloggingengineapi.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;

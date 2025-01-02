@@ -8,9 +8,10 @@ import lombok.*;
 
 import java.time.Instant;
 
-@Getter
 @Setter
+@Getter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorResponse {

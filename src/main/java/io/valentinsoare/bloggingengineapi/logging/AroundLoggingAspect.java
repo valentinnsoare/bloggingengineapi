@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.logging;
 
+import io.valentinsoare.bloggingengineapi.exception.BloggingEngineException;
 import io.valentinsoare.bloggingengineapi.exception.MethodFailedException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
