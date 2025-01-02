@@ -3,7 +3,6 @@ package io.valentinsoare.bloggingengineapi.service;
 import io.valentinsoare.bloggingengineapi.dto.AuthorDto;
 import io.valentinsoare.bloggingengineapi.dto.PostDto;
 import io.valentinsoare.bloggingengineapi.entity.Author;
-import io.valentinsoare.bloggingengineapi.entity.Post;
 import io.valentinsoare.bloggingengineapi.exception.BloggingEngineException;
 import io.valentinsoare.bloggingengineapi.exception.NoElementsException;
 import io.valentinsoare.bloggingengineapi.exception.ResourceNotFoundException;
@@ -73,13 +72,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional(readOnly = true)
     public AuthorDto getAuthorByEmail(String email) {
-        log.info("Searching author with email: {}.", email);
-
         Author foundAuthor = authorRepository.getAuthorByEmail(email)
-                .orElseThrow(() -> {
-                    log.error("Author with email {} not found.", email);
-                    return new ResourceNotFoundException("author", Map.of("email", email));
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("author", Map.of("email", email)));
 
         AuthorDto newAuthorFound = modelMapper.map(foundAuthor, AuthorDto.class);
 
@@ -88,7 +82,6 @@ public class AuthorServiceImpl implements AuthorService {
             newAuthorFound.getPostsFromAuthor().add(newPost);
         });
 
-        log.info("Fetched author with email {} found.", email);
         return newAuthorFound;
     }
 
