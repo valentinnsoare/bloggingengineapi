@@ -15,7 +15,6 @@ import java.time.Instant;
 @Slf4j
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
     private ObjectMapper objectMapper;
 
     public JwtAuthenticationEntryPoint() {
@@ -40,14 +39,14 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json");
 
         String content = String.format(
-                "{\"statusCode\": %d, \"message\": \"%s\", \"details\": \"%s\", \"timestamp\": \"%s\"}",
+                "{\n \tstatusCode: %d,\n \tmessage: %s,\n \tdetails: %s,\n \ttimestamp: %s\n }",
                 newError.getStatusCode(),
                 newError.getMessage(),
                 newError.getDetails(),
                 newError.getTimestamp()
         );
 
-        log.error("{\"statusCode\": {}, \"message\": \"{}\"}", newError.getStatusCode(), newError.getMessage());
+        log.error("{ statusCode: {}, message: {} }", newError.getStatusCode(), newError.getMessage());
         response.getWriter().write(content);
     }
 }

@@ -35,5 +35,8 @@ public interface AuthorService {
     Long countAuthors();
     Long countAuthorsByFirstName(String firstName);
     Long countAuthorsByLastName(String lastName);
-    Long countHowManyPostsAuthorHas(Long id);
+    Long countHowManyPostsAuthorHasById(Long id);
+    Long countHowManyPostsAuthorHasByEmail(String email);
+    Long countHowManyPostsAuthorHasByFirstName(String firstName);
+    Long countHowManyPostsAuthorHasByLastName(String lastName);
 }

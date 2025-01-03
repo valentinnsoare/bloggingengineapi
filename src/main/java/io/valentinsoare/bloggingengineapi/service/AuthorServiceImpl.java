@@ -64,7 +64,9 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional(readOnly = true)
     public AuthorDto getAuthorById(Long id) {
         Author foundAuthor = authorRepository.getAuthorById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("author", Map.of("id", id.toString())));
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("author", Map.of("id", id.toString()))
+                );
 
         return mapToDTO(foundAuthor);
     }
@@ -73,7 +75,9 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional(readOnly = true)
     public AuthorDto getAuthorByEmail(String email) {
         Author foundAuthor = authorRepository.getAuthorByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("author", Map.of("email", email)));
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("author", Map.of("email", email))
+                );
 
         AuthorDto newAuthorFound = modelMapper.map(foundAuthor, AuthorDto.class);
 
@@ -257,17 +261,38 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long countAuthorsByFirstName(String firstName) {
         return 0L;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Long countAuthorsByLastName(String lastName) {
         return 0L;
     }
 
     @Override
-    public Long countHowManyPostsAuthorHas(Long id) {
+    @Transactional(readOnly = true)
+    public Long countHowManyPostsAuthorHasById(Long id) {
+        return 0L;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countHowManyPostsAuthorHasByEmail(String email) {
+        return 0L;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countHowManyPostsAuthorHasByFirstName(String firstName) {
+        return 0L;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long countHowManyPostsAuthorHasByLastName(String lastName) {
         return 0L;
     }
 }
