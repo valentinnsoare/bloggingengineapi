@@ -47,7 +47,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                 newError.getTimestamp()
         );
 
-        log.error(content);
+        log.error("{\"statusCode\": {}, \"message\": \"{}\"}", newError.getStatusCode(), newError.getMessage());
         response.getWriter().write(content);
     }
 }
