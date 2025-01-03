@@ -43,6 +43,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/v3/api-docs/**").permitAll()
                     .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
         .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint))

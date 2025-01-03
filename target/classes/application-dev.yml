@@ -46,9 +46,9 @@ app:
     expiration: 900 000 # 15 minutes in milliseconds
 
 
-#springdoc:
-#  swagger-ui:
-#    path: /swagger-ui
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
 
 #management:
 #  endpoint:
