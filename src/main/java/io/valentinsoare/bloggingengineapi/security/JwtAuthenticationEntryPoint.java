@@ -31,7 +31,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         ErrorResponse newError = ErrorResponse.builder()
                 .statusCode(HttpServletResponse.SC_UNAUTHORIZED)
                 .timestamp(Instant.now())
-                .message(exception)
+                .message(exception == null ? authException.getMessage() : exception)
                 .details(request.getRequestURI())
                 .build();
 

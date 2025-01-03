@@ -155,15 +155,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Transactional(readOnly = true)
     public boolean existsByEmail(String email) {
-        log.info("Checking if author with email {} exists.", email);
-
-        if (Boolean.TRUE.equals(authorRepository.existsByEmail(email))) {
-            log.info("Author with email {} exists.", email);
-            return true;
-        }
-
-        log.info("Author with email {} does not exist.", email);
-        return false;
+        return Boolean.TRUE.equals(authorRepository.existsByEmail(email));
     }
 
     @Override
