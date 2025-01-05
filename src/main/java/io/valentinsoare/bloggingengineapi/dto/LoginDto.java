@@ -12,9 +12,11 @@ import lombok.*;
 @Schema(name = "LoginDto", description = "Data Transfer Object for Login", hidden = true)
 public class LoginDto {
     @NotBlank(message = "Username or email cannot be blank")
+    @Schema(description = "Username or email", example = "user")
     private String usernameOrEmail;
 
     @NotBlank(message = "Password cannot be blank")
+    @Schema(description = "Password", example = "password")
     private String password;
 
     @Override

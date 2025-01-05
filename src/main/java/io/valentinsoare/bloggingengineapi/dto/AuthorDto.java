@@ -15,18 +15,23 @@ import java.util.Set;
 @AllArgsConstructor
 @Schema(name = "AuthorDto", description = "Data Transfer Object for Author", hidden = true)
 public class AuthorDto {
+    @Schema(description = "Id of the author", example = "1")
     private long id;
 
     @NotBlank(message = "First name is mandatory!")
+    @Schema(description = "First name of the author", example = "John")
     private String firstName;
 
     @NotBlank(message = "Last name is mandatory!")
+    @Schema(description = "Last name of the author", example = "Doe")
     private String lastName;
 
     @NotBlank(message = "Email is mandatory!")
     @Email(message = "Email must be a valid email address!")
+    @Schema(description = "Email of the author", example = "unknown@gmail.com")
     private String email;
 
+    @Schema(description = "Posts from the author", example = "[PostDto]")
     private Set<PostDto> postsFromAuthor = Collections.emptySet();
 
     @Override

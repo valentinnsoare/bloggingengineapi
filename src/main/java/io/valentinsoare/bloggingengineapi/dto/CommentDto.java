@@ -14,21 +14,26 @@ import lombok.*;
 @AllArgsConstructor
 @Schema(name = "AuthorDto", description = "Data Transfer Object for Author", hidden = true)
 public class CommentDto {
+    @Schema(description = "Id of the comment", example = "1")
     private long id;
 
     @NotEmpty(message = "Name is mandatory!")
+    @Schema(description = "Name of the comment author", example = "John")
     @Size(min = 1, max = 50, message = "Name must be between 1 and 50 characters!")
     private String name;
 
     @NotEmpty(message = "Email is mandatory!")
     @Email(message = "Email must be a valid email address!")
+    @Schema(description = "Email of the comment author", example = "unknown@gmail.com")
     @Size(min = 1, max = 50, message = "Email must be between 1 and 50 characters!")
     private String email;
 
     @NotEmpty(message = "Comment body is mandatory!")
+    @Schema(description = "Body of the comment", example = "Comment body")
     @Size(min = 1, max = 5000, message = "Comment body must be between 1 and 5000 characters!")
     private String body;
 
+    @Schema(description = "Id of the post", example = "1")
     private long postId;
 
     @Override

@@ -16,19 +16,24 @@ import java.util.*;
 @Schema(name = "RegisterDto", description = "Data Transfer Object for Register", hidden = true)
 public class RegisterDto {
     @NotBlank(message = "Name is mandatory!")
+    @Schema(description = "Name of the user", example = "John Doe")
     private String name;
 
     @NotBlank(message = "Username is mandatory!")
+    @Schema(description = "Username of the user", example = "user")
     private String username;
 
     @NotBlank(message = "Email is mandatory!")
     @Email(message = "Email must be a valid email address!")
+    @Schema(description = "Email of the user", example = "unknown@gmail.com")
     private String email;
 
-    @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters!")
     @NotBlank(message = "Password is mandatory!")
+    @Schema(description = "Password of the user", example = "password")
+    @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters!")
     private String password;
 
+    @Schema(description = "Roles of the user", example = "[ROLE_USER]")
     private Set<String> roles = new HashSet<>();
 
     @Override

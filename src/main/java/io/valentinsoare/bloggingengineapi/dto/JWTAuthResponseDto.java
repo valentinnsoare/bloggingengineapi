@@ -14,9 +14,14 @@ import lombok.Setter;
 @Schema(name = "JWTAuthResponseDto", description = "Data Transfer Object for JWT Authentication Response", hidden = true)
 public class JWTAuthResponseDto {
     @NotBlank(message = "Access token is required")
+    @Schema(description = "Access token",
+            example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ1c2VyIiwiaWF0IjoxNjI5MjIwNjI4LCJleHAiOjE2Mjk4MjU0Mjh9.1",
+            format = "JWT"
+    )
     private String accessToken;
 
     @NotBlank(message = "Token type is required")
+    @Schema(description = "Token type", example = "Bearer")
     private String tokenType;
 
     @Override
