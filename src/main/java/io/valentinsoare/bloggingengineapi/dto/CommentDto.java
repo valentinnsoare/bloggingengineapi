@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "AuthorDto", description = "Data Transfer Object for Author", hidden = true)
+@Schema(name = "CommentDto", description = "Data Transfer Object for Comment", hidden = true)
 public class CommentDto {
     @Schema(description = "Id of the comment", example = "1")
     private long id;
