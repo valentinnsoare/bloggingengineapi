@@ -50,7 +50,7 @@ app:
 springdoc:
   swagger-ui:
     path: /swagger-ui
-#    default-models-expand-depth: -1
+    default-models-expand-depth: -1
 
 management:
   endpoint:
