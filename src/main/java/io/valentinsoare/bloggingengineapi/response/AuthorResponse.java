@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Builder
-@Schema(name = "AuthorResponse", description = "Response object for Author", hidden = true)
+@Schema(description = "Response object for Author")
 public class AuthorResponse {
     @NotNull
     @Schema(description = "Authors on page", example = "[AuthorDto]")

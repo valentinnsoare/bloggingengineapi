@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Builder
-@Schema(name = "CommentResponse", description = "Response object for Comment", hidden = true)
+@Schema(description = "Response object for Comment")
 public class CommentResponse {
     @NotNull
     @Schema(description = "Comments on page", example = "[CommentDto]")

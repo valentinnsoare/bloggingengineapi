@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "LoginDto", description = "Data Transfer Object for Login", hidden = true)
+@Schema(description = "Data Transfer Object for Login")
 public class LoginDto {
     @NotBlank(message = "Username or email cannot be blank")
     @Schema(description = "Username or email", example = "user")

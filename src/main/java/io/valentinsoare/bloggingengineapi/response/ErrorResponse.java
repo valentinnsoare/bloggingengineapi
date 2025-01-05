@@ -15,7 +15,7 @@ import java.time.Instant;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "ErrorResponse", description = "Error Response", hidden = true)
+@Schema(description = "Error Response")
 public class ErrorResponse {
     @NotNull
     @Schema(description = "Timestamp of the error", example = "2021-08-18T12:51:36.000Z")

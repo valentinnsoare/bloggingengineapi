@@ -13,7 +13,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "PostDto", description = "Data Transfer Object for Post", hidden = true)
+@Schema(description = "Data Transfer Object for Post")
 public class PostDto {
     @Schema(description = "ID of the post", example = "1")
     private long id;
@@ -33,14 +33,11 @@ public class PostDto {
     @Size(min = 1, max = 15000, message = "Content must be between 1 and 15000 characters!")
     private String content;
 
-    @Schema(description = "Authors of the post", example = "[AuthorDto]")
     @Size(min = 1, max = 5, message = "We need at least one author and maximum is five!")
     private Set<AuthorDto> authors = Collections.emptySet();
 
-    @Schema(description = "Comments of the post", example = "[CommentDto]")
     private Set<CommentDto> comments = Collections.emptySet();
 
-    @Schema(description = "Categories of the post", example = "[CategoryDto]")
     @Size(min = 1, max = 5, message = "We need at least one category and maximum is five!")
     private Set<CategoryDto> categories = Collections.emptySet();
 

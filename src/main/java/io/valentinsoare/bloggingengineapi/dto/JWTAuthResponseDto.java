@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-@Schema(name = "JWTAuthResponseDto", description = "Data Transfer Object for JWT Authentication Response", hidden = true)
+@Schema(description = "Data Transfer Object for JWT Authentication Response")
 public class JWTAuthResponseDto {
     @NotBlank(message = "Access token is required")
     @Schema(description = "Access token",

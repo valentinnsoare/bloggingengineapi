@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @Builder
-@Schema(name = "PostResponse", description = "Response object for Post", hidden = true)
+@Schema(description = "Response object for Post")
 public class PostResponse {
     @NotNull
     @Schema(description = "Posts on page", example = "[PostDto]")

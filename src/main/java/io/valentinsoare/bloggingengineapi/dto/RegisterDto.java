@@ -13,7 +13,7 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "RegisterDto", description = "Data Transfer Object for Register", hidden = true)
+@Schema(description = "Data Transfer Object for Register")
 public class RegisterDto {
     @NotBlank(message = "Name is mandatory!")
     @Schema(description = "Name of the user", example = "John Doe")
@@ -33,7 +33,6 @@ public class RegisterDto {
     @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters!")
     private String password;
 
-    @Schema(description = "Roles of the user", example = "[ROLE_USER]")
     private Set<String> roles = new HashSet<>();
 
     @Override

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Builder
-@Schema(name = "CategoryResponse", description = "Response object for Category", hidden = true)
+@Schema(description = "Response object for Category")
 public class CategoryResponse {
     @NotNull
     @Schema(description = "Categories on page", example = "[CategoryDto]")

@@ -13,7 +13,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "AuthorDto", description = "Data Transfer Object for Author", hidden = true)
+@Schema(description = "Data Transfer Object for Author")
 public class AuthorDto {
     @Schema(description = "ID of the author", example = "1")
     private long id;
@@ -31,7 +31,6 @@ public class AuthorDto {
     @Schema(description = "Email of the author", example = "unknown@gmail.com")
     private String email;
 
-    @Schema(description = "Posts from the author")
     private Set<PostDto> postsFromAuthor = Collections.emptySet();
 
     @Override

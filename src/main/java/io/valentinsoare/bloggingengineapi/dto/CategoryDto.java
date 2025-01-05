@@ -13,7 +13,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "CategoryDto", description = "Data Transfer Object for Category", hidden = true)
+@Schema(description = "Data Transfer Object for Category")
 public class CategoryDto {
     @Schema(description = "ID of the category", example = "1")
     private Long id;
@@ -28,7 +28,6 @@ public class CategoryDto {
     @Size(min = 1, max = 355, message = "Description must be between 1 and 355 characters!")
     private String description;
 
-    @Schema(description = "All posts with this category")
     private Set<PostDto> allPostsWithCategory = Collections.emptySet();
 
     @Override
