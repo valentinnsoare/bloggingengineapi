@@ -59,9 +59,6 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(readOnly = true)
     public CommentResponse getAllCommentsByPostId(Long postId, int pageNo, int pageSize, String sortBy, String sortDir) {
-        log.info("Finding all comments from post with id: {}. Page number: {} and page size: {} in sorted order.",
-                postId, pageNo, pageSize);
-
         Pageable pageCharacteristics = auxiliaryMethodsComment.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
         Page<Comment> pageWithComments = commentRepository.findByPostId(postId, pageCharacteristics);
@@ -76,7 +73,6 @@ public class CommentServiceImpl implements CommentService {
             );
         }
 
-        log.info("Mapping comments to commentDto.");
         return CommentResponse.builder()
                 .comments(allCommentsAsDTOs)
                 .pageNo(pageNo)
@@ -97,10 +93,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDto createComment(Long postId, CommentDto commentDto) {
-        log.info("Converting from commentDto for post with id: {}.", postId);
         Comment newComment = mapToEntity(commentDto);
 
-        log.info("Finding post with id: {}.", postId);
         Post postById = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("post",
                         new HashMap<>(Map.of("id", String.valueOf(postId)))));
@@ -108,10 +102,7 @@ public class CommentServiceImpl implements CommentService {
         newComment.setPost(postById);
 
         try {
-            log.info("Saving comment to database.");
             Comment saveComment = commentRepository.save(newComment);
-            log.info("Comment saved to database with success.");
-
             return mapToDTO(saveComment);
         } catch (Exception e) {
             throw new ResourceViolationException(e.getLocalizedMessage());
@@ -121,10 +112,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public CommentDto updateCommentById(Long commentId, Long postId, CommentDto commentDto) {
-        log.info("Updating comment with id: {} for post with id: {}.", commentId, postId);
         Comment commentFound = getComment(commentId, postId);
 
-        log.info("Updating comment fields.");
         commentFound.setName(auxiliaryMethodsComment.updateIfPresent(commentDto.getName(), commentFound.getName()))
                 .setEmail(auxiliaryMethodsComment.updateIfPresent(commentDto.getEmail(), commentFound.getEmail()))
                 .setBody(auxiliaryMethodsComment.updateIfPresent(commentDto.getBody(), commentFound.getBody()));
@@ -132,28 +121,21 @@ public class CommentServiceImpl implements CommentService {
         Comment savedComment;
 
         try {
-            log.info("Saving updated comment to database.");
             savedComment = commentRepository.save(commentFound);
         } catch (Exception e) {
             throw new ResourceViolationException(e.getLocalizedMessage());
         }
 
-        log.info("Comment updated with success.");
         return mapToDTO(savedComment);
     }
 
     @Override
     @Transactional
     public void deleteCommentById(Long commentId, Long postId) {
-        log.info("Finding comment with id: {} for post with id: {}.", commentId, postId);
         Comment commentFound = getComment(commentId, postId);
 
-        log.info("Removing comment from post.");
         commentFound.getPost().removeComment(commentFound);
-
-        log.info("Deleting comment with id: {}.", commentId);
         commentRepository.delete(commentFound);
-        log.info("Comment with id: {} deleted.", commentId);
     }
 
     @Override
