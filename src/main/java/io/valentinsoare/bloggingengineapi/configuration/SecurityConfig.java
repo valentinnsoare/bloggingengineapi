@@ -1,7 +1,7 @@
 package io.valentinsoare.bloggingengineapi.configuration;
 
-//import io.valentinsoare.bloggingengineapi.security.JwtAuthenticationEntryPoint;
-//import io.valentinsoare.bloggingengineapi.security.JwtAuthenticationEntryPoint;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.valentinsoare.bloggingengineapi.security.JwtAuthenticationEntryPoint;
 import io.valentinsoare.bloggingengineapi.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableMethodSecurity
+@SecurityScheme(
+        name = "Bearer Authentication",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
 public class SecurityConfig {
     private UserDetailsService userDetailsService;
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;

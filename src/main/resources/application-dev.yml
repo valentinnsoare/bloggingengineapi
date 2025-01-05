@@ -1,9 +1,11 @@
+#----------------------------------------------#
+
 spring:
   output:
     ansi:
       enabled: always
   main:
-    banner-mode: log
+    banner-mode: console
 
   application:
     name: BloggingEngineAPI
@@ -45,18 +47,16 @@ app:
     secret: "f6e9567a0b93eb68a5d331d163494adb14adfa067d148c3c165efa59928dfc95"
     expiration: 900 000 # 15 minutes in milliseconds
 
-
 springdoc:
   swagger-ui:
     path: /swagger-ui
-
-#management:
-#  endpoint:
-#    health:
-#      show-details: always
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 #----------------------------------------------#

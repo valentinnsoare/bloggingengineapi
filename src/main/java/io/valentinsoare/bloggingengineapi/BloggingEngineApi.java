@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -22,6 +23,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 						url = "http://www.apache.org/licenses/LICENSE-2.0.html"
 				),
 				termsOfService = "http://swagger.io/terms/"
+		),
+		externalDocs = @ExternalDocumentation(
+				description = "Blogging Engine API documentation",
+				url = "https://github.com/valentinnsoare/bloggingengineapi"
 		)
 )
 @SpringBootApplication

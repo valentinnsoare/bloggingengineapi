@@ -1,5 +1,7 @@
 package io.valentinsoare.bloggingengineapi.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.valentinsoare.bloggingengineapi.dto.AuthorDto;
 import io.valentinsoare.bloggingengineapi.response.AuthorResponse;
 import io.valentinsoare.bloggingengineapi.service.AuthorService;
@@ -7,11 +9,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/authors")
+@Tag(name = "Authors", description = "These endpoints are for managing authors.")
 public class AuthorController {
     private final AuthorService authorService;
 
@@ -20,6 +24,8 @@ public class AuthorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<AuthorDto> createAuthor(@RequestBody @Valid AuthorDto authorDto) {
         AuthorDto author = authorService.createAuthor(authorDto);
         return new ResponseEntity<>(author, HttpStatus.CREATED);

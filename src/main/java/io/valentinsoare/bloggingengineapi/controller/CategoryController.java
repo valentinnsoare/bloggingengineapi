@@ -1,5 +1,7 @@
 package io.valentinsoare.bloggingengineapi.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.valentinsoare.bloggingengineapi.dto.CategoryDto;
 import io.valentinsoare.bloggingengineapi.response.CategoryResponse;
 import io.valentinsoare.bloggingengineapi.service.CategoryService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/categories")
+@Tag(name = "Categories", description = "Managing categories.")
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -47,13 +50,15 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDto categoryDto) {
         return new ResponseEntity<>(categoryService.updateCategory(id, categoryDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<String> deleteCategoryById(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return new ResponseEntity<>("Category deleted successfully!", HttpStatus.OK);
     }
@@ -68,8 +73,9 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.countAllCategories(), HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllCategories() {
         categoryService.deleteAllCategories();
         return new ResponseEntity<>("All categories deleted successfully!", HttpStatus.OK);

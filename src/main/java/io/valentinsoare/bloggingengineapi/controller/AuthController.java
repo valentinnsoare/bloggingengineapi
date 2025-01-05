@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.valentinsoare.bloggingengineapi.dto.JWTAuthResponseDto;
 import io.valentinsoare.bloggingengineapi.dto.LoginDto;
 import io.valentinsoare.bloggingengineapi.dto.RegisterDto;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Authentication endpoints")
 public class AuthController {
     private final AuthService authService;
 

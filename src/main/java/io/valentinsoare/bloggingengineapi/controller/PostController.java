@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.controller;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.valentinsoare.bloggingengineapi.dto.PostDto;
 import io.valentinsoare.bloggingengineapi.response.PostResponse;
 import io.valentinsoare.bloggingengineapi.service.PostService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/posts")
+@Tag(name = "Posts", description = "Endpoints for managing posts.")
 public class PostController {
     private final PostService postService;
 
@@ -22,11 +24,12 @@ public class PostController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<PostResponse> getAllPosts(
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
@@ -82,32 +85,35 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable Long id) {
+    public ResponseEntity<PostDto> getPostById(@PathVariable @NotNull Long id) {
         return new ResponseEntity<>(postService.getPostById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/title")
-    public ResponseEntity<PostDto> getPostByTitle(@RequestParam @NotNull String name) {
-        return new ResponseEntity<>(postService.getPostByTitle(name), HttpStatus.OK);
+    @GetMapping("/{title}")
+    public ResponseEntity<PostDto> getPostByTitle(@PathVariable @NotNull String title) {
+        return new ResponseEntity<>(postService.getPostByTitle(title), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<PostDto> updatePost(@PathVariable Long id, @Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.updatePost(id, postDto), HttpStatus.OK);
     }
 
-    @PutMapping("/title")
+    @PutMapping("/{title}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
-    public ResponseEntity<PostDto> updatePostByTitle(@RequestParam @NotNull String title, @Valid @RequestBody PostDto postDto) {
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<PostDto> updatePostByTitle(@PathVariable @NotNull String title, @Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.updatePostByTitle(title, postDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
-        return new ResponseEntity<>(String.format("Post with id: %s deleted successfully!", id),HttpStatus.NO_CONTENT);
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<String> deletePostById(@PathVariable Long id) {
+        postService.deletePostWithId(id);
+        return new ResponseEntity<>(String.format("Post with id: %s deleted successfully!", id), HttpStatus.OK);
     }
 
     @GetMapping("/count")
@@ -125,45 +131,50 @@ public class PostController {
         return new ResponseEntity<>(postService.countPostsByAuthorId(id), HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPosts() {
         postService.deleteAllPosts();
-        return new ResponseEntity<>("All Posts deleted successfully!", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("All Posts deleted successfully!", HttpStatus.OK);
     }
 
-    @DeleteMapping("/author/{authorId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping("/author/{authorId}")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByAuthorId(@PathVariable Long authorId) {
         postService.deleteAllPostsByAuthorId(authorId);
-        return new ResponseEntity<>(String.format("All Posts with author id: %s deleted successfully!", authorId), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with author id: %s deleted successfully!", authorId), HttpStatus.OK);
     }
 
     @DeleteMapping("/{postId}/author/{authorId}")
     public ResponseEntity<String> deletePostByAuthorIdAndPostId(@PathVariable Long authorId, @PathVariable Long postId) {
         postService.deletePostByAuthorIdAndPostId(authorId, postId);
-        return new ResponseEntity<>(String.format("Post with id: %s and author id: %s deleted successfully!", postId, authorId), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("Post with id: %s and author id: %s deleted successfully!", postId, authorId), HttpStatus.OK);
     }
 
     @DeleteMapping("/author/{email}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByAuthorEmail(@PathVariable @NotNull String email) {
         postService.deleteAllPostsByAuthorEmail(email);
-        return new ResponseEntity<>(String.format("All Posts with author email: %s deleted successfully!", email), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with author email: %s deleted successfully!", email), HttpStatus.OK);
     }
 
-    @DeleteMapping("/author/{firstName}/{lastName}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping("/author/{firstName}/{lastName}")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByAuthorFirstNameAndLastName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName) {
         postService.deleteAllPostsByAuthorFirstNameAndLastName(firstName, lastName);
-        return new ResponseEntity<>(String.format("All Posts with author first name: %s and last name: %s deleted successfully!", firstName, lastName), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with author first name: %s and last name: %s deleted successfully!", firstName, lastName), HttpStatus.OK);
     }
 
-    @DeleteMapping("/author/{lastName}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping("/author/{lastName}")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByAuthorLastName(@PathVariable @NotNull String lastName) {
         postService.deleteAllPostsByAuthorLastName(lastName);
-        return new ResponseEntity<>(String.format("All Posts with author last name: %s deleted successfully!", lastName), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with author last name: %s deleted successfully!", lastName), HttpStatus.OK);
     }
 
     @GetMapping("/category/{categoryName}")
@@ -198,24 +209,26 @@ public class PostController {
         return new ResponseEntity<>(postService.countPostByCategoryId(categoryId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/category/{categoryId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping("/category/{categoryId}")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByCategoryId(@PathVariable Long categoryId) {
         postService.deleteAllPostsByCategoryId(categoryId);
-        return new ResponseEntity<>(String.format("All Posts with category id: %s deleted successfully!", categoryId), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with category id: %s deleted successfully!", categoryId), HttpStatus.OK);
     }
 
     @DeleteMapping("/category/{categoryId}/{postId}")
     public ResponseEntity<String> deletePostByCategoryIdAndPostId(@PathVariable Long categoryId, @PathVariable Long postId) {
         postService.deletePostByCategoryIdAndPostId(categoryId, postId);
-        return new ResponseEntity<>(String.format("Post with id: %s and category id: %s deleted successfully!", postId, categoryId), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("Post with id: %s and category id: %s deleted successfully!", postId, categoryId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/category/{categoryName}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @DeleteMapping("/category/{categoryName}")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByCategoryName(@PathVariable @NotNull String categoryName) {
         postService.deleteAllPostsByCategoryName(categoryName);
-        return new ResponseEntity<>(String.format("All Posts with category name: %s deleted successfully!", categoryName), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with category name: %s deleted successfully!", categoryName), HttpStatus.OK);
     }
 
     @GetMapping("/author/{lastName}/category/{categoryName}")
@@ -287,29 +300,27 @@ public class PostController {
         return new ResponseEntity<>(postService.countPostsByAuthorIdAndCategoryId(authorId, categoryId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{title}")
+    @DeleteMapping("/title/{name}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deletePostByTitle(@PathVariable @NotNull String title) {
-        postService.deletePostByTitle(title);
-        return new ResponseEntity<>(String.format("Post with title: %s deleted successfully!", title), HttpStatus.NO_CONTENT);
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<String> deletePostByTitle(@PathVariable @NotNull String name) {
+        postService.deletePostWithTitle(name);
+        return new ResponseEntity<>(String.format("Post with title : %s deleted successfully!", name), HttpStatus.OK);
     }
 
-    @GetMapping("/id/title")
-    public ResponseEntity<Long> findPostIdByTitle(@RequestParam @NotNull String title) {
-        return new ResponseEntity<>(postService.findPostIdByTitle(title), HttpStatus.OK);
-    }
-
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/author/{lastName}/category/{categoryName}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<String> deleteAllPostsByAuthorLastNameAndCategoryName(@PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
         postService.deleteAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
-        return new ResponseEntity<>(String.format("All Posts with author last name: %s and category name: %s deleted successfully!", lastName, categoryName), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with author last name: %s and category name: %s deleted successfully!", lastName, categoryName), HttpStatus.OK);
     }
 
-    @DeleteMapping("/author/{firstName}/{lastName}/category/{categoryName}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @DeleteMapping("/author/{firstName}/{lastName}/category/{categoryName}")
     public ResponseEntity<String> deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
         postService.deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
-        return new ResponseEntity<>(String.format("All Posts with author first name: %s, last name: %s and category name: %s deleted successfully!", firstName, lastName, categoryName), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with author first name: %s, last name: %s and category name: %s deleted successfully!", firstName, lastName, categoryName), HttpStatus.OK);
     }
 }

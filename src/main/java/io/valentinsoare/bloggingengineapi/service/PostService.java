@@ -10,11 +10,10 @@ public interface PostService {
     PostDto updatePost(Long id, PostDto postDto);
     PostDto updatePostByTitle(String title, PostDto postDto);
     PostResponse getAllPosts(int pageNo, int pageSize, String sortBy, String sortDir);
-    void deletePost(Long id);
-    void deletePostByTitle(String title);
+    void deletePostWithId(Long id);
+    void deletePostWithTitle(String title);
     void deleteAllPosts();
     Long countAllPosts();
-    Long findPostIdByTitle(String title);
 
     PostResponse getPostsByAuthorId(Long authorId, int pageNo, int pageSize, String sortBy, String sortDir);
     PostResponse getPostsByAuthorLastName(String lastName, int pageNo, int pageSize, String sortBy, String sortDir);

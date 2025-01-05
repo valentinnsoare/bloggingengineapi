@@ -1,5 +1,7 @@
 package io.valentinsoare.bloggingengineapi.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.valentinsoare.bloggingengineapi.dto.CommentDto;
 import io.valentinsoare.bloggingengineapi.response.CommentResponse;
 import io.valentinsoare.bloggingengineapi.service.CommentService;
@@ -7,10 +9,12 @@ import io.valentinsoare.bloggingengineapi.utilities.ApplicationConstants;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/comments")
+@Tag(name = "Comments", description = "Endpoints for comments.")
 public class CommentController {
     private final CommentService commentService;
 
@@ -19,6 +23,8 @@ public class CommentController {
     }
 
     @PostMapping("/{postId}/posts")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<CommentDto> createComment(@PathVariable  Long postId, @Valid @RequestBody CommentDto commentDto) {
         return new ResponseEntity<>(commentService.createComment(postId, commentDto), HttpStatus.CREATED);
     }
@@ -40,11 +46,15 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}/posts/{postId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Long postId, @PathVariable Long commentId, @Valid @RequestBody CommentDto commentDto) {
         return new ResponseEntity<>(commentService.updateComment(commentId, postId, commentDto), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/{commentId}/posts/{postId}")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<Void> deleteComment(@PathVariable Long postId, @PathVariable Long commentId) {
         commentService.deleteComment(commentId, postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

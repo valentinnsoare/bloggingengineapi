@@ -40,7 +40,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             response.setContentType("application/json");
 
             String content = String.format(
-                    "{\n \tstatusCode: %d,\n \tmessage: %s,\n \tdetails: %s,\n \ttimestamp: %s\n }",
+                    "{\n\tstatusCode: %d,\n\tmessage: %s,\n\tdetails: %s,\n\ttimestamp: %s\n }",
                     newError.getStatusCode(),
                     newError.getMessage(),
                     newError.getDetails(),

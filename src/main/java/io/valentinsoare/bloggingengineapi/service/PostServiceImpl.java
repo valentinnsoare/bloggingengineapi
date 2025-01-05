@@ -237,7 +237,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deletePost(Long id) {
+    public void deletePostWithId(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("id", String.valueOf(id)))));
 
@@ -246,7 +246,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deletePostByTitle(String title) {
+    public void deletePostWithTitle(String title) {
         Post post = postRepository.findPostByTitle(title)
                 .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("title", title))));
 
@@ -263,18 +263,6 @@ public class PostServiceImpl implements PostService {
         }
 
         return count;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Long findPostIdByTitle(String title) {
-        Long postId = postRepository.findPostIdByTitle(title);
-
-        if (postId == null || postId < 1) {
-            throw new NoElementsException("post by title: %s".formatted(title));
-        }
-
-        return postId;
     }
 
     @Override
