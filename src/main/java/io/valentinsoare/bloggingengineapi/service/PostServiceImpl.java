@@ -245,15 +245,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    @Transactional
-    public void deletePostWithTitle(String title) {
-        Post post = postRepository.findPostByTitle(title)
-                .orElseThrow(() -> new ResourceNotFoundException("post", new HashMap<>(Map.of("title", title))));
-
-        postRepository.delete(post);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public Long countAllPosts() {
         long count = postRepository.count();
@@ -273,18 +264,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long countPostByAuthorEmail(@NotNull String email) {
-        Long count = postRepository.countPostByAuthorEmail(email);
-
-        if (count < 1) {
-            throw new NoElementsException(String.format("posts by author email: %s", email));
-        }
-
-        return count;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Long countPostsByAuthorId(Long authorId) {
         Long c = postRepository.countPostByAuthorId(authorId);
 
@@ -299,30 +278,6 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public void deleteAllPostsByAuthorId(Long authorId) {
         postRepository.deleteAllByAuthorId(authorId);
-    }
-
-    @Override
-    @Transactional
-    public void deletePostByAuthorIdAndPostId(Long authorId, Long postId) {
-        postRepository.deletePostByAuthorIdAndPostId(authorId, postId);
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllPostsByAuthorEmail(String email) {
-        postRepository.deleteAllByAuthorEmail(email);
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllPostsByAuthorFirstNameAndLastName(String firstName, String lastName) {
-        postRepository.deleteAllPostsByAuthorFirstNameAndLastName(firstName, lastName);
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllPostsByAuthorLastName(String lastName) {
-        postRepository.deleteAllPostsByAuthorLastName(lastName);
     }
 
     @Override
@@ -355,18 +310,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long countPostsByCategoryName(String categoryName) {
-        Long l = postRepository.countPostsByCategoryName(categoryName);
-
-        if (l < 1) {
-            throw new NoElementsException("posts by category name: %s".formatted(categoryName));
-        }
-
-        return l;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public Long countPostByCategoryId(Long categoryId) {
         Long l = postRepository.countPostByCategoryId(categoryId);
 
@@ -385,46 +328,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deletePostByCategoryIdAndPostId(Long categoryId, Long postId) {
-        postRepository.deletePostByCategoryIdAndPostId(categoryId, postId);
-    }
-
-    @Override
-    @Transactional
     public void deleteAllPostsByCategoryName(String categoryName) {
         postRepository.deleteAllPostsByCategoryName(categoryName);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PostResponse getPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
-        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
-
-        Page<Post> pageWithPosts =
-                postRepository.getAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName, pageCharacteristics);
-
-        if (pageWithPosts.isEmpty()) {
-            throw new NoElementsException("posts by author with last name: %s and category name: %s".formatted(lastName, categoryName));
-        }
-
-        return preparePostResponseToBeReturned(pageWithPosts);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PostResponse getPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName, int pageNo, int pageSize, String sortBy, String sortDir) {
-        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
-
-        Page<Post> pageWithPosts =
-                postRepository.getPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName, pageCharacteristics);
-
-        if (pageWithPosts.isEmpty()) {
-            throw new NoElementsException(
-                    "posts by author with first name: %s last name: %s and category name: %s".formatted(firstName, lastName, categoryName)
-            );
-        }
-
-        return preparePostResponseToBeReturned(pageWithPosts);
     }
 
     @Override
@@ -459,74 +364,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public Long countPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
-        Long l = postRepository.countPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
-
-        if (l < 1) {
-            throw new NoElementsException(
-                    "posts by author with last name: %s and category name: %s".formatted(lastName, categoryName)
-            );
-        }
-
-        return l;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Long countPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
-        Long l = postRepository.countPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
-
-        if (l < 1) {
-            throw new NoElementsException(
-                    "posts by author with first name: %s last name: %s and category name: %s".formatted(firstName, lastName, categoryName)
-            );
-        }
-
-        return l;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Long countPostsByAuthorEmailAndCategoryName(String email, String categoryName) {
-        Long l = postRepository.countPostsByAuthorEmailAndCategoryName(email, categoryName);
-
-        if (l < 1) {
-            throw new NoElementsException(
-                    "posts by author with email: %s and category name: %s".formatted(email, categoryName)
-            );
-        }
-
-        return l;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Long countPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId) {
-        Long l = postRepository.countPostsByAuthorIdAndCategoryId(authorId, categoryId);
-
-        if (l < 1) {
-            throw new NoElementsException(
-                    "posts by author with id: %s and category id: %s".formatted(authorId, categoryId)
-            );
-        }
-
-        return l;
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName) {
-        postRepository.deleteAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName) {
-        postRepository.deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public PostResponse getPostsByAuthorId(Long authorId, int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
@@ -551,19 +388,5 @@ public class PostServiceImpl implements PostService {
         }
 
         return preparePostResponseToBeReturned(allPostsByAuthorLastName);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PostResponse getPostsByAuthorFirstNameAndLastName(String firstName, String lastName, int pageNo, int pageSize, String sortBy, String sortDir) {
-        Pageable pageCharacteristics = auxiliaryMethods.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
-
-        Page<Post> allPostsByAuthorFirstNameAndLastName = postRepository.getAllPostsByAuthorFirstNameAndLastName(firstName, lastName, pageCharacteristics);
-
-        if (allPostsByAuthorFirstNameAndLastName.isEmpty()) {
-            throw new NoElementsException("posts by author with firstname: %s last name: %s".formatted(firstName, lastName));
-        }
-
-        return preparePostResponseToBeReturned(allPostsByAuthorFirstNameAndLastName);
     }
 }

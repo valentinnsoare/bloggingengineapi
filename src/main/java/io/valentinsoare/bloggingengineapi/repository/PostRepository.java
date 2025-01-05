@@ -40,24 +40,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(nativeQuery = true, value = "DELETE FROM post WHERE author_id = :id")
     void deleteAllByAuthorId(Long id);
 
-    @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM post WHERE author_id IN (SELECT id FROM author WHERE email = :email)")
-    void deleteAllByAuthorEmail(String email);
-
-    @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM post WHERE author_id = :authorId AND id = :postId")
-    void deletePostByAuthorIdAndPostId(Long authorId, Long postId);
-
-    @Modifying
-    @Query(nativeQuery = true,
-            value = "DELETE FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName AND last_name = :lastName)"
-    )
-    void deleteAllPostsByAuthorFirstNameAndLastName(String firstName, String lastName);
-
-    @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM post WHERE author_id IN (SELECT id FROM author WHERE last_name = :lastName)")
-    void deleteAllPostsByAuthorLastName(String lastName);
-
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id = :id")
     Page<Post> getAllPostsByAuthorId(Long id, Pageable pageable);
 
@@ -65,11 +47,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName)"
     )
     Page<Post> getAllPostsByAuthorLastName(String firstName, Pageable pageable);
-
-    @Query(nativeQuery = true,
-            value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName AND last_name = :lastName)"
-    )
-    Page<Post> getAllPostsByAuthorFirstNameAndLastName(String firstName, String lastName, Pageable pageable);
 
     Page<Post> findAll(Pageable pageable);
 
@@ -92,22 +69,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     void deleteAllPostsByCategoryId(Long categoryId);
 
     @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM post WHERE category_id = :categoryId AND id = :postId")
-    void deletePostByCategoryIdAndPostId(Long categoryId, Long postId);
-
-    @Modifying
     @Query(nativeQuery = true,
             value = "DELETE FROM post WHERE category_id IN (SELECT id FROM category WHERE name = :categoryName)"
     )
     void deleteAllPostsByCategoryName(String categoryName);
-
-    @Query(nativeQuery = true, value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE last_name = :lastName) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)")
-    Page<Post> getAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName, Pageable pageable);
-
-    @Query(nativeQuery = true,
-            value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName AND last_name = :lastName) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
-    )
-    Page<Post> getPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName, Pageable pageable);
 
     @Query(nativeQuery = true,
             value = "SELECT * FROM post WHERE author_id IN (SELECT id FROM author WHERE email = :email) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
@@ -120,16 +85,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> getPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId, Pageable pageable);
 
     @Query(nativeQuery = true,
-            value = "SELECT COUNT(*) FROM post WHERE author_id IN (SELECT id FROM author WHERE last_name = :lastName) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
-    )
-    Long countPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName);
-
-    @Query(nativeQuery = true,
-            value = "SELECT COUNT(*) FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName AND last_name = :lastName) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
-    )
-    Long countPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName);
-
-    @Query(nativeQuery = true,
             value = "SELECT COUNT(*) FROM post WHERE author_id IN (SELECT id FROM author WHERE email = :email) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
     )
     Long countPostsByAuthorEmailAndCategoryName(String email, String categoryName);
@@ -138,16 +93,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             value = "SELECT COUNT(*) FROM post WHERE author_id = :authorId AND category_id = :categoryId"
     )
     Long countPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId);
-
-    @Modifying
-    @Query(nativeQuery = true,
-            value = "DELETE FROM post WHERE author_id IN (SELECT id FROM author WHERE last_name = :lastName) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
-    )
-    void deleteAllPostsByAuthorLastNameAndCategoryName(String lastName, String categoryName);
-
-    @Modifying
-    @Query(nativeQuery = true,
-            value = "DELETE FROM post WHERE author_id IN (SELECT id FROM author WHERE first_name = :firstName AND last_name = :lastName) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
-    )
-    void deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(String firstName, String lastName, String categoryName);
 }

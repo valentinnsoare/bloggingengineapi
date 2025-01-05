@@ -72,18 +72,6 @@ public class PostController {
         return new ResponseEntity<>(postService.getPostsByAuthorLastName(lastName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
-    @GetMapping("/author/{firstName}/{lastName}")
-    public ResponseEntity<PostResponse> getAllPostsByAuthorFirstNameAndLastName(
-            @PathVariable @NotNull String firstName,
-            @PathVariable @NotNull String lastName,
-            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
-    ) {
-        return new ResponseEntity<>(postService.getPostsByAuthorFirstNameAndLastName(firstName, lastName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPostById(@PathVariable @NotNull Long id) {
         return new ResponseEntity<>(postService.getPostById(id), HttpStatus.OK);
@@ -121,13 +109,8 @@ public class PostController {
         return new ResponseEntity<>(postService.countAllPosts(), HttpStatus.OK);
     }
 
-    @GetMapping("/count/author/{email}")
-    public ResponseEntity<Long> countPostByAuthorEmail(@PathVariable @NotNull String email) {
-        return new ResponseEntity<>(postService.countPostByAuthorEmail(email), HttpStatus.OK);
-    }
-
     @GetMapping("/count/author/{id}")
-    public ResponseEntity<Long> countPostByAuthorId(@PathVariable Long id) {
+    public ResponseEntity<Long> countPostsByAuthorId(@PathVariable Long id) {
         return new ResponseEntity<>(postService.countPostsByAuthorId(id), HttpStatus.OK);
     }
 
@@ -145,36 +128,6 @@ public class PostController {
     public ResponseEntity<String> deleteAllPostsByAuthorId(@PathVariable Long authorId) {
         postService.deleteAllPostsByAuthorId(authorId);
         return new ResponseEntity<>(String.format("All Posts with author id: %s deleted successfully!", authorId), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{postId}/author/{authorId}")
-    public ResponseEntity<String> deletePostByAuthorIdAndPostId(@PathVariable Long authorId, @PathVariable Long postId) {
-        postService.deletePostByAuthorIdAndPostId(authorId, postId);
-        return new ResponseEntity<>(String.format("Post with id: %s and author id: %s deleted successfully!", postId, authorId), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/author/{email}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<String> deleteAllPostsByAuthorEmail(@PathVariable @NotNull String email) {
-        postService.deleteAllPostsByAuthorEmail(email);
-        return new ResponseEntity<>(String.format("All Posts with author email: %s deleted successfully!", email), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @DeleteMapping("/author/{firstName}/{lastName}")
-    @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<String> deleteAllPostsByAuthorFirstNameAndLastName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName) {
-        postService.deleteAllPostsByAuthorFirstNameAndLastName(firstName, lastName);
-        return new ResponseEntity<>(String.format("All Posts with author first name: %s and last name: %s deleted successfully!", firstName, lastName), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @DeleteMapping("/author/{lastName}")
-    @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<String> deleteAllPostsByAuthorLastName(@PathVariable @NotNull String lastName) {
-        postService.deleteAllPostsByAuthorLastName(lastName);
-        return new ResponseEntity<>(String.format("All Posts with author last name: %s deleted successfully!", lastName), HttpStatus.OK);
     }
 
     @GetMapping("/category/{categoryName}")
@@ -199,13 +152,8 @@ public class PostController {
         return new ResponseEntity<>(postService.getPostsByCategoryId(categoryId, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
-    @GetMapping("/count/category/{categoryName}")
-    public ResponseEntity<Long> countPostsByCategoryName(@PathVariable @NotNull String categoryName) {
-        return new ResponseEntity<>(postService.countPostsByCategoryName(categoryName), HttpStatus.OK);
-    }
-
     @GetMapping("/count/category/{categoryId}")
-    public ResponseEntity<Long> countPostByCategoryId(@PathVariable Long categoryId) {
+    public ResponseEntity<Long> countPostsByCategoryId(@PathVariable Long categoryId) {
         return new ResponseEntity<>(postService.countPostByCategoryId(categoryId), HttpStatus.OK);
     }
 
@@ -217,43 +165,12 @@ public class PostController {
         return new ResponseEntity<>(String.format("All Posts with category id: %s deleted successfully!", categoryId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/category/{categoryId}/{postId}")
-    public ResponseEntity<String> deletePostByCategoryIdAndPostId(@PathVariable Long categoryId, @PathVariable Long postId) {
-        postService.deletePostByCategoryIdAndPostId(categoryId, postId);
-        return new ResponseEntity<>(String.format("Post with id: %s and category id: %s deleted successfully!", postId, categoryId), HttpStatus.OK);
-    }
-
     @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/category/{categoryName}")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByCategoryName(@PathVariable @NotNull String categoryName) {
         postService.deleteAllPostsByCategoryName(categoryName);
         return new ResponseEntity<>(String.format("All Posts with category name: %s deleted successfully!", categoryName), HttpStatus.OK);
-    }
-
-    @GetMapping("/author/{lastName}/category/{categoryName}")
-    public ResponseEntity<PostResponse> getPostsByAuthorLastNameAndCategoryName(
-            @PathVariable @NotNull String lastName,
-            @PathVariable @NotNull String categoryName,
-            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
-    ) {
-        return new ResponseEntity<>(postService.getPostsByAuthorLastNameAndCategoryName(lastName, categoryName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
-    }
-
-    @GetMapping("/author/{firstName}/{lastName}/category/{categoryName}")
-    public ResponseEntity<PostResponse> getPostsByAuthorFirstNameAndLastNameAndCategoryName(
-            @PathVariable @NotNull String firstName,
-            @PathVariable @NotNull String lastName,
-            @PathVariable @NotNull String categoryName,
-            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
-    ) {
-        return new ResponseEntity<>(postService.getPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
     @GetMapping("/author/{email}/category/{categoryName}")
@@ -278,49 +195,5 @@ public class PostController {
             @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
     ) {
         return new ResponseEntity<>(postService.getPostsByAuthorIdAndCategoryId(authorId, categoryId, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/author/{lastName}/category/{categoryName}")
-    public ResponseEntity<Long> countPostsByAuthorLastNameAndCategoryName(@PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
-        return new ResponseEntity<>(postService.countPostsByAuthorLastNameAndCategoryName(lastName, categoryName), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/author/{firstName}/{lastName}/category/{categoryName}")
-    public ResponseEntity<Long> countPostsByAuthorFirstNameAndLastNameAndCategoryName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
-        return new ResponseEntity<>(postService.countPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/author/{email}/category/{categoryName}")
-    public ResponseEntity<Long> countPostsByAuthorEmailAndCategoryName(@PathVariable @NotNull String email, @PathVariable @NotNull String categoryName) {
-        return new ResponseEntity<>(postService.countPostsByAuthorEmailAndCategoryName(email, categoryName), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/author/{authorId}/category/{categoryId}")
-    public ResponseEntity<Long> countPostsByAuthorIdAndCategoryId(@PathVariable Long authorId, @PathVariable Long categoryId) {
-        return new ResponseEntity<>(postService.countPostsByAuthorIdAndCategoryId(authorId, categoryId), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/title/{name}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<String> deletePostByTitle(@PathVariable @NotNull String name) {
-        postService.deletePostWithTitle(name);
-        return new ResponseEntity<>(String.format("Post with title : %s deleted successfully!", name), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @SecurityRequirement(name = "Bearer Authentication")
-    @DeleteMapping("/author/{lastName}/category/{categoryName}")
-    public ResponseEntity<String> deleteAllPostsByAuthorLastNameAndCategoryName(@PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
-        postService.deleteAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
-        return new ResponseEntity<>(String.format("All Posts with author last name: %s and category name: %s deleted successfully!", lastName, categoryName), HttpStatus.OK);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @SecurityRequirement(name = "Bearer Authentication")
-    @DeleteMapping("/author/{firstName}/{lastName}/category/{categoryName}")
-    public ResponseEntity<String> deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
-        postService.deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
-        return new ResponseEntity<>(String.format("All Posts with author first name: %s, last name: %s and category name: %s deleted successfully!", firstName, lastName, categoryName), HttpStatus.OK);
     }
 }
