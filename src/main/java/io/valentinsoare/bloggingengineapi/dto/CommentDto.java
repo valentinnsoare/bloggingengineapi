@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @Schema(name = "CommentDto", description = "Data Transfer Object for Comment", hidden = true)
 public class CommentDto {
-    @Schema(description = "Id of the comment", example = "1")
+    @Schema(description = "ID of the comment", example = "1")
     private long id;
 
     @NotEmpty(message = "Name is mandatory!")

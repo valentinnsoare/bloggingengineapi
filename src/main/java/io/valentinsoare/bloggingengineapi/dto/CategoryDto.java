@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Schema(name = "CategoryDto", description = "Data Transfer Object for Category", hidden = true)
 public class CategoryDto {
-    @Schema(description = "Id of the category", example = "1")
+    @Schema(description = "ID of the category", example = "1")
     private Long id;
 
     @NotBlank(message = "Name is mandatory!")
@@ -28,7 +28,7 @@ public class CategoryDto {
     @Size(min = 1, max = 355, message = "Description must be between 1 and 355 characters!")
     private String description;
 
-    @Schema(description = "All posts with this category", example = "[PostDto]")
+    @Schema(description = "All posts with this category")
     private Set<PostDto> allPostsWithCategory = Collections.emptySet();
 
     @Override

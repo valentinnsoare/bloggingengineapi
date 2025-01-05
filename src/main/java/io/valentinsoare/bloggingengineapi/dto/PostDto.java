@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Schema(name = "PostDto", description = "Data Transfer Object for Post", hidden = true)
 public class PostDto {
-    @Schema(description = "Id of the post", example = "1")
+    @Schema(description = "ID of the post", example = "1")
     private long id;
 
     @NotEmpty(message = "Title is mandatory!")
