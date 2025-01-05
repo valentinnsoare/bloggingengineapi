@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -45,9 +46,9 @@ public class CommentServiceImpl implements CommentService {
         return modelMapper.map(commentDto, Comment.class);
     }
 
-    private Comment getComment(long commentId, long postId) {
+    private Comment getComment(Long commentId, Long postId) {
         return commentRepository.findById(commentId)
-                .filter(c -> c.getPost().getId() == postId)
+                .filter(c -> Objects.equals(c.getPost().getId(), postId))
                 .orElseThrow(() -> new ResourceNotFoundException("comment",
                         Map.of(
                             "postId", String.valueOf(postId),
@@ -77,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
                 .comments(allCommentsAsDTOs)
                 .pageNo(pageNo)
                 .pageSize(pageSize)
-                .totalCommentsOnPage((int) pageWithComments.getTotalElements())
+                .totalCommentsOnPage(pageWithComments.getTotalElements())
                 .totalPages(pageWithComments.getTotalPages())
                 .isLast(pageWithComments.isLast())
                 .build();
@@ -111,12 +112,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto updateCommentById(Long commentId, Long postId, CommentDto commentDto) {
+    public CommentDto updateCommentByIdAndPostId(Long commentId, Long postId, CommentDto commentDto) {
         Comment commentFound = getComment(commentId, postId);
 
-        commentFound.setName(auxiliaryMethodsComment.updateIfPresent(commentDto.getName(), commentFound.getName()))
-                .setEmail(auxiliaryMethodsComment.updateIfPresent(commentDto.getEmail(), commentFound.getEmail()))
-                .setBody(auxiliaryMethodsComment.updateIfPresent(commentDto.getBody(), commentFound.getBody()));
+        commentFound.setName(commentDto.getName())
+                .setEmail(commentDto.getEmail())
+                .setBody(commentDto.getBody())
+                .setPost(commentFound.getPost());
 
         Comment savedComment;
 

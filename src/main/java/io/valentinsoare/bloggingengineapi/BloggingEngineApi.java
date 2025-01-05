@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @OpenAPIDefinition(
 		info = @Info(
 				title = "Blogging Engine API",
-				version = "0.1",
+				version = "0.0.1",
 				description = "One stop shop for a Blogging Engine API.",
 				contact = @Contact(
 						name = "Valentin Soare",

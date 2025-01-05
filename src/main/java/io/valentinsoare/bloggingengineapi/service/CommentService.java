@@ -9,7 +9,7 @@ public interface CommentService {
     CommentResponse getAllCommentsByPostId(Long postId, int pageNo, int pageSize, String sortBy, String sortDir);
     CommentResponse getAllCommentsByPostTitle(String postTitle, int pageNo, int pageSize, String sortBy, String sortDir);
     CommentDto createComment(Long postId, CommentDto commentDto);
-    CommentDto updateCommentById(Long commentId, Long postId, CommentDto commentDto);
+    CommentDto updateCommentByIdAndPostId(Long commentId, Long postId, CommentDto commentDto);
 
     void deleteCommentById(Long commentId, Long postId);
     Long countAllCommentsByPostId(Long postId);

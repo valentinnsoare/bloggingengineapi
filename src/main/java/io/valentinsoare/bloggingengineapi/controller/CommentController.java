@@ -83,7 +83,7 @@ public class CommentController {
     )
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Long postId, @PathVariable Long commentId, @Valid @RequestBody CommentDto commentDto) {
-        return new ResponseEntity<>(commentService.updateCommentById(commentId, postId, commentDto), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.updateCommentByIdAndPostId(commentId, postId, commentDto), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
