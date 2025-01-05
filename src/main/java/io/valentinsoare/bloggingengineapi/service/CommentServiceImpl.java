@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public CommentResponse getAllCommentsByPostId(long postId, int pageNo, int pageSize, String sortBy, String sortDir) {
+    public CommentResponse getAllCommentsByPostId(Long postId, int pageNo, int pageSize, String sortBy, String sortDir) {
         log.info("Finding all comments from post with id: {}. Page number: {} and page size: {} in sorted order.",
                 postId, pageNo, pageSize);
 
@@ -89,14 +89,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public CommentDto getCommentByIdAndPostId(long commentId, long postId) {
+    public CommentDto getCommentByIdAndPostId(Long commentId, Long postId) {
         Comment comment = getComment(commentId, postId);
         return mapToDTO(comment);
     }
 
     @Override
     @Transactional
-    public CommentDto createComment(long postId, CommentDto commentDto) {
+    public CommentDto createComment(Long postId, CommentDto commentDto) {
         log.info("Converting from commentDto for post with id: {}.", postId);
         Comment newComment = mapToEntity(commentDto);
 
@@ -120,7 +120,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto updateComment(long commentId, long postId, CommentDto commentDto) {
+    public CommentDto updateCommentById(Long commentId, Long postId, CommentDto commentDto) {
         log.info("Updating comment with id: {} for post with id: {}.", commentId, postId);
         Comment commentFound = getComment(commentId, postId);
 
@@ -144,7 +144,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteComment(long commentId, long postId) {
+    public void deleteCommentById(Long commentId, Long postId) {
         log.info("Finding comment with id: {} for post with id: {}.", commentId, postId);
         Comment commentFound = getComment(commentId, postId);
 
@@ -154,5 +154,50 @@ public class CommentServiceImpl implements CommentService {
         log.info("Deleting comment with id: {}.", commentId);
         commentRepository.delete(commentFound);
         log.info("Comment with id: {} deleted.", commentId);
+    }
+
+    @Override
+    public CommentResponse getAllCommentsByPostTitle(String postTitle, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public Long countAllCommentsByPostId(Long postId) {
+        return 0L;
+    }
+
+    @Override
+    public void deleteAllCommentsByPostId(Long postId) {
+
+    }
+
+    @Override
+    public CommentResponse getAllCommentsByEmail(String email, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public Long countAllCommentsByEmail(String email) {
+        return 0L;
+    }
+
+    @Override
+    public void deleteAllCommentsByEmail(String email) {
+
+    }
+
+    @Override
+    public CommentResponse getAllCommentsByName(String name, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public Long countAllCommentsByName(String name) {
+        return 0L;
+    }
+
+    @Override
+    public void deleteAllCommentsByName(String name) {
+
     }
 }

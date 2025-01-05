@@ -16,7 +16,6 @@ import io.valentinsoare.bloggingengineapi.repository.CategoryRepository;
 import io.valentinsoare.bloggingengineapi.response.PostResponse;
 import io.valentinsoare.bloggingengineapi.repository.PostRepository;
 import io.valentinsoare.bloggingengineapi.utilities.AuxiliaryMethods;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
