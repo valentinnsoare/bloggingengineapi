@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
+@Schema(name = "JWTAuthResponseDto", description = "Data Transfer Object for JWT Authentication Response", hidden = true)
 public class JWTAuthResponseDto {
     @NotBlank(message = "Access token is required")
     private String accessToken;

@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -8,6 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(name = "LoginDto", description = "Data Transfer Object for Login", hidden = true)
 public class LoginDto {
     @NotBlank(message = "Username or email cannot be blank")
     private String usernameOrEmail;

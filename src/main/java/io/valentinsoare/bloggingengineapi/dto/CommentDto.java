@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -11,6 +12,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(name = "AuthorDto", description = "Data Transfer Object for Author", hidden = true)
 public class CommentDto {
     private long id;
 

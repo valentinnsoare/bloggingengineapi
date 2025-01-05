@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(name = "PostDto", description = "Data Transfer Object for Post", hidden = true)
 public class PostDto {
     private long id;
 

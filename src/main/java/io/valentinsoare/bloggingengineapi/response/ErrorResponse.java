@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ import java.time.Instant;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(name = "ErrorResponse", description = "Error Response", hidden = true)
 public class ErrorResponse {
     @NotNull
     private Instant timestamp;

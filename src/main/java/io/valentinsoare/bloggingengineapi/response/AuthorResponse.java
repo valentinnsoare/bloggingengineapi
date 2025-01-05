@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.valentinsoare.bloggingengineapi.dto.AuthorDto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Data
 @Builder
+@Schema(name = "AuthorResponse", description = "Response object for Author", hidden = true)
 public class AuthorResponse {
     @NotNull
     private List<AuthorDto> pageContent;

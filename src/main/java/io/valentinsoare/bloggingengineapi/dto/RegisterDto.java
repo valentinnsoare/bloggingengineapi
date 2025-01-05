@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -12,6 +13,7 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(name = "RegisterDto", description = "Data Transfer Object for Register", hidden = true)
 public class RegisterDto {
     @NotBlank(message = "Name is mandatory!")
     private String name;
