@@ -98,7 +98,7 @@ public class CommentController {
     )
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<Void> deleteComment(@PathVariable Long postId, @PathVariable Long commentId) {
-        commentService.deleteCommentById(commentId, postId);
+        commentService.deleteCommentByIdAndPostId(commentId, postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

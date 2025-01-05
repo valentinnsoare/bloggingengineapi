@@ -57,6 +57,13 @@ public class CommentServiceImpl implements CommentService {
                 ));
     }
 
+    private Post getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("post",
+                        new HashMap<>(Map.of("id", String.valueOf(postId))))
+                );
+    }
+
     @Override
     @Transactional(readOnly = true)
     public CommentResponse getAllCommentsByPostId(Long postId, int pageNo, int pageSize, String sortBy, String sortDir) {
@@ -133,7 +140,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public void deleteCommentById(Long commentId, Long postId) {
+    public void deleteCommentByIdAndPostId(Long commentId, Long postId) {
         Comment commentFound = getComment(commentId, postId);
 
         commentFound.getPost().removeComment(commentFound);
