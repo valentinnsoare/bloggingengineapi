@@ -1,4 +1,6 @@
 package io.valentinsoare.bloggingengineapi.controller;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.valentinsoare.bloggingengineapi.dto.PostDto;
@@ -25,11 +27,27 @@ public class PostController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
     @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Create a new post.",
+            description = "It allows to create a new post and saved it into database."
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "HTTP status code 201 (Created) is returned after successfully creating a new post."
+    )
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/all")
+    @Operation(
+            summary = "Get all posts.",
+            description = "It allows to get all posts from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts."
+    )
     public ResponseEntity<PostResponse> getAllPosts(
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
@@ -40,6 +58,14 @@ public class PostController {
     }
 
     @GetMapping("/author/{email}")
+    @Operation(
+            summary = "Get all posts by author email.",
+            description = "It allows to get all posts by author email from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author email."
+    )
     public ResponseEntity<PostResponse> getAllPostsByAuthorEmail(
             @PathVariable @NotNull String email,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -51,6 +77,14 @@ public class PostController {
     }
 
     @GetMapping("/author/{id}")
+    @Operation(
+            summary = "Get all posts by author id.",
+            description = "It allows to get all posts by author id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author id."
+    )
     public ResponseEntity<PostResponse> getAllPostsByAuthorId(
             @PathVariable Long id,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -62,6 +96,14 @@ public class PostController {
     }
 
     @GetMapping("/author/{lastName}")
+    @Operation(
+            summary = "Get all posts by author last name.",
+            description = "It allows to get all posts by author last name from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author last name."
+    )
     public ResponseEntity<PostResponse> getAllPostsByAuthorLastName(
             @PathVariable @NotNull String lastName,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -73,16 +115,40 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Get post by id.",
+            description = "It allows to get post by id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching post by id."
+    )
     public ResponseEntity<PostDto> getPostById(@PathVariable @NotNull Long id) {
         return new ResponseEntity<>(postService.getPostById(id), HttpStatus.OK);
     }
 
     @GetMapping("/{title}")
+    @Operation(
+            summary = "Get post by title.",
+            description = "It allows to get post by title from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching post by title."
+    )
     public ResponseEntity<PostDto> getPostByTitle(@PathVariable @NotNull String title) {
         return new ResponseEntity<>(postService.getPostByTitle(title), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Update post by id.",
+            description = "It allows to update post by id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully updating post by id."
+    )
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<PostDto> updatePost(@PathVariable Long id, @Valid @RequestBody PostDto postDto) {
@@ -90,6 +156,14 @@ public class PostController {
     }
 
     @PutMapping("/{title}")
+    @Operation(
+            summary = "Update post by title.",
+            description = "It allows to update post by title from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully updating post by title."
+    )
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<PostDto> updatePostByTitle(@PathVariable @NotNull String title, @Valid @RequestBody PostDto postDto) {
@@ -97,6 +171,14 @@ public class PostController {
     }
 
     @DeleteMapping("/id/{id}")
+    @Operation(
+            summary = "Delete post by id.",
+            description = "It allows to delete post by id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully deleting post by id."
+    )
     @PreAuthorize("hasAnyRole('ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deletePostById(@PathVariable Long id) {
@@ -105,16 +187,40 @@ public class PostController {
     }
 
     @GetMapping("/count")
+    @Operation(
+            summary = "Count all posts.",
+            description = "It allows to count all posts from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully counting all posts."
+    )
     public ResponseEntity<Long> countAllPosts() {
         return new ResponseEntity<>(postService.countAllPosts(), HttpStatus.OK);
     }
 
     @GetMapping("/count/author/{id}")
+    @Operation(
+            summary = "Count posts by author id.",
+            description = "It allows to count posts by author id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully counting posts by author id."
+    )
     public ResponseEntity<Long> countPostsByAuthorId(@PathVariable Long id) {
         return new ResponseEntity<>(postService.countPostsByAuthorId(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/all")
+    @Operation(
+            summary = "Delete all posts.",
+            description = "It allows to delete all posts from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully deleting all posts."
+    )
     @PreAuthorize("hasAnyRole('ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPosts() {
@@ -123,6 +229,14 @@ public class PostController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(
+            summary = "Delete all posts by author id.",
+            description = "It allows to delete all posts by author id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by author id."
+    )
     @DeleteMapping("/author/{authorId}")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByAuthorId(@PathVariable Long authorId) {
@@ -131,6 +245,14 @@ public class PostController {
     }
 
     @GetMapping("/category/{categoryName}")
+    @Operation(
+            summary = "Get all posts by category name.",
+            description = "It allows to get all posts by category name from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by category name."
+    )
     public ResponseEntity<PostResponse> getAllPostsByCategoryName(
             @PathVariable @NotNull String categoryName,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -142,6 +264,14 @@ public class PostController {
     }
 
     @GetMapping("/category/{categoryId}")
+    @Operation(
+            summary = "Get all posts by category id.",
+            description = "It allows to get all posts by category id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by category id."
+    )
     public ResponseEntity<PostResponse> getAllPostsByCategoryId(
             @PathVariable Long categoryId,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -153,11 +283,27 @@ public class PostController {
     }
 
     @GetMapping("/count/category/{categoryId}")
+    @Operation(
+            summary = "Count posts by category id.",
+            description = "It allows to count posts by category id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully counting posts by category id."
+    )
     public ResponseEntity<Long> countPostsByCategoryId(@PathVariable Long categoryId) {
         return new ResponseEntity<>(postService.countPostByCategoryId(categoryId), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(
+            summary = "Delete all posts by category id.",
+            description = "It allows to delete all posts by category id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by category id."
+    )
     @DeleteMapping("/category/{categoryId}")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByCategoryId(@PathVariable Long categoryId) {
@@ -166,6 +312,14 @@ public class PostController {
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(
+            summary = "Delete all posts by category name.",
+            description = "It allows to delete all posts by category name from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by category name."
+    )
     @DeleteMapping("/category/{categoryName}")
     @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByCategoryName(@PathVariable @NotNull String categoryName) {
@@ -174,6 +328,14 @@ public class PostController {
     }
 
     @GetMapping("/author/{email}/category/{categoryName}")
+    @Operation(
+            summary = "Get all posts by author email and category name.",
+            description = "It allows to get all posts by author email and category name from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author email and category name."
+    )
     public ResponseEntity<PostResponse> getPostsByAuthorEmailAndCategoryName(
             @PathVariable @NotNull String email,
             @PathVariable @NotNull String categoryName,
@@ -186,6 +348,14 @@ public class PostController {
     }
 
     @GetMapping("/author/{authorId}/category/{categoryId}")
+    @Operation(
+            summary = "Get all posts by author id and category id.",
+            description = "It allows to get all posts by author id and category id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author id and category id."
+    )
     public ResponseEntity<PostResponse> getPostsByAuthorIdAndCategoryId(
             @PathVariable Long authorId,
             @PathVariable Long categoryId,
