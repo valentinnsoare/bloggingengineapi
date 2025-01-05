@@ -28,11 +28,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT p FROM post p WHERE p.id = :id")
     Post getPostById(Long id);
 
-    @Query(nativeQuery = true,
-            value = "SELECT COUNT(*) FROM post WHERE author_id IN (SELECT id FROM author WHERE email = :email)"
-    )
-    Long countPostByAuthorEmail(String email);
-
     @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM post WHERE author_id = :id")
     Long countPostByAuthorId(Long id);
 
@@ -58,9 +53,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM post WHERE category_id = :categoryId")
     Page<Post> getAllPostsByCategoryId(Long categoryId, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM post WHERE category_id IN (SELECT id FROM category WHERE name = :categoryName)")
-    Long countPostsByCategoryName(String categoryName);
-
     @Query(nativeQuery = true, value = "SELECT COUNT(*) FROM post WHERE category_id = :categoryId")
     Long countPostByCategoryId(Long categoryId);
 
@@ -83,14 +75,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             value = "SELECT * FROM post WHERE author_id = :authorId AND category_id = :categoryId"
     )
     Page<Post> getPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId, Pageable pageable);
-
-    @Query(nativeQuery = true,
-            value = "SELECT COUNT(*) FROM post WHERE author_id IN (SELECT id FROM author WHERE email = :email) AND category_id IN (SELECT id FROM category WHERE name = :categoryName)"
-    )
-    Long countPostsByAuthorEmailAndCategoryName(String email, String categoryName);
-
-    @Query(nativeQuery = true,
-            value = "SELECT COUNT(*) FROM post WHERE author_id = :authorId AND category_id = :categoryId"
-    )
-    Long countPostsByAuthorIdAndCategoryId(Long authorId, Long categoryId);
 }
