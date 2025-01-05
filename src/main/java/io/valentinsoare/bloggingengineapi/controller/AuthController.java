@@ -1,5 +1,7 @@
 package io.valentinsoare.bloggingengineapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.valentinsoare.bloggingengineapi.dto.JWTAuthResponseDto;
 import io.valentinsoare.bloggingengineapi.dto.LoginDto;
@@ -26,6 +28,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(
+            summary = "Login",
+            description = "Login to the application."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Login successful."
+    )
     public ResponseEntity<JWTAuthResponseDto> login(@RequestBody @Valid LoginDto loginDto) {
         String token = authService.login(loginDto);
 
@@ -38,6 +48,14 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @Operation(
+            summary = "Register",
+            description = "Register to the application."
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "Registration successful."
+    )
     public ResponseEntity<String> register(@RequestBody @Valid RegisterDto registerDto) {
        return new ResponseEntity<>(authService.register(registerDto), HttpStatus.CREATED);
     }
