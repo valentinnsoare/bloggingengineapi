@@ -16,6 +16,7 @@ import jakarta.validation.constraints.Size;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -73,16 +74,16 @@ public class JwtTokenProvider {
 
             return true;
         } catch (MalformedJwtException e) {
-            request.setAttribute("exception", e.getMessage());
+            request.setAttribute("exception", "Invalid JWT Token");
             throw new ApiAuthException("validateToken", "Invalid JWT Token", Map.of("token", token));
         } catch (UnsupportedJwtException e) {
-            request.setAttribute("exception", e.getMessage());
+            request.setAttribute("exception", "Unsupported JWT Token");
             throw new ApiAuthException("validateToken", "Unsupported JWT Token", Map.of("token", token));
         } catch (ExpiredJwtException e) {
-            request.setAttribute("exception", e.getMessage());
+            request.setAttribute("exception", "Expired JWT Token");
             throw new ApiAuthException("validateToken", "Expired JWT Token", Map.of("token", token));
         } catch (IllegalArgumentException e) {
-            request.setAttribute("exception", e.getMessage());
+            request.setAttribute("exception", "JWT claims string is empty");
             throw new ApiAuthException("validateToken", "JWT claims string is empty", Map.of("token", token));
         }
     }

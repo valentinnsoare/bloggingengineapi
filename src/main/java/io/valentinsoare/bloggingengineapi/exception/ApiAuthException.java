@@ -4,14 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.AuthenticationException;
 
 import java.util.Map;
 
 @Getter
 @Setter
 @Builder
-public class ApiAuthException extends AuthenticationException {
+public class ApiAuthException extends RuntimeException {
     private String resourceName;
     private String message;
     private Map<String, String> resources;
