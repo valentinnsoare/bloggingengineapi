@@ -37,10 +37,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
                     .build();
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
 
             String content = String.format(
-                    "{\n\tstatusCode: %d,\n\tmessage: %s,\n\tdetails: %s,\n\ttimestamp: %s\n }",
+                    "{\n    statusCode: %d,\n    message: %s,\n    details: %s,\n    timestamp: %s\n }",
                     newError.getStatusCode(),
                     newError.getMessage(),
                     newError.getDetails(),

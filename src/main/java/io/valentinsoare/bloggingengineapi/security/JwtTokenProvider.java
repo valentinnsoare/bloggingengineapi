@@ -62,7 +62,7 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public boolean validateToken(String token, HttpServletRequest request) {
+    public boolean validateToken(String token, HttpServletRequest request) throws ApiAuthException {
         try {
             Jwts.parser()
                     .verifyWith(getSecretKey())
