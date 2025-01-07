@@ -1,6 +1,7 @@
 package io.valentinsoare.bloggingengineapi.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.valentinsoare.bloggingengineapi.dto.PostDto;
@@ -31,9 +32,11 @@ public class PostController {
             summary = "Create a new post.",
             description = "It allows to create a new post and saved it into database."
     )
-    @ApiResponse(
-            responseCode = "201",
-            description = "HTTP status code 201 (Created) is returned after successfully creating a new post."
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "HTTP status code 201 (CREATED) is returned after successfully creating a new post."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to create a new post."),
+            }
     )
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
@@ -145,9 +148,11 @@ public class PostController {
             summary = "Update post by id.",
             description = "It allows to update post by id from database."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP status code 200 (OK) is returned after successfully updating post by id."
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully updating post by id."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to update post by id."),
+            }
     )
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
     @SecurityRequirement(name = "Bearer Authentication")
@@ -160,9 +165,11 @@ public class PostController {
             summary = "Update post by title.",
             description = "It allows to update post by title from database."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP status code 200 (OK) is returned after successfully updating post by title."
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully updating post by title."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to update post by title."),
+            }
     )
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
     @SecurityRequirement(name = "Bearer Authentication")
@@ -175,9 +182,11 @@ public class PostController {
             summary = "Delete post by id.",
             description = "It allows to delete post by id from database."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP status code 200 (OK) is returned after successfully deleting post by id."
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting post by id."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete post by id."),
+            }
     )
     @PreAuthorize("hasAnyRole('ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
@@ -217,9 +226,11 @@ public class PostController {
             summary = "Delete all posts.",
             description = "It allows to delete all posts from database."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP status code 200 (OK) is returned after successfully deleting all posts."
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting all posts."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete all posts."),
+            }
     )
     @PreAuthorize("hasAnyRole('ADMIN')")
     @SecurityRequirement(name = "Bearer Authentication")
@@ -233,9 +244,11 @@ public class PostController {
             summary = "Delete all posts by author id.",
             description = "It allows to delete all posts by author id from database."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by author id."
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by author id."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete all posts by author id."),
+            }
     )
     @DeleteMapping("/author/{authorId}")
     @SecurityRequirement(name = "Bearer Authentication")
@@ -300,9 +313,11 @@ public class PostController {
             summary = "Delete all posts by category id.",
             description = "It allows to delete all posts by category id from database."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by category id."
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by category id."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete all posts by category id."),
+            }
     )
     @DeleteMapping("/category/{categoryId}")
     @SecurityRequirement(name = "Bearer Authentication")
@@ -316,9 +331,11 @@ public class PostController {
             summary = "Delete all posts by category name.",
             description = "It allows to delete all posts by category name from database."
     )
-    @ApiResponse(
-            responseCode = "200",
-            description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by category name."
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by category name."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete all posts by category name."),
+            }
     )
     @DeleteMapping("/category/{categoryName}")
     @SecurityRequirement(name = "Bearer Authentication")

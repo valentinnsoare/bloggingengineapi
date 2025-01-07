@@ -1,6 +1,5 @@
 package io.valentinsoare.bloggingengineapi.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.valentinsoare.bloggingengineapi.response.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
