@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -12,14 +13,18 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Data Transfer Object for Category")
 public class CategoryDto {
+    @Schema(description = "ID of the category", example = "1")
     private Long id;
 
     @NotBlank(message = "Name is mandatory!")
+    @Schema(description = "Name of the category", example = "Category name")
     @Size(min = 1, max = 50, message = "Name must be between 1 and 50 characters!")
     private String name;
 
     @NotBlank(message = "Description is mandatory!")
+    @Schema(description = "Description of the category", example = "Category description")
     @Size(min = 1, max = 355, message = "Description must be between 1 and 355 characters!")
     private String description;
 

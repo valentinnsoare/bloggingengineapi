@@ -1,5 +1,6 @@
 package io.valentinsoare.bloggingengineapi.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -12,17 +13,22 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Data Transfer Object for Author")
 public class AuthorDto {
+    @Schema(description = "ID of the author", example = "1")
     private long id;
 
     @NotBlank(message = "First name is mandatory!")
+    @Schema(description = "First name of the author", example = "John")
     private String firstName;
 
     @NotBlank(message = "Last name is mandatory!")
+    @Schema(description = "Last name of the author", example = "Doe")
     private String lastName;
 
     @NotBlank(message = "Email is mandatory!")
     @Email(message = "Email must be a valid email address!")
+    @Schema(description = "Email of the author", example = "unknown@gmail.com")
     private String email;
 
     private Set<PostDto> postsFromAuthor = Collections.emptySet();

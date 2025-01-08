@@ -12,6 +12,9 @@ public class AopMapping {
     @Pointcut("execution(* io.valentinsoare.bloggingengineapi.repository.*.*(..))")
     public void methodsExecutionOnRepositoryLayer() {}
 
-    @Pointcut("methodsExecutionOnControllerLayer() || methodsExecutionOnServiceLayer() || methodsExecutionOnRepositoryLayer()")
+    @Pointcut("execution(public * io.valentinsoare.bloggingengineapi.security.*.*(..))")
+    public void methodsExecutionOnSecurityLayer() {}
+
+    @Pointcut("methodsExecutionOnSecurityLayer() || methodsExecutionOnControllerLayer() || methodsExecutionOnServiceLayer() || methodsExecutionOnRepositoryLayer()")
     public void methodsExecutionOnAllLayers() {}
 }

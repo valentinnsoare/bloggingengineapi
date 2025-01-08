@@ -1,5 +1,9 @@
 package io.valentinsoare.bloggingengineapi.controller;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.valentinsoare.bloggingengineapi.dto.PostDto;
 import io.valentinsoare.bloggingengineapi.response.PostResponse;
 import io.valentinsoare.bloggingengineapi.service.PostService;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/posts")
+@Tag(name = "Posts", description = "Endpoints for managing posts.")
 public class PostController {
     private final PostService postService;
 
@@ -22,11 +27,30 @@ public class PostController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Create a new post.",
+            description = "It allows to create a new post and saved it into database."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "HTTP status code 201 (CREATED) is returned after successfully creating a new post."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to create a new post."),
+            }
+    )
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.createPost(postDto), HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/all")
+    @Operation(
+            summary = "Get all posts.",
+            description = "It allows to get all posts from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts."
+    )
     public ResponseEntity<PostResponse> getAllPosts(
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
@@ -37,6 +61,14 @@ public class PostController {
     }
 
     @GetMapping("/author/{email}")
+    @Operation(
+            summary = "Get all posts by author email.",
+            description = "It allows to get all posts by author email from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author email."
+    )
     public ResponseEntity<PostResponse> getAllPostsByAuthorEmail(
             @PathVariable @NotNull String email,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -48,6 +80,14 @@ public class PostController {
     }
 
     @GetMapping("/author/{id}")
+    @Operation(
+            summary = "Get all posts by author id.",
+            description = "It allows to get all posts by author id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author id."
+    )
     public ResponseEntity<PostResponse> getAllPostsByAuthorId(
             @PathVariable Long id,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -59,6 +99,14 @@ public class PostController {
     }
 
     @GetMapping("/author/{lastName}")
+    @Operation(
+            summary = "Get all posts by author last name.",
+            description = "It allows to get all posts by author last name from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author last name."
+    )
     public ResponseEntity<PostResponse> getAllPostsByAuthorLastName(
             @PathVariable @NotNull String lastName,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -69,104 +117,155 @@ public class PostController {
         return new ResponseEntity<>(postService.getPostsByAuthorLastName(lastName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
-    @GetMapping("/author/{firstName}/{lastName}")
-    public ResponseEntity<PostResponse> getAllPostsByAuthorFirstNameAndLastName(
-            @PathVariable @NotNull String firstName,
-            @PathVariable @NotNull String lastName,
-            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
-    ) {
-        return new ResponseEntity<>(postService.getPostsByAuthorFirstNameAndLastName(firstName, lastName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
-    }
-
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable Long id) {
+    @Operation(
+            summary = "Get post by id.",
+            description = "It allows to get post by id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching post by id."
+    )
+    public ResponseEntity<PostDto> getPostById(@PathVariable @NotNull Long id) {
         return new ResponseEntity<>(postService.getPostById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/title")
-    public ResponseEntity<PostDto> getPostByTitle(@RequestParam @NotNull String name) {
-        return new ResponseEntity<>(postService.getPostByTitle(name), HttpStatus.OK);
+    @GetMapping("/{title}")
+    @Operation(
+            summary = "Get post by title.",
+            description = "It allows to get post by title from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching post by title."
+    )
+    public ResponseEntity<PostDto> getPostByTitle(@PathVariable @NotNull String title) {
+        return new ResponseEntity<>(postService.getPostByTitle(title), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
+    @Operation(
+            summary = "Update post by id.",
+            description = "It allows to update post by id from database."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully updating post by id."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to update post by id."),
+            }
+    )
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<PostDto> updatePost(@PathVariable Long id, @Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.updatePost(id, postDto), HttpStatus.OK);
     }
 
-    @PutMapping("/title")
+    @PutMapping("/{title}")
+    @Operation(
+            summary = "Update post by title.",
+            description = "It allows to update post by title from database."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully updating post by title."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to update post by title."),
+            }
+    )
     @PreAuthorize("hasAnyRole('ADMIN', 'MAINTAINER')")
-    public ResponseEntity<PostDto> updatePostByTitle(@RequestParam @NotNull String title, @Valid @RequestBody PostDto postDto) {
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<PostDto> updatePostByTitle(@PathVariable @NotNull String title, @Valid @RequestBody PostDto postDto) {
         return new ResponseEntity<>(postService.updatePostByTitle(title, postDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
+    @Operation(
+            summary = "Delete post by id.",
+            description = "It allows to delete post by id from database."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting post by id."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete post by id."),
+            }
+    )
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
-        return new ResponseEntity<>(String.format("Post with id: %s deleted successfully!", id),HttpStatus.NO_CONTENT);
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<String> deletePostById(@PathVariable Long id) {
+        postService.deletePostWithId(id);
+        return new ResponseEntity<>(String.format("Post with id: %s deleted successfully!", id), HttpStatus.OK);
     }
 
     @GetMapping("/count")
+    @Operation(
+            summary = "Count all posts.",
+            description = "It allows to count all posts from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully counting all posts."
+    )
     public ResponseEntity<Long> countAllPosts() {
         return new ResponseEntity<>(postService.countAllPosts(), HttpStatus.OK);
     }
 
-    @GetMapping("/count/author/{email}")
-    public ResponseEntity<Long> countPostByAuthorEmail(@PathVariable @NotNull String email) {
-        return new ResponseEntity<>(postService.countPostByAuthorEmail(email), HttpStatus.OK);
-    }
-
     @GetMapping("/count/author/{id}")
-    public ResponseEntity<Long> countPostByAuthorId(@PathVariable Long id) {
+    @Operation(
+            summary = "Count posts by author id.",
+            description = "It allows to count posts by author id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully counting posts by author id."
+    )
+    public ResponseEntity<Long> countPostsByAuthorId(@PathVariable Long id) {
         return new ResponseEntity<>(postService.countPostsByAuthorId(id), HttpStatus.OK);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/all")
+    @Operation(
+            summary = "Delete all posts.",
+            description = "It allows to delete all posts from database."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting all posts."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete all posts."),
+            }
+    )
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPosts() {
         postService.deleteAllPosts();
-        return new ResponseEntity<>("All Posts deleted successfully!", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("All Posts deleted successfully!", HttpStatus.OK);
     }
 
-    @DeleteMapping("/author/{authorId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(
+            summary = "Delete all posts by author id.",
+            description = "It allows to delete all posts by author id from database."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by author id."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete all posts by author id."),
+            }
+    )
+    @DeleteMapping("/author/{authorId}")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByAuthorId(@PathVariable Long authorId) {
         postService.deleteAllPostsByAuthorId(authorId);
-        return new ResponseEntity<>(String.format("All Posts with author id: %s deleted successfully!", authorId), HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/{postId}/author/{authorId}")
-    public ResponseEntity<String> deletePostByAuthorIdAndPostId(@PathVariable Long authorId, @PathVariable Long postId) {
-        postService.deletePostByAuthorIdAndPostId(authorId, postId);
-        return new ResponseEntity<>(String.format("Post with id: %s and author id: %s deleted successfully!", postId, authorId), HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/author/{email}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deleteAllPostsByAuthorEmail(@PathVariable @NotNull String email) {
-        postService.deleteAllPostsByAuthorEmail(email);
-        return new ResponseEntity<>(String.format("All Posts with author email: %s deleted successfully!", email), HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/author/{firstName}/{lastName}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deleteAllPostsByAuthorFirstNameAndLastName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName) {
-        postService.deleteAllPostsByAuthorFirstNameAndLastName(firstName, lastName);
-        return new ResponseEntity<>(String.format("All Posts with author first name: %s and last name: %s deleted successfully!", firstName, lastName), HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/author/{lastName}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deleteAllPostsByAuthorLastName(@PathVariable @NotNull String lastName) {
-        postService.deleteAllPostsByAuthorLastName(lastName);
-        return new ResponseEntity<>(String.format("All Posts with author last name: %s deleted successfully!", lastName), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with author id: %s deleted successfully!", authorId), HttpStatus.OK);
     }
 
     @GetMapping("/category/{categoryName}")
+    @Operation(
+            summary = "Get all posts by category name.",
+            description = "It allows to get all posts by category name from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by category name."
+    )
     public ResponseEntity<PostResponse> getAllPostsByCategoryName(
             @PathVariable @NotNull String categoryName,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -178,6 +277,14 @@ public class PostController {
     }
 
     @GetMapping("/category/{categoryId}")
+    @Operation(
+            summary = "Get all posts by category id.",
+            description = "It allows to get all posts by category id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by category id."
+    )
     public ResponseEntity<PostResponse> getAllPostsByCategoryId(
             @PathVariable Long categoryId,
             @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
@@ -188,62 +295,64 @@ public class PostController {
         return new ResponseEntity<>(postService.getPostsByCategoryId(categoryId, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
-    @GetMapping("/count/category/{categoryName}")
-    public ResponseEntity<Long> countPostsByCategoryName(@PathVariable @NotNull String categoryName) {
-        return new ResponseEntity<>(postService.countPostsByCategoryName(categoryName), HttpStatus.OK);
-    }
-
     @GetMapping("/count/category/{categoryId}")
-    public ResponseEntity<Long> countPostByCategoryId(@PathVariable Long categoryId) {
+    @Operation(
+            summary = "Count posts by category id.",
+            description = "It allows to count posts by category id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully counting posts by category id."
+    )
+    public ResponseEntity<Long> countPostsByCategoryId(@PathVariable Long categoryId) {
         return new ResponseEntity<>(postService.countPostByCategoryId(categoryId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/category/{categoryId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(
+            summary = "Delete all posts by category id.",
+            description = "It allows to delete all posts by category id from database."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by category id."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete all posts by category id."),
+            }
+    )
+    @DeleteMapping("/category/{categoryId}")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByCategoryId(@PathVariable Long categoryId) {
         postService.deleteAllPostsByCategoryId(categoryId);
-        return new ResponseEntity<>(String.format("All Posts with category id: %s deleted successfully!", categoryId), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(String.format("All Posts with category id: %s deleted successfully!", categoryId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/category/{categoryId}/{postId}")
-    public ResponseEntity<String> deletePostByCategoryIdAndPostId(@PathVariable Long categoryId, @PathVariable Long postId) {
-        postService.deletePostByCategoryIdAndPostId(categoryId, postId);
-        return new ResponseEntity<>(String.format("Post with id: %s and category id: %s deleted successfully!", postId, categoryId), HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/category/{categoryName}")
     @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(
+            summary = "Delete all posts by category name.",
+            description = "It allows to delete all posts by category name from database."
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "HTTP status code 200 (OK) is returned after successfully deleting all posts by category name."),
+                    @ApiResponse(responseCode = "401", description = "HTTP status code 401 (UNAUTHORIZED) is returned if the user is not authorized to delete all posts by category name."),
+            }
+    )
+    @DeleteMapping("/category/{categoryName}")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<String> deleteAllPostsByCategoryName(@PathVariable @NotNull String categoryName) {
         postService.deleteAllPostsByCategoryName(categoryName);
-        return new ResponseEntity<>(String.format("All Posts with category name: %s deleted successfully!", categoryName), HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping("/author/{lastName}/category/{categoryName}")
-    public ResponseEntity<PostResponse> getPostsByAuthorLastNameAndCategoryName(
-            @PathVariable @NotNull String lastName,
-            @PathVariable @NotNull String categoryName,
-            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
-    ) {
-        return new ResponseEntity<>(postService.getPostsByAuthorLastNameAndCategoryName(lastName, categoryName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
-    }
-
-    @GetMapping("/author/{firstName}/{lastName}/category/{categoryName}")
-    public ResponseEntity<PostResponse> getPostsByAuthorFirstNameAndLastNameAndCategoryName(
-            @PathVariable @NotNull String firstName,
-            @PathVariable @NotNull String lastName,
-            @PathVariable @NotNull String categoryName,
-            @RequestParam(value = "pageNo", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_NO, required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = ApplicationConstants.DEFAULT_POSTS_PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_BY, required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
-    ) {
-        return new ResponseEntity<>(postService.getPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
+        return new ResponseEntity<>(String.format("All Posts with category name: %s deleted successfully!", categoryName), HttpStatus.OK);
     }
 
     @GetMapping("/author/{email}/category/{categoryName}")
+    @Operation(
+            summary = "Get all posts by author email and category name.",
+            description = "It allows to get all posts by author email and category name from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author email and category name."
+    )
     public ResponseEntity<PostResponse> getPostsByAuthorEmailAndCategoryName(
             @PathVariable @NotNull String email,
             @PathVariable @NotNull String categoryName,
@@ -256,6 +365,14 @@ public class PostController {
     }
 
     @GetMapping("/author/{authorId}/category/{categoryId}")
+    @Operation(
+            summary = "Get all posts by author id and category id.",
+            description = "It allows to get all posts by author id and category id from database."
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP status code 200 (OK) is returned after successfully fetching all posts by author id and category id."
+    )
     public ResponseEntity<PostResponse> getPostsByAuthorIdAndCategoryId(
             @PathVariable Long authorId,
             @PathVariable Long categoryId,
@@ -265,51 +382,5 @@ public class PostController {
             @RequestParam(value = "sortDir", defaultValue = ApplicationConstants.DEFAULT_POSTS_SORT_DIR, required = false) String sortDir
     ) {
         return new ResponseEntity<>(postService.getPostsByAuthorIdAndCategoryId(authorId, categoryId, pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/author/{lastName}/category/{categoryName}")
-    public ResponseEntity<Long> countPostsByAuthorLastNameAndCategoryName(@PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
-        return new ResponseEntity<>(postService.countPostsByAuthorLastNameAndCategoryName(lastName, categoryName), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/author/{firstName}/{lastName}/category/{categoryName}")
-    public ResponseEntity<Long> countPostsByAuthorFirstNameAndLastNameAndCategoryName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
-        return new ResponseEntity<>(postService.countPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/author/{email}/category/{categoryName}")
-    public ResponseEntity<Long> countPostsByAuthorEmailAndCategoryName(@PathVariable @NotNull String email, @PathVariable @NotNull String categoryName) {
-        return new ResponseEntity<>(postService.countPostsByAuthorEmailAndCategoryName(email, categoryName), HttpStatus.OK);
-    }
-
-    @GetMapping("/count/author/{authorId}/category/{categoryId}")
-    public ResponseEntity<Long> countPostsByAuthorIdAndCategoryId(@PathVariable Long authorId, @PathVariable Long categoryId) {
-        return new ResponseEntity<>(postService.countPostsByAuthorIdAndCategoryId(authorId, categoryId), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{title}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deletePostByTitle(@PathVariable @NotNull String title) {
-        postService.deletePostByTitle(title);
-        return new ResponseEntity<>(String.format("Post with title: %s deleted successfully!", title), HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping("/id/title")
-    public ResponseEntity<Long> findPostIdByTitle(@RequestParam @NotNull String title) {
-        return new ResponseEntity<>(postService.findPostIdByTitle(title), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/author/{lastName}/category/{categoryName}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deleteAllPostsByAuthorLastNameAndCategoryName(@PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
-        postService.deleteAllPostsByAuthorLastNameAndCategoryName(lastName, categoryName);
-        return new ResponseEntity<>(String.format("All Posts with author last name: %s and category name: %s deleted successfully!", lastName, categoryName), HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/author/{firstName}/{lastName}/category/{categoryName}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<String> deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(@PathVariable @NotNull String firstName, @PathVariable @NotNull String lastName, @PathVariable @NotNull String categoryName) {
-        postService.deleteAllPostsByAuthorFirstNameAndLastNameAndCategoryName(firstName, lastName, categoryName);
-        return new ResponseEntity<>(String.format("All Posts with author first name: %s, last name: %s and category name: %s deleted successfully!", firstName, lastName, categoryName), HttpStatus.NO_CONTENT);
     }
 }

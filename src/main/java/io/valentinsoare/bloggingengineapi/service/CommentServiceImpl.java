@@ -10,7 +10,6 @@ import io.valentinsoare.bloggingengineapi.repository.PostRepository;
 import io.valentinsoare.bloggingengineapi.response.CommentResponse;
 import io.valentinsoare.bloggingengineapi.utilities.AuxiliaryMethods;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Aspect;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -46,9 +46,9 @@ public class CommentServiceImpl implements CommentService {
         return modelMapper.map(commentDto, Comment.class);
     }
 
-    private Comment getComment(long commentId, long postId) {
+    private Comment getComment(Long commentId, Long postId) {
         return commentRepository.findById(commentId)
-                .filter(c -> c.getPost().getId() == postId)
+                .filter(c -> Objects.equals(c.getPost().getId(), postId))
                 .orElseThrow(() -> new ResourceNotFoundException("comment",
                         Map.of(
                             "postId", String.valueOf(postId),
@@ -57,12 +57,16 @@ public class CommentServiceImpl implements CommentService {
                 ));
     }
 
+    private Post getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("post",
+                        new HashMap<>(Map.of("id", String.valueOf(postId))))
+                );
+    }
+
     @Override
     @Transactional(readOnly = true)
-    public CommentResponse getAllCommentsByPostId(long postId, int pageNo, int pageSize, String sortBy, String sortDir) {
-        log.info("Finding all comments from post with id: {}. Page number: {} and page size: {} in sorted order.",
-                postId, pageNo, pageSize);
-
+    public CommentResponse getAllCommentsByPostId(Long postId, int pageNo, int pageSize, String sortBy, String sortDir) {
         Pageable pageCharacteristics = auxiliaryMethodsComment.sortingWithDirections(sortDir, sortBy, pageNo, pageSize);
 
         Page<Comment> pageWithComments = commentRepository.findByPostId(postId, pageCharacteristics);
@@ -77,12 +81,11 @@ public class CommentServiceImpl implements CommentService {
             );
         }
 
-        log.info("Mapping comments to commentDto.");
         return CommentResponse.builder()
                 .comments(allCommentsAsDTOs)
                 .pageNo(pageNo)
                 .pageSize(pageSize)
-                .totalCommentsOnPage((int) pageWithComments.getTotalElements())
+                .totalCommentsOnPage(pageWithComments.getTotalElements())
                 .totalPages(pageWithComments.getTotalPages())
                 .isLast(pageWithComments.isLast())
                 .build();
@@ -90,18 +93,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public CommentDto getCommentByIdAndPostId(long commentId, long postId) {
+    public CommentDto getCommentByIdAndPostId(Long commentId, Long postId) {
         Comment comment = getComment(commentId, postId);
         return mapToDTO(comment);
     }
 
     @Override
     @Transactional
-    public CommentDto createComment(long postId, CommentDto commentDto) {
-        log.info("Converting from commentDto for post with id: {}.", postId);
+    public CommentDto createComment(Long postId, CommentDto commentDto) {
         Comment newComment = mapToEntity(commentDto);
 
-        log.info("Finding post with id: {}.", postId);
         Post postById = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException("post",
                         new HashMap<>(Map.of("id", String.valueOf(postId)))));
@@ -109,10 +110,7 @@ public class CommentServiceImpl implements CommentService {
         newComment.setPost(postById);
 
         try {
-            log.info("Saving comment to database.");
             Comment saveComment = commentRepository.save(newComment);
-            log.info("Comment saved to database with success.");
-
             return mapToDTO(saveComment);
         } catch (Exception e) {
             throw new ResourceViolationException(e.getLocalizedMessage());
@@ -121,39 +119,76 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto updateComment(long commentId, long postId, CommentDto commentDto) {
-        log.info("Updating comment with id: {} for post with id: {}.", commentId, postId);
+    public CommentDto updateCommentByIdAndPostId(Long commentId, Long postId, CommentDto commentDto) {
         Comment commentFound = getComment(commentId, postId);
 
-        log.info("Updating comment fields.");
-        commentFound.setName(auxiliaryMethodsComment.updateIfPresent(commentDto.getName(), commentFound.getName()))
-                .setEmail(auxiliaryMethodsComment.updateIfPresent(commentDto.getEmail(), commentFound.getEmail()))
-                .setBody(auxiliaryMethodsComment.updateIfPresent(commentDto.getBody(), commentFound.getBody()));
+        commentFound.setName(commentDto.getName())
+                .setEmail(commentDto.getEmail())
+                .setBody(commentDto.getBody())
+                .setPost(commentFound.getPost());
 
         Comment savedComment;
 
         try {
-            log.info("Saving updated comment to database.");
             savedComment = commentRepository.save(commentFound);
         } catch (Exception e) {
             throw new ResourceViolationException(e.getLocalizedMessage());
         }
 
-        log.info("Comment updated with success.");
         return mapToDTO(savedComment);
     }
 
     @Override
     @Transactional
-    public void deleteComment(long commentId, long postId) {
-        log.info("Finding comment with id: {} for post with id: {}.", commentId, postId);
+    public void deleteCommentByIdAndPostId(Long commentId, Long postId) {
         Comment commentFound = getComment(commentId, postId);
 
-        log.info("Removing comment from post.");
         commentFound.getPost().removeComment(commentFound);
-
-        log.info("Deleting comment with id: {}.", commentId);
         commentRepository.delete(commentFound);
-        log.info("Comment with id: {} deleted.", commentId);
+    }
+
+    @Override
+    public CommentResponse getAllCommentsByPostTitle(String postTitle, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public Long countAllCommentsByPostId(Long postId) {
+        return 0L;
+    }
+
+    @Override
+    public void deleteAllCommentsByPostId(Long postId) {
+
+    }
+
+    @Override
+    public CommentResponse getAllCommentsByEmail(String email, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public Long countAllCommentsByEmail(String email) {
+        return 0L;
+    }
+
+    @Override
+    public void deleteAllCommentsByEmail(String email) {
+
+    }
+
+    @Override
+    public CommentResponse getAllCommentsByName(String name, int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
+    }
+
+    @Override
+    public Long countAllCommentsByName(String name) {
+        return 0L;
+    }
+
+    @Override
+    public void deleteAllCommentsByName(String name) {
+
     }
 }
